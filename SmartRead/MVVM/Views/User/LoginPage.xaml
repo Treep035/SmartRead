@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartRead.MVVM.Views.User.LoginPage"
+             BackgroundImageSource="background.png" NavigationPage.HasNavigationBar="False"
+             Title="">
+
+    <Grid VerticalOptions="Center" HorizontalOptions="Center" Padding="30">
+        <!-- Imagen colocada en la parte superior dentro del Grid -->
+
+        <Grid BackgroundColor="#BE1F1F1F" Padding="20" WidthRequest="300" VerticalOptions="Center">
+            <VerticalStackLayout Spacing="15">
+
+                <Image Source="smartread.png" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="100"/>
+
+                <Entry Placeholder="Correo electrónico"
+                      BackgroundColor="#BE1F1F1F"
+                      TextColor="White"
+                      HeightRequest="50"/>
+
+                <Entry Placeholder="Contraseña"
+                      BackgroundColor="#BE1F1F1F"
+                      TextColor="White"
+                      HeightRequest="50"
+                      IsPassword="True" />
+
+                <Button Text="Iniciar sesión"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       HeightRequest="40"
+                       VerticalOptions="End" />
+
+                <Label Text="¿Olvidaste tu contraseña?"
+                      HorizontalOptions="Center"
+                      TextColor="#808080"
+                      FontAttributes="Italic" />
+
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>
