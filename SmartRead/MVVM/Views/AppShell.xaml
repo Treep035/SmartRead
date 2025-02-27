@@ -8,7 +8,7 @@
              Shell.FlyoutBehavior="Disabled"
              Title="">
 
-    <ShellContent Title="" ContentTemplate="{DataTemplate User:LoginPage}"/>
+    <ShellContent Title="" ContentTemplate="{DataTemplate User:RegisterPage}"/>
     
 
 
