@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
              x:Class="SmartRead.MVVM.Views.User.RegisterPage"
-             BackgroundImageSource="background.png" NavigationPage.HasNavigationBar="False"
-             Title="">
+             BackgroundImageSource="background.png"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.BindingContext>
+        <vm:RegisterViewModel />
+    </ContentPage.BindingContext>
 
     <Grid VerticalOptions="Center" HorizontalOptions="Center" Padding="30">
-        <!-- Imagen colocada en la parte superior dentro del Grid -->
-
         <Grid BackgroundColor="#BE1F1F1F" Padding="20" WidthRequest="300" VerticalOptions="Center">
             <VerticalStackLayout Spacing="15">
-
                 <Image Source="smartread.png" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="100"/>
 
                 <Entry Placeholder="Nombre de usuario"
-                      BackgroundColor="#BE1F1F1F"
-                      TextColor="White"
-                      HeightRequest="50"/>
-                
+                       BackgroundColor="#BE1F1F1F"
+                       TextColor="White"
+                       HeightRequest="50"
+                       Text="{Binding Username}" />
+
                 <Entry Placeholder="Correo electrónico"
-                      BackgroundColor="#BE1F1F1F"
-                      TextColor="White"
-                      HeightRequest="50"/>
+                       BackgroundColor="#BE1F1F1F"
+                       TextColor="White"
+                       HeightRequest="50"
+                       Text="{Binding Email}" />
 
                 <Entry Placeholder="Contraseña"
-                      BackgroundColor="#BE1F1F1F"
-                      TextColor="White"
-                      HeightRequest="50"
-                      IsPassword="True" />
-
+                       BackgroundColor="#BE1F1F1F"
+                       TextColor="White"
+                       HeightRequest="50"
+                       IsPassword="True"
+                       Text="{Binding Password}" />
                 <Entry Placeholder="Confirmar contraseña"
-                      BackgroundColor="#BE1F1F1F"
-                      TextColor="White"
-                      HeightRequest="50"
-                      IsPassword="True" />
+                       BackgroundColor="#BE1F1F1F"
+                       TextColor="White"
+                       HeightRequest="50"
+                       IsPassword="True"
+                       Text="{Binding ConfirmPassword}" />
 
                 <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Start" Spacing="10">
-                    <CheckBox x:Name="RememberMeCheckBox"
-                              Color="White"
+                    <CheckBox Color="White"
                               HeightRequest="24"
-                              WidthRequest="24"/>
+                              WidthRequest="24"
+                              IsChecked="{Binding RememberMe}" />
                     <Label Text="Recuérdame"
                            TextColor="White"
                            VerticalOptions="Center"
@@ -47,16 +52,17 @@
                 </HorizontalStackLayout>
 
                 <Button Text="Registrarse"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="40"
-                       VerticalOptions="End" />
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        HeightRequest="40"
+                        VerticalOptions="End"
+                        Command="{Binding RegisterCommand}" />
 
                 <Label Text="¿Ya tienes cuenta? Iniciar sesión"
                        HorizontalOptions="Center"
                        TextColor="#808080">
                     <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnLoginTapped"/>
+                        <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}" />
                     </Label.GestureRecognizers>
                 </Label>
 

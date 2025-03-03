@@ -7,8 +7,5 @@ public partial class RegisterPage : ContentPage
 		InitializeComponent();
 	}
 
-    private void OnLoginTapped(object sender, TappedEventArgs e)
-    {
-        App.Current.MainPage = new LoginPage();
-    }
+
 }
