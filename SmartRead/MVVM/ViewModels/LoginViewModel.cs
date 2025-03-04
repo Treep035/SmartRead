@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SmartRead.MVVM.Views.User;
+using SmartRead.MVVM.Views.Book;
 
 namespace SmartRead.MVVM.ViewModels
 {
@@ -34,6 +35,8 @@ namespace SmartRead.MVVM.ViewModels
             }
 
             await App.Current.MainPage.DisplayAlert("Éxito", "Inicio de sesión exitoso", "OK");
+            App.Current.MainPage = new HomePage();
+
         }
 
         private async void NavigateToRegister()
