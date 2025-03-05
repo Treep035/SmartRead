@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartRead.MVVM.ViewModels;
+using SmartRead.MVVM.Views;
+using SmartRead.MVVM.Views.User;
 
 namespace SmartRead
 {
@@ -16,9 +18,16 @@ namespace SmartRead
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // Registrar `AppShell`
+            builder.Services.AddTransient<AppShell>();
+
             // Registrar ViewModels
-            builder.Services.AddSingleton<LoginViewModel>();
-            builder.Services.AddSingleton<RegisterViewModel>();
+            builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<RegisterViewModel>();
+
+            // Registrar Vistas
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<RegisterPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

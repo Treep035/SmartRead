@@ -19,29 +19,27 @@ namespace SmartRead.MVVM.ViewModels
 
         public LoginViewModel()
         {
-            LoginCommand = new RelayCommand(Login);
-            NavigateToRegisterCommand = new RelayCommand(NavigateToRegister);
+           
         }
 
-        public ICommand LoginCommand { get; }
-        public ICommand NavigateToRegisterCommand { get; }
-
-        private async void Login()
+        [RelayCommand]
+        public async Task Login()
         {
+
             if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
-                await App.Current.MainPage.DisplayAlert("Error", "Debe ingresar un correo y una contraseña.", "OK");
+                await Shell.Current.DisplayAlert("Error", "Debe ingresar un correo y una contraseña.", "OK");
                 return;
             }
 
-            await App.Current.MainPage.DisplayAlert("Éxito", "Inicio de sesión exitoso", "OK");
-            App.Current.MainPage = new HomePage();
-
+            await Shell.Current.DisplayAlert("Éxito", "Inicio de sesión exitoso", "OK");
+            await Shell.Current.GoToAsync("//home");
         }
 
-        private async void NavigateToRegister()
+        [RelayCommand]
+        public async Task NavigateToRegister()
         {
-            App.Current.MainPage = new RegisterPage();
+            await Shell.Current.GoToAsync("//register");
         }
     }
 }
