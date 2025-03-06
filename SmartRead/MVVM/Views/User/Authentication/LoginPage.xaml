@@ -28,6 +28,24 @@
                        IsPassword="True"
                        Text="{Binding Password}" />
 
+                <Label Text="¿Olvidaste tu contraseña?"
+                    TextColor="#808080">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToForgotPasswordCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Start" Spacing="10">
+                    <CheckBox Color="White"
+                        HeightRequest="24"
+                        WidthRequest="24"
+                        IsChecked="{Binding RememberMe}" />
+                    <Label Text="Recuérdame"
+                        TextColor="White"
+                        VerticalOptions="Center"
+                        FontSize="16"/>
+                    </HorizontalStackLayout>
+
                 <Button Text="Iniciar sesión"
                         BackgroundColor="White"
                         TextColor="Black"

@@ -41,5 +41,11 @@ namespace SmartRead.MVVM.ViewModels
         {
             await Shell.Current.GoToAsync("//register");
         }
+
+        [RelayCommand]
+        public async Task NavigateToForgotPassword()
+        {
+            await Shell.Current.GoToAsync("//forgotpassword");
+        }
     }
 }

@@ -11,6 +11,7 @@
     <!-- Páginas de autenticación (fuera del TabBar) -->
     <ShellContent Route="login" ContentTemplate="{DataTemplate User:LoginPage}" />
     <ShellContent Route="register" ContentTemplate="{DataTemplate User:RegisterPage}" />
+    <ShellContent Route="forgotpassword" ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />
 
     <!-- TabBar para navegación principal -->
     <TabBar>
