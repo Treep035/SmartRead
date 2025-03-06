@@ -73,16 +73,16 @@
 	  <MauiXaml Update="MVVM\Views\Book\NewsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\User\ForgotPasswordPage.xaml">
+	  <MauiXaml Update="MVVM\Views\User\Authentication\ForgotPasswordPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\User\LoginPage.xaml">
+	  <MauiXaml Update="MVVM\Views\User\Authentication\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\User\ProfilePage.xaml">
+	  <MauiXaml Update="MVVM\Views\User\Account\ProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\User\RegisterPage.xaml">
+	  <MauiXaml Update="MVVM\Views\User\Authentication\RegisterPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
