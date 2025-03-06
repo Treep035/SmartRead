@@ -12,8 +12,6 @@ namespace SmartRead
             
             MainPage = serviceProvider.GetRequiredService<AppShell>();
         }
-
-
     }
 
 }

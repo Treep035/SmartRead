@@ -15,15 +15,14 @@
 
     <!-- TabBar para navegación principal -->
     <TabBar>
-        <Tab Title="Home" Icon="home_icon.png">
+        <Tab Icon="home.png">
             <ShellContent Route="home" ContentTemplate="{DataTemplate Book:HomePage}" />
         </Tab>
-        <Tab Title="News" Icon="news_icon.png">
+        <Tab Icon="news.png">
             <ShellContent Route="news" ContentTemplate="{DataTemplate Book:NewsPage}" />
         </Tab>
-        <Tab Title="Profile" Icon="profile_icon.png">
+        <Tab Icon="account.png">
             <ShellContent Route="profile" ContentTemplate="{DataTemplate User:ProfilePage}" />
         </Tab>
     </TabBar>
-
 </Shell>

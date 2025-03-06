@@ -1,12 +1,119 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SmartRead.MVVM.Views.Book.HomePage"
-             Title="HomePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SmartRead.MVVM.Views.Book.HomePage"
+    NavigationPage.HasNavigationBar="False"
+    BackgroundColor="Black">
+
+    <!-- Usamos un Grid para dividir la pantalla en dos partes -->
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,*">
+            <!-- Imagen que ocupará la mitad superior de la pantalla -->
+            <Grid Grid.Row="0">
+                <!-- Imagen de fondo -->
+                <Image Source="home_image.png"
+                       Aspect="AspectFill"
+                       HeightRequest="450"
+                       HorizontalOptions="FillAndExpand" />
+
+                <!-- Imagen de búsqueda en la esquina superior derecha -->
+                <Image Source="Search.png"
+                       HeightRequest="30"
+                       WidthRequest="30"
+                       HorizontalOptions="End"
+                       VerticalOptions="Start"
+                       Margin="10" />
+                
+                <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Start"
+                     Margin="0,50,0,0"
+                     Spacing="50">
+                    <Label Text="Libros"
+                   TextColor="White"
+                   FontSize="16"
+                   FontAttributes="Bold"/>
+                    <Label Text="Novelas"
+                   TextColor="White"
+                   FontSize="16"
+                   FontAttributes="Bold"/>
+                    <Label Text="Categorías"
+                   TextColor="White"
+                   FontSize="16"
+                   FontAttributes="Bold"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center"
+                             VerticalOptions="End"
+                             Margin="0,0,0,20"
+                             Spacing="60">
+
+                    <StackLayout Orientation="Vertical" HorizontalOptions="Center">
+                        <Label Text="Añadir a"
+                               TextColor="White"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"/>
+                        <Label Text="la lista"
+                               TextColor="White"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+
+                    <Button Text="Leer"
+                            TextColor="Black"
+                            BackgroundColor="White"
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            Padding="10,5"
+                            WidthRequest="70"/>
+
+                    <Label Text="Info"
+                           TextColor="White"
+                           FontSize="13"
+                           FontAttributes="Bold"/>
+                </StackLayout>
+
+
+            </Grid>
+
+                <!-- Texto "Recomendaciones para ti" -->
+            <Label Text="Recomendaciones para ti"
+                   FontSize="18"
+                   TextColor="White"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   Margin="10,20,10,10"
+                   Grid.Row="1" />
+
+            <!-- Carrusel horizontal de imágenes -->
+            <CollectionView Grid.Row="2"
+                ItemsSource="{Binding Recommendations}"
+                ItemsLayout="HorizontalList"
+                Margin="0"
+                HeightRequest="200"
+                ItemSizingStrategy="MeasureFirstItem">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="0"
+                               HasShadow="False"
+                               BackgroundColor="Transparent"
+                               BorderColor="Transparent"
+                               CornerRadius="10"
+                               WidthRequest="140"
+                               HeightRequest="200">
+                            <Image Source="{Binding ImageSource}"
+                                   Aspect="AspectFit"
+                                   HeightRequest="200"
+                                   WidthRequest="140" />
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+    </ScrollView>
 </ContentPage>
