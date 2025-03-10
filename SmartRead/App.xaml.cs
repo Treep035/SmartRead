@@ -6,12 +6,12 @@ namespace SmartRead
 {
     public partial class App : Application
     {
+        public static bool IsLoggedIn { get; set; } = false;
+
         public App(IServiceProvider serviceProvider)
         {
             InitializeComponent();
-            
             MainPage = serviceProvider.GetRequiredService<AppShell>();
         }
     }
-
 }

@@ -4,16 +4,14 @@
        x:Class="SmartRead.MVVM.Views.AppShell"
        xmlns:User="clr-namespace:SmartRead.MVVM.Views.User"
        xmlns:Book="clr-namespace:SmartRead.MVVM.Views.Book"
-       xmlns:Local="clr-namespace:SmartRead"
-       Shell.FlyoutBehavior="Disabled"
        Title="SmartRead">
 
-    <!-- Páginas de autenticación (fuera del TabBar) -->
-    <ShellContent Route="login" ContentTemplate="{DataTemplate User:LoginPage}" />
-    <ShellContent Route="register" ContentTemplate="{DataTemplate User:RegisterPage}" />
-    <ShellContent Route="forgotpassword" ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />
+    <!-- Páginas de autenticación -->
+    <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="login" ContentTemplate="{DataTemplate User:LoginPage}" />
+    <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="register" ContentTemplate="{DataTemplate User:RegisterPage}" />
+    <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="forgotpassword" ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />
 
-    <!-- TabBar para navegación principal -->
+    <!-- TabBar para navegación principal (rutas protegidas) -->
     <TabBar>
         <Tab Icon="home.png">
             <ShellContent Route="home" ContentTemplate="{DataTemplate Book:HomePage}" />

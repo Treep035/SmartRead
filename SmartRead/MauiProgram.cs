@@ -2,6 +2,7 @@
 using SmartRead.MVVM.ViewModels;
 using SmartRead.MVVM.Views;
 using SmartRead.MVVM.Views.User;
+using SmartRead.Services;
 
 namespace SmartRead
 {
@@ -28,6 +29,8 @@ namespace SmartRead
             // Registrar Vistas
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
+
+
 
 #if DEBUG
             builder.Logging.AddDebug();
