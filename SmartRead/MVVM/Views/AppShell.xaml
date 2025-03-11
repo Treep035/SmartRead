@@ -4,6 +4,8 @@
        x:Class="SmartRead.MVVM.Views.AppShell"
        xmlns:User="clr-namespace:SmartRead.MVVM.Views.User"
        xmlns:Book="clr-namespace:SmartRead.MVVM.Views.Book"
+       xmlns:Account="clr-namespace:SmartRead.MVVM.Views.User.Account"
+       Shell.NavBarIsVisible="False"
        Title="SmartRead">
 
     <!-- Páginas de autenticación -->
@@ -12,15 +14,27 @@
     <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="forgotpassword" ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />
 
     <!-- TabBar para navegación principal (rutas protegidas) -->
-    <TabBar>
-        <Tab Icon="home.png">
-            <ShellContent Route="home" ContentTemplate="{DataTemplate Book:HomePage}" />
+    <FlyoutItem Title="Perfil">
+        <Tab Title="Inicio" Icon="home.png">
+            <ShellContent 
+                Route="home" 
+                ContentTemplate="{DataTemplate Book:HomePage}" />
         </Tab>
-        <Tab Icon="news.png">
-            <ShellContent Route="news" ContentTemplate="{DataTemplate Book:NewsPage}" />
+        <Tab Title="Noticias" Icon="news.png">
+            <ShellContent 
+                Route="news" 
+                ContentTemplate="{DataTemplate Book:NewsPage}" />
         </Tab>
-        <Tab Icon="account.png">
-            <ShellContent Route="profile" ContentTemplate="{DataTemplate User:ProfilePage}" />
+        <Tab Title="Perfil" Icon="account.png">
+            <ShellContent 
+                Route="profile" 
+                ContentTemplate="{DataTemplate User:ProfilePage}" />
         </Tab>
-    </TabBar>
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Configuración" Icon="settings.png">
+        <ShellContent 
+            Route="settings" 
+            ContentTemplate="{DataTemplate Account:SettingsPage}" />
+    </FlyoutItem>
 </Shell>

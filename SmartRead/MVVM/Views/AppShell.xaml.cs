@@ -31,5 +31,6 @@ namespace SmartRead.MVVM.Views
                 return false;
             return true;
         }
+
     }
 }

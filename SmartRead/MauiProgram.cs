@@ -2,7 +2,6 @@
 using SmartRead.MVVM.ViewModels;
 using SmartRead.MVVM.Views;
 using SmartRead.MVVM.Views.User;
-using SmartRead.Services;
 
 namespace SmartRead
 {

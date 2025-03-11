@@ -19,7 +19,9 @@ namespace SmartRead.MVVM.Views.Book
             };
 
             BindingContext = this;
+
         }
+
     }
 
     public class Recommendation
