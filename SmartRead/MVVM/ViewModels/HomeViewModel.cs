@@ -33,7 +33,8 @@ namespace SmartRead.MVVM.ViewModels
             };
 
             // Puedes pasar el recommendation como parámetro si es necesario
-            await Shell.Current.GoToAsync("//info");
+            await Shell.Current.Navigation.PushAsync(new InfoPage());
+
         }
     }
 }

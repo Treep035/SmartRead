@@ -1,17 +1,59 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartRead.MVVM.Views.Book.InfoPage"
              BackgroundColor="Black">
 
-    <StackLayout Padding="10">
-        <Label Text="Titulo de ejemplo"
-               FontSize="24"
-               TextColor="White" />
+    <Grid>
+        <!-- Imagen de fondo -->
+        <Image Source="image1.png"
+               Aspect="AspectFill"
+               VerticalOptions="FillAndExpand"
+               HorizontalOptions="FillAndExpand" />
 
-        <Label Text="Esta es una descripcion de ejemplo que se mostrara en la pagina."
-               FontSize="16"
-               TextColor="White" />
-    </StackLayout>
+        <!-- Botón de cerrar, superpuesto en la esquina superior derecha -->
+        <Image Source="close.png"
+               HorizontalOptions="End"
+               VerticalOptions="Start"
+               Margin="10">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseCommand}" />
+            </Image.GestureRecognizers>
+        </Image>
 
+        <!-- Frame con la descripción, posicionado al fondo -->
+        <Frame BackgroundColor="#2D2D2D"
+               Padding="30"
+               HasShadow="False"
+               BorderColor="Transparent"
+               CornerRadius="0"
+               VerticalOptions="End"
+               HeightRequest="300"
+               Margin="0">
+            <StackLayout>
+                <!-- Botón Leer -->
+                <Button Text="Leer"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        FontSize="14"
+                        CornerRadius="10"
+                        WidthRequest="350"
+                        HorizontalOptions="Center"
+                        Padding="10"
+                        Margin="0,0,0,20" />
+
+                <!-- Descripción principal -->
+                <Label Text="Un drama criminal épico sobre el vínculo inquebrantable entre padres e hijos"
+                       FontSize="16"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Margin="0,0,0,5" />
+
+                <!-- Nombre del autor -->
+                <Label Text="Naira Gamboa"
+                       FontSize="14"
+                       TextColor="#ADADAD"/>
+            </StackLayout>
+        </Frame>
+    </Grid>
 </ContentPage>

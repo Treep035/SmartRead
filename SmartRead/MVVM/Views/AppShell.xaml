@@ -31,14 +31,12 @@
                 ContentTemplate="{DataTemplate User:ProfilePage}" />
         </Tab>
     </FlyoutItem>
-    
+
+    <ShellContent Route="info" ContentTemplate="{DataTemplate Book:InfoPage}" />
+
     <FlyoutItem Title="Configuración" Icon="settings.png">
         <ShellContent 
             Route="settings" 
             ContentTemplate="{DataTemplate Account:SettingsPage}" />
     </FlyoutItem>
-
-    <ShellContent 
-        Route="info" 
-        ContentTemplate="{DataTemplate Book:InfoPage}" />
 </Shell>

@@ -1,5 +1,6 @@
-﻿using SmartRead.MVVM.Models;
+﻿using SmartRead.MVVM.ViewModels; // Importar el ViewModel
 using Microsoft.Maui.Controls;
+using SmartRead.MVVM.Models; // Para el tipo Info
 
 namespace SmartRead.MVVM.Views.Book
 {
@@ -8,14 +9,7 @@ namespace SmartRead.MVVM.Views.Book
         public InfoPage()
         {
             InitializeComponent();
-        }
-
-        public void ApplyQueryAttributes(IDictionary<string, object> query)
-        {
-            if (query.ContainsKey("info") && query["info"] is Info info)
-            {
-                BindingContext = info;
-            }
+            BindingContext = new InfoPageViewModel(); // Establecer el ViewModel como BindingContext
         }
     }
 }
