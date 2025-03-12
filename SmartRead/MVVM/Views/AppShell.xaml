@@ -37,4 +37,8 @@
             Route="settings" 
             ContentTemplate="{DataTemplate Account:SettingsPage}" />
     </FlyoutItem>
+
+    <ShellContent 
+        Route="info" 
+        ContentTemplate="{DataTemplate Book:InfoPage}" />
 </Shell>
