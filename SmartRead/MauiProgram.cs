@@ -4,6 +4,7 @@ using SmartRead.MVVM.ViewModels;
 using SmartRead.MVVM.Views;
 using SmartRead.MVVM.Views.Book;
 using SmartRead.MVVM.Views.User;
+using SmartRead.MVVM.Views.User.Account;
 using SmartRead.MVVM.Views.User.Authentication;
 
 namespace SmartRead

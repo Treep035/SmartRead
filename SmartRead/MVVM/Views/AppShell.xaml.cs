@@ -1,4 +1,5 @@
 using Microsoft.Maui.Controls;
+using SmartRead.MVVM.Views.User.Account;
 using SmartRead.MVVM.Services;
 using SmartRead.MVVM.Views.Book;
 using SmartRead.MVVM.Views.User;
@@ -24,7 +25,7 @@ namespace SmartRead.MVVM.Views
 
             if (rutasProtegidas.Any(ruta => e.Target.Location.OriginalString.Contains(ruta)))
             {
-                // Comprobación sincrónica del estado (sin delay)
+                // Comprobaciï¿½n sincrï¿½nica del estado (sin delay)
                 bool isAuthenticated = Preferences.Default.Get("AuthState", false);
 
                 if (!isAuthenticated)

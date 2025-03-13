@@ -37,7 +37,7 @@
         <Tab Title="Perfil" Icon="account.png">
             <ShellContent 
                 Route="profile" 
-                ContentTemplate="{DataTemplate User:ProfilePage}" />
+                ContentTemplate="{DataTemplate Account:ProfilePage}" />
         </Tab>
     </FlyoutItem>
 

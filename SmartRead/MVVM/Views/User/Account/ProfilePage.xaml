@@ -1,16 +1,131 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SmartRead.MVVM.Views.User.ProfilePage"
-             NavigationPage.HasNavigationBar="False">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Button Text="Abrir Menú"
-    Clicked="OnCustomButtonClicked" />
-        <Button Text="Logout"
-                Clicked="Button_Clicked"/>
-    </VerticalStackLayout>
+             xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
+             x:Class="SmartRead.MVVM.Views.User.Account.ProfilePage"
+             BackgroundColor="Black"
+             Title="Account"
+             Shell.NavBarIsVisible="True">
+
+    <!-- Contenedor Principal con dos filas -->
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- 🔹 Fila 0: Barra superior con menú hamburguesa -->
+        <Grid BackgroundColor="Black" Padding="15,10,15,0">
+            <Image Source="prueba.png"
+                   WidthRequest="40"
+                   HeightRequest="40"
+                   HorizontalOptions="End"
+                   VerticalOptions="Start">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnMenuClicked"/>
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
+
+        <!-- 🔹 Fila 1: Contenido Principal -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20">
+
+                <!-- Perfil de Usuario -->
+                <VerticalStackLayout HorizontalOptions="Center" Margin="0,10,0,20">
+                    <Image Source="usuario.png" WidthRequest="80" HeightRequest="80"/>
+                    <Label Text="Usuario" TextColor="White" FontSize="18" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Progreso de Lectura -->
+                <VerticalStackLayout HorizontalOptions="Center" Padding="0,10">
+                    <Grid WidthRequest="220" HeightRequest="18">
+                        <BoxView BackgroundColor="#E0E0E0" CornerRadius="10" WidthRequest="220" HeightRequest="18"/>
+                        <BoxView BackgroundColor="#FFC766" CornerRadius="10" WidthRequest="100" HeightRequest="18" HorizontalOptions="Start"/>
+                    </Grid>
+
+                    <Label Text="Esta semana has leído" TextColor="White" FontSize="16" FontAttributes="Bold" HorizontalTextAlignment="Center" Padding="0,5,0,0"/>
+                    <Label Text="58 páginas" TextColor="#FFC766" FontSize="14" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Separador -->
+                <BoxView BackgroundColor="#808080" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,10"/>
+
+                <!-- Libros Gustados -->
+                <Label Text="Libros que te han gustado" TextColor="White" FontSize="16" Margin="0,10"/>
+
+                <HorizontalStackLayout>
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Image Source="libro1.png" WidthRequest="100" HeightRequest="150"/>
+                        <Button Text="📤 Compartir"
+                                TextColor="White"
+                                BackgroundColor="Black"
+                                FontSize="14"
+                                Padding="5,5"
+                                Clicked="OnShareClicked"
+                                HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+
+                <!-- Mi lista de libros -->
+                <Label Text="Mi Lista" TextColor="White" FontSize="16" Margin="0,10"/>
+
+                <HorizontalStackLayout>
+                    <VerticalStackLayout>
+                        <Image Source="libro2.png" WidthRequest="100" HeightRequest="150"/>
+                        <Button Text="📤 Compartir"
+                                TextColor="White"
+                                BackgroundColor="Black"
+                                FontSize="14"
+                                Padding="5,5"
+                                Clicked="OnShareClicked"
+                                HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Image Source="libro3.png" WidthRequest="100" HeightRequest="150"/>
+                        <Button Text="📤 Compartir"
+                                TextColor="White"
+                                BackgroundColor="Black"
+                                FontSize="14"
+                                Padding="5,5"
+                                Clicked="OnShareClicked"
+                                HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Image Source="libro4.png" WidthRequest="100" HeightRequest="150"/>
+                        <Button Text="📤 Compartir"
+                                TextColor="White"
+                                BackgroundColor="Black"
+                                FontSize="14"
+                                Padding="5,5"
+                                Clicked="OnShareClicked"
+                                HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Image Source="libro5.png" WidthRequest="100" HeightRequest="150"/>
+                        <Button Text="📤 Compartir"
+                                TextColor="White"
+                                BackgroundColor="Black"
+                                FontSize="14"
+                                Padding="5,5"
+                                Clicked="OnShareClicked"
+                                HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Image Source="libro6.png" WidthRequest="100" HeightRequest="150"/>
+                        <Button Text="📤 Compartir"
+                                TextColor="White"
+                                BackgroundColor="Black"
+                                FontSize="14"
+                                Padding="5,5"
+                                Clicked="OnShareClicked"
+                                HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
 </ContentPage>

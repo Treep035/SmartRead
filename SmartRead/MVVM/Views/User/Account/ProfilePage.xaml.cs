@@ -1,27 +1,21 @@
-using SmartRead.MVVM.Services;
+﻿using SmartRead.MVVM.ViewModels;
 
-namespace SmartRead.MVVM.Views.User;
-
+namespace SmartRead.MVVM.Views.User.Account;
 public partial class ProfilePage : ContentPage
 {
-    private readonly AuthService _authService;
-
-    public ProfilePage(AuthService authService)
+    public ProfilePage()
     {
         InitializeComponent();
-        _authService = authService;
     }
-    private void OnCustomButtonClicked(object sender, EventArgs e)
+
+    private async void OnMenuClicked(object sender, EventArgs e)
     {
-        // Desplegar el flyout (abre el men� lateral)
-        Shell.Current.FlyoutIsPresented = true;
+        await DisplayAlert("Menú", "Aquí irá el menú lateral", "OK");
     }
-    private void Button_Clicked(object sender, EventArgs e)
+
+    // ✅ Método correcto para compartir
+    private async void OnShareClicked(object sender, EventArgs e)
     {
-        _authService.Logout();
-        Shell.Current.GoToAsync("//login");
+        await DisplayAlert("Compartir", "Aquí puedes compartir este libro", "OK");
     }
 }
-
-
-             
