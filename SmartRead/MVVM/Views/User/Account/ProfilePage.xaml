@@ -12,7 +12,7 @@
 
         <!-- 🔹 Fila 0: Barra superior con menú hamburguesa -->
         <Grid BackgroundColor="Black" Padding="15,10,15,0">
-            <Image Source="prueba.png"
+            <Image Source="menu.png"
                    WidthRequest="40"
                    HeightRequest="40"
                    HorizontalOptions="End"

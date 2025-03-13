@@ -9,37 +9,108 @@ namespace SmartRead.MVVM.ViewModels
 {
     public partial class HomeViewModel : ObservableObject
     {
-        public ObservableCollection<Recommendation> Recommendations { get; set; }
+        public ObservableCollection<Category> Categories { get; set; }
 
         public HomeViewModel()
         {
-            Recommendations = new ObservableCollection<Recommendation>
+            Categories = new ObservableCollection<Category>
             {
-                new Recommendation { ImageSource = "image1.png" },
-                new Recommendation { ImageSource = "image2.png" },
-                new Recommendation { ImageSource = "image3.png" },
-                new Recommendation { ImageSource = "image4.png" }
+                new Category("Recomendaciones para ti", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image1.png" },
+                    new Book { ImageSource = "image2.png" }
+                }),
+                new Category("Seguir leyendo", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image3.png" },
+                    new Book { ImageSource = "image4.png" }
+                }),
+                new Category("Aventuras", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image5.png" },
+                    new Book { ImageSource = "image6.png" }
+                }),
+                new Category("Fantástico", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image7.png" },
+                    new Book { ImageSource = "image8.png" }
+                }),
+                new Category("Intriga", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image9.png" },
+                    new Book { ImageSource = "image10.png" }
+                }),
+                new Category("Infantil y juvenil", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image9.png" },
+                    new Book { ImageSource = "image10.png" }
+                }),
+                new Category("Terror", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image9.png" },
+                    new Book { ImageSource = "image10.png" }
+                }),
+                new Category("Clásico", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image9.png" },
+                    new Book { ImageSource = "image10.png" }
+                }),
+                new Category("Ciencia ficción", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image9.png" },
+                    new Book { ImageSource = "image10.png" }
+                }),
+                new Category("Ciencia", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image9.png" },
+                    new Book { ImageSource = "image10.png" }
+                }),
+                new Category("Humor", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image9.png" },
+                    new Book { ImageSource = "image10.png" }
+                }),
+                new Category("Novela", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image9.png" },
+                    new Book { ImageSource = "image10.png" }
+                }),
+                new Category("Cuentos", new ObservableCollection<Book>
+                {
+                    new Book { ImageSource = "image9.png" },
+                    new Book { ImageSource = "image10.png" }
+                })
             };
         }
 
         [RelayCommand]
-        public async Task NavigateToInfo(Recommendation recommendation)
+        public async Task NavigateToInfo(Book book)
         {
-            var info = new Info 
-            { 
+            var info = new Info
+            {
                 Title = "Título de ejemplo",
                 Description = "Esta es una descripción de ejemplo",
-                ImageSource = recommendation.ImageSource 
+                ImageSource = book.ImageSource
             };
 
-            // Puedes pasar el recommendation como parámetro si es necesario
             await Shell.Current.Navigation.PushAsync(new InfoPage());
-
         }
     }
-}
 
-public class Recommendation
-{
-    public string ImageSource { get; set; }
+    public class Category
+    {
+        public string Name { get; set; }
+        public ObservableCollection<Book> Books { get; set; }
+
+        public Category(string name, ObservableCollection<Book> books)
+        {
+            Name = name;
+            Books = books;
+        }
+    }
+
+    public class Book
+    {
+        public string ImageSource { get; set; }
+    }
 }

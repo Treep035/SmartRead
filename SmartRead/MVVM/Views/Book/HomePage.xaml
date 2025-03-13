@@ -5,44 +5,46 @@
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="Black">
 
-    <!-- Usamos un Grid para dividir la pantalla en dos partes -->
+    <ContentPage.BindingContext>
+        <vm:HomeViewModel/>
+    </ContentPage.BindingContext>
+
     <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,*">
-            <!-- Imagen que ocupará la mitad superior de la pantalla -->
-            <Grid Grid.Row="0">
-                <!-- Imagen de fondo -->
+        <StackLayout>
+
+            <!-- Sección de imagen de fondo y barra superior -->
+            <Grid>
                 <Image Source="home_image.png"
                        Aspect="AspectFill"
-                       HeightRequest="450"
+                       VerticalOptions="FillAndExpand"
                        HorizontalOptions="FillAndExpand" />
 
-                <!-- Imagen de búsqueda en la esquina superior derecha -->
                 <Image Source="Search.png"
                        HeightRequest="30"
                        WidthRequest="30"
                        HorizontalOptions="End"
                        VerticalOptions="Start"
                        Margin="10" />
-                
+
                 <StackLayout Orientation="Horizontal"
                      HorizontalOptions="Center"
                      VerticalOptions="Start"
                      Margin="0,50,0,0"
                      Spacing="50">
                     <Label Text="Libros"
-                   TextColor="White"
-                   FontSize="16"
-                   FontAttributes="Bold"/>
+                           TextColor="White"
+                           FontSize="16"
+                           FontAttributes="Bold"/>
                     <Label Text="Novelas"
-                   TextColor="White"
-                   FontSize="16"
-                   FontAttributes="Bold"/>
+                           TextColor="White"
+                           FontSize="16"
+                           FontAttributes="Bold"/>
                     <Label Text="Categorías"
-                   TextColor="White"
-                   FontSize="16"
-                   FontAttributes="Bold"/>
+                           TextColor="White"
+                           FontSize="16"
+                           FontAttributes="Bold"/>
                 </StackLayout>
-
+                
                 <StackLayout Orientation="Horizontal"
                              HorizontalOptions="Center"
                              VerticalOptions="End"
@@ -76,49 +78,47 @@
                            FontSize="13"
                            FontAttributes="Bold"/>
                 </StackLayout>
-
-
             </Grid>
 
-                <!-- Texto "Recomendaciones para ti" -->
-            <Label Text="Recomendaciones para ti"
-                   FontSize="18"
-                   TextColor="White"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Center"
-                   Margin="10,20,10,10"
-                   Grid.Row="1" />
-
-            <!-- Carrusel horizontal de imágenes -->
-            <CollectionView Grid.Row="2"
-                ItemsSource="{Binding Recommendations}"
-                ItemsLayout="HorizontalList"
-                Margin="0"
-                HeightRequest="200"
-                ItemSizingStrategy="MeasureFirstItem">
+            <!-- Lista de Categorías con sus libros -->
+            <CollectionView ItemsSource="{Binding Categories}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Padding="0"
-                               HasShadow="False"
-                               BackgroundColor="Transparent"
-                               BorderColor="Transparent"
-                               CornerRadius="10"
-                               WidthRequest="140"
-                               HeightRequest="200">
-                            <Image Source="{Binding ImageSource}"
-                                   Aspect="AspectFit"
-                                   HeightRequest="200"
-                                   WidthRequest="140">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
-                                        CommandParameter="{Binding .}" />
-                                </Image.GestureRecognizers>
-                            </Image>
-                        </Frame>
+                        <StackLayout>
+
+                            <!-- Título de la Categoría -->
+                            <Label Text="{Binding Name}"
+                                   FontSize="18"
+                                   TextColor="White"
+                                   Margin="10,20,0,10"/>
+
+                            <!-- Carrusel de Libros -->
+                            <CollectionView ItemsSource="{Binding Books}"
+                                            ItemsLayout="HorizontalList"
+                                            HeightRequest="200">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame Padding="0"
+                                               HasShadow="False"
+                                               BackgroundColor="Transparent"
+                                               BorderColor="Transparent"
+                                               CornerRadius="10"
+                                               WidthRequest="140"
+                                               HeightRequest="200">
+                                            <Image Source="{Binding ImageSource}"
+                                                   Aspect="AspectFit"
+                                                   HeightRequest="200"
+                                                   WidthRequest="140"/>
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                        </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </Grid>
+
+        </StackLayout>
     </ScrollView>
 </ContentPage>
