@@ -10,5 +10,7 @@
             HorizontalOptions="Center" />
         <Button Text="Abrir Menú"
     Clicked="OnCustomButtonClicked" />
+        <Button Text="Logout"
+                Clicked="Button_Clicked"/>
     </VerticalStackLayout>
 </ContentPage>

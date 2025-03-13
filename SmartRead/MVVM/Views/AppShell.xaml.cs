@@ -1,36 +1,38 @@
 using Microsoft.Maui.Controls;
+using SmartRead.MVVM.Services;
+using SmartRead.MVVM.Views.Book;
+using SmartRead.MVVM.Views.User;
 
 namespace SmartRead.MVVM.Views
 {
     public partial class AppShell : Shell
     {
+        private readonly AuthService authService;
+
         public AppShell()
         {
             InitializeComponent();
-            // Suscribirse al evento de navegación
-            this.Navigating += AppShell_Navigating;
+
+            authService = new AuthService();
+
+            this.Navigating += OnNavigating;
         }
 
-        private async void AppShell_Navigating(object sender, ShellNavigatingEventArgs e)
+        private async void OnNavigating(object sender, ShellNavigatingEventArgs e)
         {
-            // Si no ha iniciado sesión y se intenta navegar a una ruta protegida...
-            if (!App.IsLoggedIn && IsProtectedRoute(e.Target))
+            var rutasProtegidas = new[] { nameof(HomePage), nameof(ProfilePage), nameof(NewsPage) };
+
+            if (rutasProtegidas.Any(ruta => e.Target.Location.OriginalString.Contains(ruta)))
             {
-                e.Cancel(); // Cancela la navegación
-                await Shell.Current.GoToAsync("//login"); // Redirige al Login
+                // Comprobación sincrónica del estado (sin delay)
+                bool isAuthenticated = Preferences.Default.Get("AuthState", false);
+
+                if (!isAuthenticated)
+                {
+                    e.Cancel();
+                    await Shell.Current.GoToAsync("//login");
+                }
             }
         }
-
-        /// <summary>
-        /// Considera como rutas públicas aquellas que contienen "login", "register" o "forgotpassword"
-        /// </summary>
-        private bool IsProtectedRoute(ShellNavigationState target)
-        {
-            var route = target.Location.OriginalString.ToLower();
-            if (route.Contains("login") || route.Contains("register") || route.Contains("forgotpassword"))
-                return false;
-            return true;
-        }
-
     }
 }

@@ -5,10 +5,19 @@
        xmlns:User="clr-namespace:SmartRead.MVVM.Views.User"
        xmlns:Book="clr-namespace:SmartRead.MVVM.Views.Book"
        xmlns:Account="clr-namespace:SmartRead.MVVM.Views.User.Account"
+       xmlns:Auth="clr-namespace:SmartRead.MVVM.Views.User.Authentication"
+
        Shell.NavBarIsVisible="False"
        Title="SmartRead">
 
     <!-- Páginas de autenticación -->
+    <ShellContent
+     Title="Loading"
+     ContentTemplate="{DataTemplate Auth:LoadingPage}"
+     Route="Loading"
+     Shell.FlyoutBehavior="Disabled"
+     Shell.FlyoutItemIsVisible="False" />
+    
     <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="login" ContentTemplate="{DataTemplate User:LoginPage}" />
     <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="register" ContentTemplate="{DataTemplate User:RegisterPage}" />
     <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="forgotpassword" ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />

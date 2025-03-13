@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmartRead.MVVM.Services;
 using SmartRead.MVVM.ViewModels;
 using SmartRead.MVVM.Views;
+using SmartRead.MVVM.Views.Book;
 using SmartRead.MVVM.Views.User;
+using SmartRead.MVVM.Views.User.Authentication;
 
 namespace SmartRead
 {
@@ -24,12 +27,16 @@ namespace SmartRead
             // Registrar ViewModels
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
-
+  
             // Registrar Vistas
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<LoadingPage>();
+            builder.Services.AddTransient<ProfilePage>();
+            builder.Services.AddTransient<HomePage>();
 
-
+            // Registrar Servicios
+            builder.Services.AddTransient<AuthService>();
 
 #if DEBUG
             builder.Logging.AddDebug();
