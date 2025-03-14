@@ -95,22 +95,11 @@ namespace SmartRead.MVVM.ViewModels
 
             await Shell.Current.Navigation.PushAsync(new InfoPage());
         }
-    }
 
-    public class Category
-    {
-        public string Name { get; set; }
-        public ObservableCollection<Book> Books { get; set; }
-
-        public Category(string name, ObservableCollection<Book> books)
+        [RelayCommand]
+        public async Task NavigateToCategories()
         {
-            Name = name;
-            Books = books;
+            await Shell.Current.GoToAsync("//categories");
         }
-    }
-
-    public class Book
-    {
-        public string ImageSource { get; set; }
     }
 }

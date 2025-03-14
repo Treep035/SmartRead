@@ -42,9 +42,13 @@
                     <Label Text="Categorías"
                            TextColor="White"
                            FontSize="16"
-                           FontAttributes="Bold"/>
+                           FontAttributes="Bold">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToCategoriesCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
                 </StackLayout>
-                
+
                 <StackLayout Orientation="Horizontal"
                              HorizontalOptions="Center"
                              VerticalOptions="End"
@@ -108,7 +112,13 @@
                                             <Image Source="{Binding ImageSource}"
                                                    Aspect="AspectFit"
                                                    HeightRequest="200"
-                                                   WidthRequest="140"/>
+                                                   WidthRequest="140">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer 
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
+                                                         CommandParameter="{Binding .}" />
+                                                </Image.GestureRecognizers>
+                                            </Image>
                                         </Frame>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
@@ -118,7 +128,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
         </StackLayout>
     </ScrollView>
 </ContentPage>
+
