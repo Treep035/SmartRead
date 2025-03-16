@@ -1,4 +1,5 @@
 ﻿using SmartRead.MVVM.ViewModels;
+using SmartRead.ViewModels;
 
 namespace SmartRead.MVVM.Views.User.Account;
 public partial class ProfilePage : ContentPage
@@ -6,6 +7,7 @@ public partial class ProfilePage : ContentPage
     public ProfilePage()
     {
         InitializeComponent();
+        BindingContext = new ProfileViewModel();  // Conecta la vista con los datos
     }
 
     private async void OnMenuClicked(object sender, EventArgs e)
@@ -16,6 +18,7 @@ public partial class ProfilePage : ContentPage
     // ✅ Método correcto para compartir
     private async void OnShareClicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Compartir", "Aquí puedes compartir este libro", "OK");
+        await Application.Current.MainPage.DisplayAlert("Compartir", "Funcionalidad en desarrollo", "OK");
     }
 }
+

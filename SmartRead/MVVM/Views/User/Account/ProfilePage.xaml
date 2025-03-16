@@ -47,81 +47,80 @@
                 <!-- Separador -->
                 <BoxView BackgroundColor="#808080" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,10"/>
 
-                <!-- Libros Gustados -->
+                <!-- 🔹 Sección: Libros que te han gustado -->
                 <Label Text="Libros que te han gustado" TextColor="White" FontSize="16" Margin="0,10"/>
+                <HorizontalStackLayout HorizontalOptions="Start" Margin="0,5,0,0">
+                    <VerticalStackLayout HorizontalOptions="Start">
+                        <!-- Imagen del libro -->
+                        <Image Source="libro1.png"
+                               WidthRequest="100"
+                               HeightRequest="150"
+                               HorizontalOptions="Start"/>
 
-                <HorizontalStackLayout>
-                    <VerticalStackLayout HorizontalOptions="Center">
-                        <Image Source="libro1.png" WidthRequest="100" HeightRequest="150"/>
-                        <Button Text="📤 Compartir"
-                                TextColor="White"
-                                BackgroundColor="Black"
-                                FontSize="14"
-                                Padding="5,5"
-                                Clicked="OnShareClicked"
-                                HorizontalOptions="Center"/>
+                        <!-- Botón de Compartir -->
+                        <HorizontalStackLayout HorizontalOptions="Start" Margin="0,5,0,0">
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnShareClicked"/>
+                            </HorizontalStackLayout.GestureRecognizers>
+
+                            <!-- Icono de compartir -->
+                            <Image Source="icono_compartir.png"
+                                   WidthRequest="20"
+                                   HeightRequest="20"
+                                   VerticalOptions="Center"/>
+
+                            <!-- Texto "Comparte" -->
+                            <Label Text="Comparte"
+                                   TextColor="White"
+                                   FontSize="14"
+                                   VerticalOptions="Center"
+                                   Margin="5,0,0,0"/>
+                        </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </HorizontalStackLayout>
 
-                <!-- Mi lista de libros -->
-                <Label Text="Mi Lista" TextColor="White" FontSize="16" Margin="0,10"/>
+                <!-- 🔹 Carrusel Único para "Mi Lista" y "Leídos Recientemente" -->
+                <CollectionView ItemsSource="{Binding Categories}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout>
 
-                <HorizontalStackLayout>
-                    <VerticalStackLayout>
-                        <Image Source="libro2.png" WidthRequest="100" HeightRequest="150"/>
-                        <Button Text="📤 Compartir"
-                                TextColor="White"
-                                BackgroundColor="Black"
-                                FontSize="14"
-                                Padding="5,5"
-                                Clicked="OnShareClicked"
-                                HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+                                <!-- Nombre de la Categoría -->
+                                <Label Text="{Binding Name}"
+                                       FontSize="18"
+                                       TextColor="White"
+                                       Margin="10,10,0,5"/>
 
-                    <VerticalStackLayout>
-                        <Image Source="libro3.png" WidthRequest="100" HeightRequest="150"/>
-                        <Button Text="📤 Compartir"
-                                TextColor="White"
-                                BackgroundColor="Black"
-                                FontSize="14"
-                                Padding="5,5"
-                                Clicked="OnShareClicked"
-                                HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+                                <!-- Carrusel de Libros -->
+                                <CollectionView ItemsSource="{Binding Books}"
+                                                HeightRequest="180">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame Padding="0"
+                                                   HasShadow="False"
+                                                   BackgroundColor="Transparent"
+                                                   BorderColor="Transparent"
+                                                   CornerRadius="8"
+                                                   WidthRequest="120"
+                                                   HeightRequest="200">
+                                                <Image Source="{Binding ImageSource}"
+                                                       WidthRequest="120"
+                                                       HeightRequest="180"/>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
 
-                    <VerticalStackLayout>
-                        <Image Source="libro4.png" WidthRequest="100" HeightRequest="150"/>
-                        <Button Text="📤 Compartir"
-                                TextColor="White"
-                                BackgroundColor="Black"
-                                FontSize="14"
-                                Padding="5,5"
-                                Clicked="OnShareClicked"
-                                HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout>
-                        <Image Source="libro5.png" WidthRequest="100" HeightRequest="150"/>
-                        <Button Text="📤 Compartir"
-                                TextColor="White"
-                                BackgroundColor="Black"
-                                FontSize="14"
-                                Padding="5,5"
-                                Clicked="OnShareClicked"
-                                HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout>
-                        <Image Source="libro6.png" WidthRequest="100" HeightRequest="150"/>
-                        <Button Text="📤 Compartir"
-                                TextColor="White"
-                                BackgroundColor="Black"
-                                FontSize="14"
-                                Padding="5,5"
-                                Clicked="OnShareClicked"
-                                HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                </HorizontalStackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
             </VerticalStackLayout>
         </ScrollView>
