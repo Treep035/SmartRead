@@ -51,7 +51,7 @@
         Route="info" 
         ContentTemplate="{DataTemplate Book:InfoPage}" />
 
-    <ShellContent Route="categories" ContentTemplate="{DataTemplate Book:CategoriesPage}" />
+
 
     <!-- TabBar para navegación principal -->
     <FlyoutItem Title="Menú principal">

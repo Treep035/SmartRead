@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="SmartRead.MVVM.Views.Book.CategoriesPopup"
+    Color="Transparent">
+    <!-- Esta es la propiedad clave a agregar -->
+
+    <!-- Contenido transparente -->
+    <ContentView BackgroundColor="Transparent">
+        <StackLayout Padding="20" 
+                     VerticalOptions="FillAndExpand"
+                     HorizontalOptions="Center" 
+                     BackgroundColor="Transparent">
+            <CollectionView ItemsSource="{Binding CategoryNames}" HeightRequest="500" HorizontalOptions="Center" VerticalOptions="FillAndExpand">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding}" 
+                               TextColor="White" 
+                               FontSize="18" 
+                               Padding="10"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                               Margin="0,15"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <ImageButton Source="close.png"
+                         Clicked="ClosePopup"
+                         HorizontalOptions="Center"
+                         Padding="10"
+                         BackgroundColor="Transparent"
+                         Margin="0,80,0,0"/>
+        </StackLayout>
+    </ContentView>
+
+</toolkit:Popup>

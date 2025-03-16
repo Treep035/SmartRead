@@ -61,6 +61,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="8.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
@@ -68,8 +69,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="MVVM\Views\Book\CategoriesPage.xaml.cs">
-	    <DependentUpon>CategoriesPage.xaml</DependentUpon>
+	  <Compile Update="MVVM\Views\Book\CategoriesPopup.xaml.cs">
+	    <DependentUpon>CategoriesPopup.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -83,7 +84,7 @@
 	  <MauiXaml Update="MVVM\Views\Book\InfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\Book\CategoriesPage.xaml">
+	  <MauiXaml Update="MVVM\Views\Book\NewPage1.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\Book\NewsPage.xaml">

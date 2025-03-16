@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+
+using Microsoft.Extensions.Logging;
 using SmartRead.MVVM.Services;
 using SmartRead.MVVM.ViewModels;
 using SmartRead.MVVM.Views;
@@ -16,6 +18,7 @@ namespace SmartRead
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
