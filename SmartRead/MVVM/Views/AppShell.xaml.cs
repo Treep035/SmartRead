@@ -35,5 +35,11 @@ namespace SmartRead.MVVM.Views
                 }
             }
         }
+
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            authService.Logout();
+            Shell.Current.GoToAsync("//login");
+        }
     }
 }

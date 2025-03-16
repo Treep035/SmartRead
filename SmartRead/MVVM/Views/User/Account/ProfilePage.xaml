@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
              x:Class="SmartRead.MVVM.Views.User.Account.ProfilePage"
-             BackgroundColor="Black"
-             Title="Account"
-             Shell.NavBarIsVisible="True">
+             BackgroundColor="Black">
 
     <!-- Contenedor Principal con dos filas -->
     <Grid RowDefinitions="Auto,*">
