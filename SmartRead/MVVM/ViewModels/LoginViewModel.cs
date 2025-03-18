@@ -1,15 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.Controls;
 using SmartRead.MVVM.Services;
-using SmartRead.MVVM.Views.Book;
 
 namespace SmartRead.MVVM.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
         private readonly AuthService _authService;
+        private readonly IConfiguration _configuration;  
 
         [ObservableProperty]
         private string email;
@@ -20,11 +24,12 @@ namespace SmartRead.MVVM.ViewModels
         [ObservableProperty]
         private bool rememberMe;
 
-        public LoginViewModel(AuthService authService)
+        // Se inyectan AuthService e IConfiguration en el constructor
+        public LoginViewModel(AuthService authService, IConfiguration configuration)
         {
             _authService = authService;
+            _configuration = configuration;
         }
-
 
         [RelayCommand]
         public async Task Login()
@@ -34,41 +39,81 @@ namespace SmartRead.MVVM.ViewModels
                 await Shell.Current.DisplayAlert("Error", "Debe ingresar un correo y una contraseña.", "OK");
                 return;
             }
+
             if (RememberMe)
             {
-                // Si "Recordarme" está activado, entonces llama a LoginAsync
-                await LoginAsync(Email, Password);
+                bool success = await LoginAsync(Email, Password);
+                if (!success)
+                {
+                    // Se detiene el proceso si no se pudo iniciar sesión correctamente.
+                    return;
+                }
             }
+
             _authService.Login();
             await Shell.Current.GoToAsync($"//home");
-            // Aquí se simula el login sin consultar ningún servicio:
-            //App.IsLoggedIn = true; // Se marca que el usuario inició sesión
-
             await Shell.Current.DisplayAlert("Éxito", "Inicio de sesión exitoso", "OK");
         }
 
-        public async Task LoginAsync(string username, string password)
+        public async Task<bool> LoginAsync(string username, string password)
         {
-            // Lógica para autenticar al usuario (simulación)
-            string accessToken = _authService.GenerateRandomToken(32);
-            string refreshToken = _authService.GenerateRandomToken(64);
+            // Obtener la clave de la Azure Function desde appsettings.json mediante IConfiguration
+            var functionKey = _configuration["AzureFunctionKey"];
+            await Shell.Current.DisplayAlert("Debug", $"Valor de functionKey: {functionKey}", "OK");
 
-            // Guardar los tokens
-            await _authService.SaveAccessTokenAsync(accessToken);
-            await _authService.SaveRefreshTokenAsync(refreshToken);
-            Console.WriteLine($"Access Token: {accessToken}");
-            Console.WriteLine($"Refresh Token: {refreshToken}");
+            // Construir la URL con los parámetros utilizando la clave obtenida
+            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function1?code={functionKey}&username={Uri.EscapeDataString(username)}&password={Uri.EscapeDataString(password)}";
+
+            // Mostrar la URL final para depuración
+            await Shell.Current.DisplayAlert("Debug", $"URL final: {url}", "OK");
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var response = await httpClient.GetAsync(url);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorMessage = await response.Content.ReadAsStringAsync();
+                        await Shell.Current.DisplayAlert("Error", $"Error al iniciar sesión: {errorMessage}", "OK");
+                        return false;
+                    }
+
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    // var result = JsonSerializer.Deserialize<YourResponseModel>(responseContent);
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    await Shell.Current.DisplayAlert("Error", $"Excepción: {ex.Message}", "OK");
+                    return false;
+                }
+            }
         }
 
-        public async Task GetStoredTokensAsync()
-        {
-            // Recuperar los tokens
-            var accessToken = await _authService.GetAccessTokenAsync();
-            var refreshToken = await _authService.GetRefreshTokenAsync();
+        // public async Task LoginAsync(string username, string password)
+        // {
+        //     // Lógica para autenticar al usuario (simulación).
+        //     // string accessToken = _authService.GenerateRandomToken(32);
+        //     // string refreshToken = _authService.GenerateRandomToken(64);
 
-            Console.WriteLine($"Access Token: {accessToken}");
-            Console.WriteLine($"Refresh Token: {refreshToken}");
-        }
+        //     // await _authService.SaveAccessTokenAsync(accessToken);
+        //     // await _authService.SaveRefreshTokenAsync(refreshToken);
+        //     // Console.WriteLine($"Access Token: {accessToken}");
+        //     // Console.WriteLine($"Refresh Token: {refreshToken}");
+        // }
+
+        // public async Task GetStoredTokensAsync()
+        // {
+        //     // var accessToken = await _authService.GetAccessTokenAsync();
+        //     // var refreshToken = await _authService.GetRefreshTokenAsync();
+
+        //     // Console.WriteLine($"Access Token: {accessToken}");
+        //     // Console.WriteLine($"Refresh Token: {refreshToken}");
+        // }
+
+
 
         [RelayCommand]
         public async Task NavigateToRegister()

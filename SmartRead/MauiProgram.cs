@@ -8,6 +8,8 @@ using SmartRead.MVVM.Views.Book;
 using SmartRead.MVVM.Views.User;
 using SmartRead.MVVM.Views.User.Account;
 using SmartRead.MVVM.Views.User.Authentication;
+using Microsoft.Extensions.Configuration;
+
 
 namespace SmartRead
 {
@@ -24,6 +26,9 @@ namespace SmartRead
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            using var stream = FileSystem.OpenAppPackageFileAsync("Properties/appsettings.json").GetAwaiter().GetResult();
+            builder.Configuration.AddJsonStream(stream);
 
             // Registrar `AppShell`
             builder.Services.AddTransient<AppShell>();
