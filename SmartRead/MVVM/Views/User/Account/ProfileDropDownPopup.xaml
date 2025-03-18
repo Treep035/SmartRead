@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<popup:Popup
+    x:Class="SmartRead.MVVM.Views.User.Account.ProfileDropDownPopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:popup="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+    Color="Transparent">
+
+    <!-- Contenedor principal: ocupa toda la pantalla -->
+    <Grid x:Name="RootGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        <!-- Fondo semi-transparente para cerrar al tocar fuera -->
+        <BoxView BackgroundColor="Black" Opacity="0.5" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseTapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- Panel inferior: posicionado al final del Grid -->
+        <Border x:Name="PanelBorder"
+                BackgroundColor="#2D2D2D"
+                Stroke="Transparent"
+                StrokeThickness="0"
+                HorizontalOptions="Fill"
+                VerticalOptions="End"
+                HeightRequest="265"
+                Margin="0"
+                InputTransparent="False">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="30,30,0,0"/>
+                <!-- Esquina superior izquierda/derecha -->
+            </Border.StrokeShape>
+
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnEmptyTapped"/>
+            </Border.GestureRecognizers>
+            <Grid Padding="20">
+                <!-- Botón de cerrar -->
+                <Image Source="close.png"
+                       HorizontalOptions="End"
+                       VerticalOptions="Start"
+                       WidthRequest="30"
+                       HeightRequest="30">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCloseTapped"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <!-- Opciones del panel -->
+                <VerticalStackLayout Margin="0,50,0,0" Spacing="35" HorizontalOptions="FillAndExpand">
+                    <HorizontalStackLayout Spacing="15">
+                        <Image Source="configuration.png"
+                               WidthRequest="30"
+                               HeightRequest="30"
+                               VerticalOptions="Center"/>
+                        <Label Text="Configuración de la aplicación" 
+                               FontSize="18" 
+                               TextColor="White" 
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Cuenta -->
+                    <HorizontalStackLayout Spacing="15">
+                        <Image Source="account.png"
+                               WidthRequest="30"
+                               HeightRequest="30"
+                               VerticalOptions="Center"/>
+                        <Label Text="Cuenta" 
+                               FontSize="18" 
+                               TextColor="White" 
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Cerrar sesión -->
+                    <HorizontalStackLayout Spacing="15">
+                        <Image Source="sign_out.png"
+                               WidthRequest="30"
+                               HeightRequest="30"
+                               VerticalOptions="Center"/>
+                        <Label Text="Cerrar sesión" 
+                               FontSize="18" 
+                               TextColor="White" 
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+    </Grid>
+</popup:Popup>
