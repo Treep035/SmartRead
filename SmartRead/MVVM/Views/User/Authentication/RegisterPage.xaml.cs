@@ -1,13 +1,14 @@
+using Microsoft.Extensions.Configuration;
 using SmartRead.MVVM.ViewModels;
 
 namespace SmartRead.MVVM.Views.User;
 
 public partial class RegisterPage : ContentPage
 {
-	public RegisterPage(RegisterViewModel vm)
+	public RegisterPage(IConfiguration configuration)
 	{
 		InitializeComponent();
-        BindingContext = vm;
+        BindingContext = new RegisterViewModel(configuration);
 
     }
 
