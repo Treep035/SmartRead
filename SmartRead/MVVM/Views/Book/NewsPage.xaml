@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
              x:Class="SmartRead.MVVM.Views.Book.NewsPage"
-<<<<<<< HEAD
              BackgroundColor="Black"
              Title="Noticias">
 
@@ -148,6 +147,8 @@
 
 </ContentPage>
 =======
+=======
+>>>>>>> 1358c98512b6f1c11120f2e7234a00e8d678b79c
             >
     <VerticalStackLayout>
         <Label 

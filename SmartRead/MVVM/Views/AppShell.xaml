@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-       xmlns:views="clr-namespace:SmartRead.MVVM.Views.Book"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        x:Class="SmartRead.MVVM.Views.AppShell"
        xmlns:User="clr-namespace:SmartRead.MVVM.Views.User"
-       xmlns:Book="clr-namespace:SmartRead.MVVM.Views.Book" 
+       xmlns:Book="clr-namespace:SmartRead.MVVM.Views.Book"
        xmlns:Account="clr-namespace:SmartRead.MVVM.Views.User.Account"
        xmlns:Auth="clr-namespace:SmartRead.MVVM.Views.User.Authentication"
        Title="SmartRead"
@@ -16,39 +15,9 @@
        Shell.TabBarUnselectedColor="#555462">
 
 
-    
+
     <!-- Páginas de autenticación -->
     <ShellContent
-<<<<<<< HEAD
-     Title="Loading"
-     ContentTemplate="{DataTemplate Auth:LoadingPage}"
-     Route="Loading"
-     Shell.FlyoutBehavior="Disabled"
-     Shell.FlyoutItemIsVisible="False" />
-    
-    <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="login" ContentTemplate="{DataTemplate User:LoginPage}" />
-    <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="register" ContentTemplate="{DataTemplate User:RegisterPage}" />
-    <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="forgotpassword" ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />
-    <ShellContent Title="Noticias" Route="news" ContentTemplate="{DataTemplate Book:NewsPage}" /> 
-    
-    <!-- TabBar para navegación principal (rutas protegidas) -->
-    <FlyoutItem Title="Perfil">
-        <Tab Title="Inicio" Icon="home.png">
-            <ShellContent 
-                Route="home" 
-                ContentTemplate="{DataTemplate Book:HomePage}" />
-        </Tab>
-        <Tab Title="Noticias" Icon="news.png">
-            <ShellContent 
-                Route="news" 
-                ContentTemplate="{DataTemplate Book:NewsPage}" />
-        </Tab>
-        <Tab Title="Perfil" Icon="account.png">
-            <ShellContent 
-                Route="profile" 
-                ContentTemplate="{DataTemplate Account:ProfilePage}" />
-        </Tab>
-=======
         Title="Loading"
         ContentTemplate="{DataTemplate Auth:LoadingPage}"
         Route="Loading"
@@ -82,7 +51,7 @@
         Route="info" 
         ContentTemplate="{DataTemplate Book:InfoPage}" />
 
-    <ShellContent Route="categories" ContentTemplate="{DataTemplate Book:CategoriesPage}" />
+
 
     <!-- TabBar para navegación principal -->
     <FlyoutItem Title="Menú principal">
@@ -113,9 +82,8 @@
              Route="profile">
 
         </ShellContent>
->>>>>>> 1358c98512b6f1c11120f2e7234a00e8d678b79c
     </FlyoutItem>
-    
+
     <FlyoutItem Title="Configuración" Icon="settings.png">
         <ShellContent 
             Route="settings" 
@@ -137,5 +105,3 @@
 
 
 </Shell>
-
-
