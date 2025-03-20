@@ -55,17 +55,10 @@
                              Margin="0,0,0,20"
                              Spacing="60">
 
-                    <StackLayout Orientation="Vertical" HorizontalOptions="Center">
-                        <Label Text="Añadir a"
-                               TextColor="White"
-                               FontSize="13"
-                               FontAttributes="Bold"
-                               HorizontalTextAlignment="Center"/>
-                        <Label Text="la lista"
-                               TextColor="White"
-                               FontSize="13"
-                               FontAttributes="Bold"
-                               HorizontalTextAlignment="Center"/>
+                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="2">
+                        <Image Source="list.png" WidthRequest="30" HeightRequest="30"/>
+                        <Label Text="Añadir a" TextColor="White" FontSize="13" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                        <Label Text="la lista" TextColor="White" FontSize="13" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
                     </StackLayout>
 
                     <Button Text="Leer"
@@ -75,12 +68,13 @@
                             FontAttributes="Bold"
                             CornerRadius="10"
                             Padding="10,5"
+                            HeightRequest="50"
                             WidthRequest="70"/>
 
-                    <Label Text="Info"
-                           TextColor="White"
-                           FontSize="13"
-                           FontAttributes="Bold"/>
+                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="5">
+                        <Image Source="info.png" WidthRequest="30" HeightRequest="30"/>
+                        <Label Text="Info" TextColor="White" FontSize="13" FontAttributes="Bold" Margin="2,0,0,0"/>
+                    </StackLayout>
                 </StackLayout>
             </Grid>
 

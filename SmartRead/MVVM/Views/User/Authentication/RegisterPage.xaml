@@ -6,9 +6,7 @@
              BackgroundImageSource="background.png"
              NavigationPage.HasNavigationBar="False">
 
-    <ContentPage.BindingContext>
-        <vm:RegisterViewModel />
-    </ContentPage.BindingContext>
+
 
     <Grid VerticalOptions="Center" HorizontalOptions="Center" Padding="30">
         <Grid BackgroundColor="#BE1F1F1F" Padding="20" WidthRequest="300" VerticalOptions="Center">

@@ -1,5 +1,5 @@
-﻿using SmartRead.MVVM.ViewModels;
-using SmartRead.MVVM.Views.Book;
+﻿using CommunityToolkit.Maui.Views;
+using SmartRead.MVVM.ViewModels;
 using SmartRead.ViewModels;
 
 namespace SmartRead.MVVM.Views.User.Account;
@@ -13,10 +13,22 @@ public partial class ProfilePage : ContentPage
 
     private async void OnMenuClicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Menú", "Aquí irá el menú lateral", "OK");
+        // Verificación correcta usando la propiedad estática
+        if (ProfileDropDownPopup.IsPopupOpen) return;
+
+        try
+        {
+            var popup = new ProfileDropDownPopup();
+            this.ShowPopup(popup);
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Manejar el caso de popup ya abierto
+            Console.WriteLine(ex.Message);
+        }
     }
 
-    // ✅ Método correcto para compartir
+    // Método correcto para compartir
     private async void OnShareClicked(object sender, EventArgs e)
     {
         await Application.Current.MainPage.DisplayAlert("Compartir", "Funcionalidad en desarrollo", "OK");

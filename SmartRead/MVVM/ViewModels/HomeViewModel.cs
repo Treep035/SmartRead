@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
 using SmartRead.MVVM.Models;
 using SmartRead.MVVM.Views.Book;
+using CommunityToolkit.Maui.Views;
 
 namespace SmartRead.MVVM.ViewModels
 {
@@ -97,9 +98,11 @@ namespace SmartRead.MVVM.ViewModels
         }
 
         [RelayCommand]
-        public async Task NavigateToCategories()
+        public Task NavigateToCategories()
         {
-            await Shell.Current.GoToAsync("//categories");
+            var categoriesPopup = new CategoriesPopup();  // Crear el Popup
+            Application.Current.MainPage.ShowPopup(categoriesPopup);  // Mostrar el Popup
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+
+using Microsoft.Extensions.Logging;
 using SmartRead.MVVM.Services;
 using SmartRead.MVVM.ViewModels;
 using SmartRead.MVVM.Views;
@@ -6,6 +8,8 @@ using SmartRead.MVVM.Views.Book;
 using SmartRead.MVVM.Views.User;
 using SmartRead.MVVM.Views.User.Account;
 using SmartRead.MVVM.Views.User.Authentication;
+using Microsoft.Extensions.Configuration;
+
 
 namespace SmartRead
 {
@@ -16,11 +20,15 @@ namespace SmartRead
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            using var stream = FileSystem.OpenAppPackageFileAsync("Properties/appsettings.json").GetAwaiter().GetResult();
+            builder.Configuration.AddJsonStream(stream);
 
             // Registrar `AppShell`
             builder.Services.AddTransient<AppShell>();
