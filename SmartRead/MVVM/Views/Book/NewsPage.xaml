@@ -82,7 +82,7 @@
                                       Margin="0,-5,0,0">
 
                                     <!-- Número del libro -->
-                                <Label Text="{Binding Numero}"
+                                    <Label Text="{Binding Numero}"
                                        FontSize="50"
                                        TextColor="White"
                                        FontAttributes="Bold"
@@ -94,10 +94,10 @@
                                        HorizontalOptions="Center"
                                        ZIndex="2"
                                        IsVisible="{Binding PopularSelected}"/>
-                                   
 
-                                <!-- Imagen del libro -->
-                                <Image Source="{Binding Imagen}"
+
+                                    <!-- Imagen del libro -->
+                                    <Image Source="{Binding Imagen}"
                                        WidthRequest="100"
                                        HeightRequest="150"
                                        Aspect="AspectFit"
@@ -106,7 +106,7 @@
                                        ZIndex="1"/>
                                 </Grid>
                                 <!-- Información del libro -->
-                                <VerticalStackLayout Grid.Column="1" Grid.Row="0" HeightRequest="150" VerticalOptions="Fill" Padding="0,5,0,5"> 
+                                <VerticalStackLayout Grid.Column="1" Grid.Row="0" HeightRequest="150" VerticalOptions="Fill" Padding="0,5,0,5">
                                     <Label Text="{Binding Titulo}" 
                                            FontSize="18"
                                            FontAttributes="Bold"
@@ -146,15 +146,3 @@
     </ScrollView>
 
 </ContentPage>
-=======
-=======
->>>>>>> 1358c98512b6f1c11120f2e7234a00e8d678b79c
-            >
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
-</ContentPage>
->>>>>>> 1358c98512b6f1c11120f2e7234a00e8d678b79c
