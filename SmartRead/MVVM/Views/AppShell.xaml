@@ -7,12 +7,19 @@
        xmlns:Book="clr-namespace:SmartRead.MVVM.Views.Book" 
        xmlns:Account="clr-namespace:SmartRead.MVVM.Views.User.Account"
        xmlns:Auth="clr-namespace:SmartRead.MVVM.Views.User.Authentication"
+       Title="SmartRead"
+       BackgroundColor="Black"
+       FlyoutIcon="menu.png"
+       Shell.TabBarBackgroundColor="Black"
+       Shell.TabBarForegroundColor="#C9C9C9"
+       Shell.TabBarTitleColor="#C9C9C9"
+       Shell.TabBarUnselectedColor="#555462">
 
-       Shell.NavBarIsVisible="False"
-       Title="SmartRead">
 
+    
     <!-- Páginas de autenticación -->
     <ShellContent
+<<<<<<< HEAD
      Title="Loading"
      ContentTemplate="{DataTemplate Auth:LoadingPage}"
      Route="Loading"
@@ -41,13 +48,94 @@
                 Route="profile" 
                 ContentTemplate="{DataTemplate Account:ProfilePage}" />
         </Tab>
+=======
+        Title="Loading"
+        ContentTemplate="{DataTemplate Auth:LoadingPage}"
+        Route="Loading"
+        Shell.FlyoutBehavior="Disabled"
+        Shell.FlyoutItemIsVisible="False" />
+
+    <ShellContent 
+        FlyoutItemIsVisible="False" 
+        Shell.FlyoutBehavior="Disabled" 
+        Route="login" 
+        ContentTemplate="{DataTemplate User:LoginPage}" />
+    <ShellContent 
+        FlyoutItemIsVisible="False" 
+        Shell.FlyoutBehavior="Disabled" 
+        Route="register" 
+        ContentTemplate="{DataTemplate User:RegisterPage}" />
+    <ShellContent 
+        FlyoutItemIsVisible="False" 
+        Shell.FlyoutBehavior="Disabled" 
+        Route="forgotpassword" 
+        ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />
+
+    <!-- Resto de paginas que no forman parte del Flyout pero que nos interesa manejarlas con Shell, Antencion, es importante para estas paginas poner  
+    FlyoutItemIsVisible="False" 
+    Shell.FlyoutBehavior="Disabled" 
+    para que NO aparezcan automaticamente en el Flyout igual que lo hacemos con las de autenticación-->
+
+    <ShellContent 
+        FlyoutItemIsVisible="False" 
+        Shell.FlyoutBehavior="Disabled" 
+        Route="info" 
+        ContentTemplate="{DataTemplate Book:InfoPage}" />
+
+    <ShellContent Route="categories" ContentTemplate="{DataTemplate Book:CategoriesPage}" />
+
+    <!-- TabBar para navegación principal -->
+    <FlyoutItem Title="Menú principal">
+
+        <!-- Tab Home -->
+        <ShellContent
+             Title="Inicio"
+             Icon="home.png"
+             ContentTemplate="{DataTemplate Book:HomePage}"
+             Route="home">
+
+        </ShellContent>
+
+        <!-- Tab News -->
+        <ShellContent
+             Title="Noticias"
+             Icon="news.png"
+             ContentTemplate="{DataTemplate Book:NewsPage}"
+             Route="news">
+
+        </ShellContent>
+
+        <!-- Tab Profile -->
+        <ShellContent
+             Title="Perfil"
+             Icon="account.png"
+             ContentTemplate="{DataTemplate Account:ProfilePage}"
+             Route="profile">
+
+        </ShellContent>
+>>>>>>> 1358c98512b6f1c11120f2e7234a00e8d678b79c
     </FlyoutItem>
-
-    <ShellContent Route="info" ContentTemplate="{DataTemplate Book:InfoPage}" />
-
+    
     <FlyoutItem Title="Configuración" Icon="settings.png">
         <ShellContent 
             Route="settings" 
             ContentTemplate="{DataTemplate Account:SettingsPage}" />
     </FlyoutItem>
+
+    <Shell.FlyoutFooter>
+        <StackLayout Padding="10">
+            <Button Text="Logout"
+                TextColor="White"
+                BackgroundColor="#FF5722"
+                FontSize="13"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                HeightRequest="50"
+                Clicked="OnLogoutClicked"/>
+        </StackLayout>
+    </Shell.FlyoutFooter>
+
+
 </Shell>
+
+
