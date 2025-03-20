@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+       xmlns:views="clr-namespace:SmartRead.MVVM.Views.Book"
        x:Class="SmartRead.MVVM.Views.AppShell"
        xmlns:User="clr-namespace:SmartRead.MVVM.Views.User"
-       xmlns:Book="clr-namespace:SmartRead.MVVM.Views.Book"
+       xmlns:Book="clr-namespace:SmartRead.MVVM.Views.Book" 
        xmlns:Account="clr-namespace:SmartRead.MVVM.Views.User.Account"
        xmlns:Auth="clr-namespace:SmartRead.MVVM.Views.User.Authentication"
 
@@ -21,7 +22,8 @@
     <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="login" ContentTemplate="{DataTemplate User:LoginPage}" />
     <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="register" ContentTemplate="{DataTemplate User:RegisterPage}" />
     <ShellContent FlyoutItemIsVisible="False" Shell.FlyoutBehavior="Disabled" Route="forgotpassword" ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />
-
+    <ShellContent Title="Noticias" Route="news" ContentTemplate="{DataTemplate Book:NewsPage}" /> 
+    
     <!-- TabBar para navegación principal (rutas protegidas) -->
     <FlyoutItem Title="Perfil">
         <Tab Title="Inicio" Icon="home.png">

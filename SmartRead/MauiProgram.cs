@@ -28,13 +28,18 @@ namespace SmartRead
             // Registrar ViewModels
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
-  
+           
             // Registrar Vistas
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<HomePage>();
+            builder.Services.AddSingleton<NewsViewModel>();
+            builder.Services.AddTransient<NewsPage>();
+            
+
+
 
             // Registrar Servicios
             builder.Services.AddTransient<AuthService>();
