@@ -62,8 +62,11 @@ namespace SmartRead.MVVM.ViewModels
 
         private async Task<bool> RegisterAsync(string username, string email, string password)
         {
+            // Obtener la clave de la Azure Function desde appsettings.json mediante IConfiguration
             var functionKey = _configuration["AzureFunctionKey1"];
-            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function2?code={functionKey}&username={Uri.EscapeDataString(username)}&password={Uri.EscapeDataString(password)}&email={Uri.EscapeDataString(email)}";
+
+            // Construir la URL con la acción "register"
+            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=register&username={Uri.EscapeDataString(username)}&password={Uri.EscapeDataString(password)}&email={Uri.EscapeDataString(email)}";
 
             await Shell.Current.DisplayAlert("Debug", $"URL final: {url}", "OK");
 
@@ -71,6 +74,7 @@ namespace SmartRead.MVVM.ViewModels
             {
                 try
                 {
+                    // Se utiliza POST para el registro
                     var response = await httpClient.PostAsync(url, null);
                     if (!response.IsSuccessStatusCode)
                     {
@@ -88,6 +92,7 @@ namespace SmartRead.MVVM.ViewModels
                 }
             }
         }
+
 
         [RelayCommand]
         public async Task NavigateToLogin()

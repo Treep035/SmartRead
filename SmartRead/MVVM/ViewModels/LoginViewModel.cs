@@ -49,6 +49,15 @@ namespace SmartRead.MVVM.ViewModels
                     return;
                 }
             }
+            else
+            {
+                bool success = await LoginAsync(Email, Password);
+                if (!success)
+                {
+                    // Se detiene el proceso si no se pudo iniciar sesión correctamente.
+                    return;
+                }
+            }
 
             _authService.Login();
             await Shell.Current.GoToAsync($"//home");
@@ -61,8 +70,8 @@ namespace SmartRead.MVVM.ViewModels
             var functionKey = _configuration["AzureFunctionKey"];
             await Shell.Current.DisplayAlert("Debug", $"Valor de functionKey: {functionKey}", "OK");
 
-            // Construir la URL con los parámetros utilizando la clave obtenida
-            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function1?code={functionKey}&username={Uri.EscapeDataString(username)}&password={Uri.EscapeDataString(password)}";
+            // Construir la URL con los parámetros utilizando la clave obtenida y la acción "login"
+            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=login&username={Uri.EscapeDataString(username)}&password={Uri.EscapeDataString(password)}";
 
             // Mostrar la URL final para depuración
             await Shell.Current.DisplayAlert("Debug", $"URL final: {url}", "OK");
@@ -91,6 +100,7 @@ namespace SmartRead.MVVM.ViewModels
                 }
             }
         }
+
 
         // public async Task LoginAsync(string username, string password)
         // {
