@@ -128,7 +128,8 @@
                                                 CornerRadius="10"
                                                 Padding="5,5"/>
 
-                                        <Button Text="📌 + Lista"
+                                        <Button Text="Lista"
+                                                ImageSource="list.png"
                                                 BackgroundColor="Gray"
                                                 TextColor="White"
                                                 CornerRadius="10"

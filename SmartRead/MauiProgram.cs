@@ -17,6 +17,7 @@ namespace SmartRead
     {
         public static MauiApp CreateMauiApp()
         {
+            AppContext.SetSwitch("System.Reflection.NullabilityInfoContext.IsSupported", true);
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -36,10 +37,12 @@ namespace SmartRead
             // Registrar ViewModels
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
-           
+            builder.Services.AddTransient<ForgotPasswordViewModel>();
+
             // Registrar Vistas
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<ForgotPasswordPage>();
             builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<HomePage>();

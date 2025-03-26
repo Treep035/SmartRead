@@ -45,15 +45,12 @@ namespace SmartRead.MVVM.ViewModels
         [RelayCommand]
         public void CargarPopulares()
         {
-            if (!PopularSelected)
+            PopularSelected = true;
+            NovedadesSelected = false;
+            LibrosActuales.Clear();
+            foreach (var libro in LibrosPopulares)
             {
-                PopularSelected = true;
-                NovedadesSelected = false;
-                LibrosActuales.Clear();
-                foreach (var libro in LibrosPopulares)
-                {
-                    LibrosActuales.Add(libro);
-                }
+                LibrosActuales.Add(libro);
             }
         }
 
