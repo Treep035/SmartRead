@@ -39,7 +39,8 @@ namespace SmartRead.MVVM.Views
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
             authService.Logout();
-            Shell.Current.GoToAsync("//login");
+            await authService.ClearTokensAsync();
+            await Shell.Current.GoToAsync("//login");
         }
     }
 }

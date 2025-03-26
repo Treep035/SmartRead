@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.Controls;
+using SmartRead.MVVM.Models;
 using SmartRead.MVVM.Services;
 
 namespace SmartRead.MVVM.ViewModels
@@ -89,7 +90,28 @@ namespace SmartRead.MVVM.ViewModels
                     }
 
                     var responseContent = await response.Content.ReadAsStringAsync();
-                    // var result = JsonSerializer.Deserialize<YourResponseModel>(responseContent);
+
+                    // Usar opciones para ignorar mayúsculas/minúsculas en los nombres de las propiedades
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent, options);
+
+                    if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.AccessToken))
+                    {
+                        await Shell.Current.DisplayAlert("Error", "La respuesta no contiene tokens válidos.", "OK");
+                        return false;
+                    }
+
+                    // Almacenar los tokens de forma segura
+                    await _authService.SaveAccessTokenAsync(tokenResponse.AccessToken);
+                    await _authService.SaveRefreshTokenAsync(tokenResponse.RefreshToken);
+
+                    // Mostrar los tokens en un DisplayAlert
+                    await Shell.Current.DisplayAlert("Tokens",
+                        $"Access Token:\n{tokenResponse.AccessToken}\n\nRefresh Token:\n{tokenResponse.RefreshToken}", "OK");
 
                     return true;
                 }

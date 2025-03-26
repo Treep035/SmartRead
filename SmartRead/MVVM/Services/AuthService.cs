@@ -18,13 +18,7 @@ namespace SmartRead.MVVM.Services
             var authState = Preferences.Default.Get<bool>(AuthStateKey, false);
             return authState;
         }
-        public string GenerateRandomToken(int byteLength)
-        {
-            var random = new Random();
-            var buffer = new byte[byteLength]; // 32 bytes (256 bits)
-            random.NextBytes(buffer);
-            return Convert.ToBase64String(buffer); // Convierte el buffer en una cadena Base64
-        }
+      
 
         public async Task SaveAccessTokenAsync(string accessToken)
         {
@@ -54,8 +48,8 @@ namespace SmartRead.MVVM.Services
         // Método para eliminar los tokens cuando el usuario cierra sesión
         public async Task ClearTokensAsync()
         {
-            await SecureStorage.SetAsync("access_token", string.Empty);
-            await SecureStorage.SetAsync("refresh_token", string.Empty);
+            SecureStorage.Remove("access_token");
+            SecureStorage.Remove("refresh_token");
         }
 
         public void Login()
