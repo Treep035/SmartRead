@@ -8,6 +8,7 @@ namespace SmartRead.MVVM.Models
 {
     public class RecoveryResponse
     {
-        public string Code { get; set; }
+        public bool IsValid { get; set; }
+
     }
 }

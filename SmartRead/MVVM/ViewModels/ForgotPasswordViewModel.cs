@@ -8,8 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.Controls;
 using System.Text.Json;
 using System.Text;
-using System.Net.Mail;
-using System.Net;
 
 namespace SmartRead.MVVM.ViewModels
 {
@@ -21,7 +19,7 @@ namespace SmartRead.MVVM.ViewModels
         private string email;
 
         [ObservableProperty]
-        private string code;
+        private string userCode;
 
         public ForgotPasswordViewModel(IConfiguration configuration)
         {
@@ -31,111 +29,120 @@ namespace SmartRead.MVVM.ViewModels
         [RelayCommand]
         public async Task SendCodeToEmail()
         {
-
             if (string.IsNullOrWhiteSpace(Email))
             {
                 await Shell.Current.DisplayAlert("Error", "Debe ingresar un correo para enviar el código.", "OK");
                 return;
             }
 
-            try
+            bool result = await SendCodeAsync(Email);
+            if (result)
             {
-                using var client = new HttpClient();
-                var functionKey = _configuration["AzureFunctionKey"]; // Clave de la Azure Function
-                var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=sendcode";
-
-                // Crear el JSON con el email
-                var data = new { Email = Email };
-                var json = JsonSerializer.Serialize(data);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                // Enviar la solicitud POST a Azure
-                HttpResponseMessage response = await client.PostAsync(url, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // Obtener el código de la respuesta
-                    //string responseBody = await response.Content.ReadAsStringAsync();
-                    //var result = JsonSerializer.Deserialize<RecoveryResponse>(responseBody);
-                    //string recoveryCode = result?.Code;
-                    //await Shell.Current.DisplayAlert("Éxito", $"Código recibido: {responseBody}", "OK");
-                    string responseBody = await response.Content.ReadAsStringAsync();
-
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    };
-
-                    var recoveryResponse = JsonSerializer.Deserialize<RecoveryResponse>(responseBody, options);
-
-                    if (recoveryResponse == null || string.IsNullOrEmpty(recoveryResponse.Code))
-                    {
-                        await Shell.Current.DisplayAlert("Error", "La respuesta no contiene un código válido.", "OK");
-                        return;
-                    }
-
-                    await Shell.Current.DisplayAlert("Éxito", $"Código recibido: {recoveryResponse.Code}", "OK");
-
-                }
+                await Shell.Current.DisplayAlert("Éxito", "El código de recuperación ha sido enviado a tu correo.", "OK");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ocurrió un error: {ex.Message}");
-            } 
-
-            try
-            {
-                string smtpServer = "smtp.gmail.com"; // Servidor SMTP (Gmail en este caso)
-                int smtpPort = 587; // Puerto SMTP (587 para TLS)
-                string smtpUser = "smartreadteam@gmail.com"; // Tu correo
-                string smtpPassword = _configuration["SmtpPassword"]; // Tu contraseña o App Password
-
-                // Crear mensaje de correo
-                MailMessage mail = new()
-                {
-                    From = new MailAddress(smtpUser),
-                    Subject = "Código de recuperación",
-                    Body = "Tu código de recuperación es: 123456",
-                    IsBodyHtml = false
-                };
-                mail.To.Add(Email);
-
-                // Configurar SMTP
-                using SmtpClient smtpClient = new(smtpServer, smtpPort)
-                {
-                    Credentials = new NetworkCredential(smtpUser, smtpPassword),
-                    EnableSsl = true
-                };
-
-                // Enviar el correo
-                await smtpClient.SendMailAsync(mail);
-
-                await Shell.Current.DisplayAlert("Éxito", "Código enviado exitosamente a tu correo.", "OK");
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Error", $"2Ocurrió un error: {ex.Message}", "OK");
-            }
+            // En caso de error, SendCodeAsync ya muestra el mensaje correspondiente.
         }
 
         [RelayCommand]
-        public async Task SendCode()
+        public async Task VerifyCode()
         {
-
-            if (string.IsNullOrWhiteSpace(Code))
+            if (string.IsNullOrWhiteSpace(Email))
             {
-                await Shell.Current.DisplayAlert("Error", "Debe ingresar un código.", "OK");
+                await Shell.Current.DisplayAlert("Error", "Debe ingresar el correo.", "OK");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(UserCode))
+            {
+                await Shell.Current.DisplayAlert("Error", "Debe ingresar el código.", "OK");
                 return;
             }
 
-            await Shell.Current.DisplayAlert("Éxito", "Código correcto", "OK");
-            //await Shell.Current.GoToAsync("//changepassword");
+            bool result = await VerifyCodeAsync(Email, UserCode);
+            if (result)
+            {
+                await Shell.Current.DisplayAlert("Éxito", "Código correcto. ¡Puedes cambiar tu contraseña ahora!", "OK");
+                // Aquí podrías navegar a la pantalla de cambio de contraseña, por ejemplo:
+                // await Shell.Current.GoToAsync("//ChangePasswordPage");
+            }
+            // En caso de error, VerifyCodeAsync ya muestra el mensaje correspondiente.
         }
 
         [RelayCommand]
         public async Task NavigateToLogin()
         {
             await Shell.Current.GoToAsync("//login");
+        }
+
+        // Método auxiliar para enviar el código de recuperación mediante la API (acción sendcode)
+        private async Task<bool> SendCodeAsync(string email)
+        {
+            var functionKey = _configuration["AzureFunctionKey"];
+            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=sendcode&email={Uri.EscapeDataString(email)}";
+
+            await Shell.Current.DisplayAlert("Debug", $"URL final: {url}", "OK");
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    // Se utiliza POST para enviar la solicitud, sin body adicional
+                    var response = await httpClient.PostAsync(url, null);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorMessage = await response.Content.ReadAsStringAsync();
+                        await Shell.Current.DisplayAlert("Error", $"Error al enviar el código: {errorMessage}", "OK");
+                        return false;
+                    }
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    await Shell.Current.DisplayAlert("Error", $"Excepción: {ex.Message}", "OK");
+                    return false;
+                }
+            }
+        }
+
+        // Método auxiliar para verificar el código mediante la API (acción validatecode)
+        private async Task<bool> VerifyCodeAsync(string email, string code)
+        {
+            var functionKey = _configuration["AzureFunctionKey"];
+            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=validatecode&email={Uri.EscapeDataString(email)}&resetcode={Uri.EscapeDataString(code)}";
+
+            await Shell.Current.DisplayAlert("Debug", $"URL final: {url}", "OK");
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var response = await httpClient.GetAsync(url);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorMessage = await response.Content.ReadAsStringAsync();
+                        await Shell.Current.DisplayAlert("Error", $"Error al verificar el código: {errorMessage}", "OK");
+                        return false;
+                    }
+
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    // Se utiliza la misma clase RecoveryResponse, la cual debe tener las propiedades Code e IsValid.
+                    var recoveryResponse = JsonSerializer.Deserialize<RecoveryResponse>(responseBody, options);
+                    if (recoveryResponse != null && recoveryResponse.IsValid)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert("Error", "Código incorrecto o expirado.", "OK");
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await Shell.Current.DisplayAlert("Error", $"Excepción: {ex.Message}", "OK");
+                    return false;
+                }
+            }
         }
     }
 }

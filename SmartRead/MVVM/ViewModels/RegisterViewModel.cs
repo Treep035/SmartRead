@@ -63,7 +63,7 @@ namespace SmartRead.MVVM.ViewModels
         private async Task<bool> RegisterAsync(string username, string email, string password)
         {
             // Obtener la clave de la Azure Function desde appsettings.json mediante IConfiguration
-            var functionKey = _configuration["AzureFunctionKey1"];
+            var functionKey = _configuration["AzureFunctionKey"];
 
             // Construir la URL con la acción "register"
             var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=register&username={Uri.EscapeDataString(username)}&password={Uri.EscapeDataString(password)}&email={Uri.EscapeDataString(email)}";
