@@ -1,3 +1,5 @@
+using SmartRead.MVVM.ViewModels;
+
 namespace SmartRead.MVVM.Views.User.Account;
 
 public partial class SettingsPage : ContentPage
@@ -5,7 +7,8 @@ public partial class SettingsPage : ContentPage
 	public SettingsPage()
 	{
 		InitializeComponent();
-	}
+        BindingContext = new SettingsViewModel();
+    }
     private void OnCustomButtonClicked(object sender, EventArgs e)
     {
         // Desplegar el flyout (abre el menú lateral)

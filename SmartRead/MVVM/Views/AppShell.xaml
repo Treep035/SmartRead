@@ -67,7 +67,7 @@
 
         <!-- Tab News -->
         <ShellContent
-             Title="Noticias"
+             Title="Novedades"
              Icon="news.png"
              ContentTemplate="{DataTemplate Book:NewsPage}"
              Route="news">

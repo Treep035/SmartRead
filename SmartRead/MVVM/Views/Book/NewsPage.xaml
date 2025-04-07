@@ -13,20 +13,19 @@
     <ScrollView>
         <VerticalStackLayout Padding="20">
 
-            <!-- 🔹 Título de la sección -->
             <Label Text="Novedades"
                    FontSize="20"
                    FontAttributes="Bold"
                    TextColor="White"
                    Margin="0,0,0,10"/>
 
-            <!-- 🔹 Botones de selección (Usando Grid en lugar de StackLayout) -->
             <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                 <Button Grid.Column="0"
-                        Text="📖 Los 10 libros más populares"
-                        BackgroundColor="White"
-                        TextColor="Black"
+                        Text="Los 10 libros más populares"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
                         CornerRadius="25"
+                        BorderColor="#333333"
                         Padding="25,8"
                         FontSize="14"
                         WidthRequest="180"
@@ -34,17 +33,22 @@
                         Command="{Binding CargarPopularesCommand}">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button" Binding="{Binding PopularSelected}" Value="True">
-                            <Setter Property="BackgroundColor" Value="Gray"/>
-                            <Setter Property="TextColor" Value="White"/>
+                            <Setter Property="BackgroundColor" Value="#333333"/>
+                            <Setter Property="BorderColor" Value="White"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding PopularSelected}" Value="False">
+                            <Setter Property="BackgroundColor" Value="Transparent"/>
+                            <Setter Property="BorderColor" Value="White"/>
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
 
                 <Button Grid.Column="1"
-                        Text="📰 Novedades editoriales"
-                        BackgroundColor="White"
-                        TextColor="Black"
+                        Text="Novedades editoriales"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
                         CornerRadius="25"
+                        BorderColor="#333333"
                         Padding="25,8"
                         FontSize="14"
                         WidthRequest="180"
@@ -52,14 +56,17 @@
                         Command="{Binding CargarNovedadesCommand}">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button" Binding="{Binding NovedadesSelected}" Value="True">
-                            <Setter Property="BackgroundColor" Value="Gray"/>
-                            <Setter Property="TextColor" Value="White"/>
+                            <Setter Property="BackgroundColor" Value="#333333"/>
+                            <Setter Property="BorderColor" Value="White"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding NovedadesSelected}" Value="False">
+                            <Setter Property="BackgroundColor" Value="Transparent"/>
+                            <Setter Property="BorderColor" Value="White"/>
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
             </Grid>
 
-            <!-- 🔹 Lista de libros -->
             <CollectionView ItemsSource="{Binding LibrosActuales}"
                             ItemsLayout="VerticalList"
                             Margin="0,10,0,10">
@@ -75,13 +82,11 @@
                                   ColumnDefinitions="Auto,*"
                                   ColumnSpacing="10"
                                   HeightRequest="180">
-                                <!-- Contenedor del libro con número superpuesto -->
                                 <Grid Grid.Column="0" Grid.Row="0"
                                       WidthRequest="100"
                                       HeightRequest="190"
                                       Margin="0,-5,0,0">
 
-                                    <!-- Número del libro -->
                                     <Label Text="{Binding Numero}"
                                        FontSize="50"
                                        TextColor="White"
@@ -95,8 +100,6 @@
                                        ZIndex="2"
                                        IsVisible="{Binding PopularSelected}"/>
 
-
-                                    <!-- Imagen del libro -->
                                     <Image Source="{Binding Imagen}"
                                        WidthRequest="100"
                                        HeightRequest="150"
@@ -105,7 +108,6 @@
                                        HorizontalOptions="Center"
                                        ZIndex="1"/>
                                 </Grid>
-                                <!-- Información del libro -->
                                 <VerticalStackLayout Grid.Column="1" Grid.Row="0" HeightRequest="150" VerticalOptions="Fill" Padding="0,5,0,5">
                                     <Label Text="{Binding Titulo}" 
                                            FontSize="18"
@@ -122,18 +124,18 @@
                                            Margin="0,0,0,5"/>
 
                                     <HorizontalStackLayout Spacing="10" Margin="0,15,0,0" VerticalOptions="End" HorizontalOptions="Center">
-                                        <Button Text="📖 Leer ahora"
+                                        <Button Text="Leer ahora"
                                                 BackgroundColor="White"
                                                 TextColor="Black"
-                                                CornerRadius="10"
-                                                Padding="5,5"/>
+                                                CornerRadius="5"
+                                                Padding="17,5"/>
 
                                         <Button Text="Lista"
                                                 ImageSource="list.png"
-                                                BackgroundColor="Gray"
+                                                BackgroundColor="#333333"
                                                 TextColor="White"
-                                                CornerRadius="10"
-                                                Padding="5,5"/>
+                                                CornerRadius="5"
+                                                Padding="17,5"/>
                                     </HorizontalStackLayout>
                                 </VerticalStackLayout>
 

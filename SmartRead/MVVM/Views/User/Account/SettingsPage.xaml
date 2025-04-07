@@ -1,14 +1,128 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartRead.MVVM.Views.User.Account.SettingsPage"
-             Title="SettingsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Button Text="Abrir Menú"
-                Clicked="OnCustomButtonClicked" />
-    </VerticalStackLayout>
+             BackgroundColor="#000000"
+             Title="Configuración de la aplicación"
+             xmlns:local="clr-namespace:SmartRead.MVVM.ViewModels">
+
+    <ContentPage.BindingContext>
+        <local:SettingsViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="35,0,25,0" Spacing="50">
+
+            <!-- Título con botón de cierre -->
+            <Grid ColumnDefinitions="*, Auto, *"
+                  VerticalOptions="Center"
+                  Padding="0,10">
+
+                <!-- Título centrado -->
+                <Label Grid.Column="1"
+                       Text="Configuración de la aplicación"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+
+                <!-- Ícono de cierre alineado a la derecha -->
+                <Image Grid.Column="2"
+                       Source="close.png"
+                       HeightRequest="32"
+                       WidthRequest="32"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"
+                       Margin="10,0,0,0">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CerrarCommand}" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+            </Grid>
+
+            <!-- Idioma -->
+            <Grid ColumnDefinitions="*, Auto" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                <Label Text="Idioma"
+           FontSize="18"
+           TextColor="White"
+           VerticalOptions="Center"
+           HorizontalOptions="Start"
+           Grid.Column="0" />
+
+                <Picker Title="Seleccionar" 
+            HorizontalOptions="End" 
+            WidthRequest="150"
+            TextColor="White" 
+            BackgroundColor="#171717"
+            SelectedItem="{Binding Idioma}" 
+            Grid.Column="1" />
+            </Grid>
+
+            <!-- Tema -->
+            <Grid ColumnDefinitions="*, Auto" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                <Label Text="Tema"
+           FontSize="18"
+           TextColor="White"
+           VerticalOptions="Center"
+           HorizontalOptions="Start"
+           Grid.Column="0" />
+
+                <Picker Title="Seleccionar" 
+            HorizontalOptions="End" 
+            WidthRequest="150"
+            TextColor="White" 
+            BackgroundColor="#171717"
+            SelectedItem="{Binding Tema}" 
+            Grid.Column="1" />
+            </Grid>
+
+            <!-- Tamaño de letra -->
+            <Grid ColumnDefinitions="*, Auto" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                <Label Text="Tamaño de letra"
+           FontSize="18"
+           TextColor="White"
+           VerticalOptions="Center"
+           HorizontalOptions="Start"
+           Grid.Column="0" />
+
+                <Picker Title="Seleccionar" 
+            HorizontalOptions="End" 
+            WidthRequest="150"
+            TextColor="White" 
+            BackgroundColor="#171717"
+            SelectedItem="{Binding TamañoLetra}" 
+            Grid.Column="1" />
+            </Grid>
+
+
+            <!-- Restablecer preferencias -->
+            <Label Text="Restablecer preferencias"
+                   FontSize="18"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start">
+                <!-- Agregar GestureRecognizer si se requiere restablecer -->
+            </Label>
+
+            <!-- Política de privacidad -->
+            <Label Text="Política de privacidad"
+                   FontSize="18"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start">
+                <!-- Agregar GestureRecognizer si se requiere ver política -->
+            </Label>
+
+            <!-- Acerca de SmartRead -->
+            <Label Text="Acerca de SmartRead"
+                   FontSize="18"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start">
+                <!-- Agregar GestureRecognizer si se requiere información sobre la app -->
+            </Label>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

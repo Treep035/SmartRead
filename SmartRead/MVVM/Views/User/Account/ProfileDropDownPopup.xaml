@@ -47,17 +47,24 @@
 
                 <!-- Opciones del panel -->
                 <VerticalStackLayout Margin="0,50,0,0" Spacing="35" HorizontalOptions="FillAndExpand">
-                    <HorizontalStackLayout Spacing="15">
-                        <Image Source="configuration.png"
-                               WidthRequest="30"
-                               HeightRequest="30"
-                               VerticalOptions="Center"/>
-                        <Label Text="Configuración de la aplicación" 
-                               FontSize="18" 
-                               TextColor="White" 
-                               FontAttributes="Bold"
-                               VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
+                    <Frame HasShadow="False" Padding="0" BackgroundColor="Transparent" BorderColor="Transparent">
+                        <HorizontalStackLayout Spacing="15">
+                            <Image Source="configuration.png"
+                                   WidthRequest="30"
+                                   HeightRequest="30"
+                                   VerticalOptions="Center"/>
+                            <Label Text="Configuración de la aplicación" 
+                                   FontSize="18" 
+                                   TextColor="White" 
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Agregar GestureRecognizer al Frame -->
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSettingsTapped"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
 
                     <!-- Cuenta -->
                     <HorizontalStackLayout Spacing="15">

@@ -42,7 +42,7 @@ namespace SmartRead.MVVM.Views.User.Account
             _isPopupOpen = false;
         }
 
-        private async void OnCloseTapped(object sender, EventArgs e)
+        private async Task ClosePopupAsync()
         {
             if (_isClosing) return;
             _isClosing = true;
@@ -62,9 +62,19 @@ namespace SmartRead.MVVM.Views.User.Account
                 _isClosing = false;
             }
         }
+        private async void OnCloseTapped(object sender, EventArgs e)
+        {
+            await ClosePopupAsync();
+        }
         private void OnEmptyTapped(object sender, EventArgs e)
         {
             // No hace nada, solo evita que el evento se propague al fondo
+        }
+
+        private async void OnSettingsTapped(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//settings");
+            await ClosePopupAsync();
         }
     }
 }
