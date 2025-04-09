@@ -10,11 +10,11 @@ namespace SmartRead.MVVM.Views
     {
         private readonly AuthService authService;
 
-        public AppShell()
+        // El framework inyectará la instancia de AuthService que se registró en MauiProgram.cs
+        public AppShell(AuthService authService)
         {
             InitializeComponent();
-
-            authService = new AuthService();
+            this.authService = authService;
 
             this.Navigating += OnNavigating;
         }
