@@ -2,12 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
              x:Class="SmartRead.MVVM.Views.Book.HomePage"
-            
              BackgroundColor="Black">
-
-    <ContentPage.BindingContext>
-        <vm:HomeViewModel/>
-    </ContentPage.BindingContext>
 
     <ScrollView>
         <StackLayout>
@@ -78,19 +73,18 @@
                 </StackLayout>
             </Grid>
 
-            <!-- Lista de Categorías con sus libros -->
+            <!-- Lista de Categorías descargadas desde la API -->
             <CollectionView ItemsSource="{Binding Categories}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout>
-
                             <!-- Título de la Categoría -->
                             <Label Text="{Binding Name}"
                                    FontSize="18"
                                    TextColor="White"
                                    Margin="10,20,0,10"/>
 
-                            <!-- Carrusel de Libros -->
+                            <!-- Carrusel de Libros (si tienes datos para ello) -->
                             <CollectionView ItemsSource="{Binding Books}"
                                             ItemsLayout="HorizontalList"
                                             HeightRequest="200">
@@ -122,7 +116,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
         </StackLayout>
     </ScrollView>
 </ContentPage>
-

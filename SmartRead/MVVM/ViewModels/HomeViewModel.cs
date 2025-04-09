@@ -1,87 +1,115 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Maui.Controls;
 using SmartRead.MVVM.Models;
+using SmartRead.MVVM.Services;
 using SmartRead.MVVM.Views.Book;
-using CommunityToolkit.Maui.Views;
 
 namespace SmartRead.MVVM.ViewModels
 {
     public partial class HomeViewModel : ObservableObject
     {
-        public ObservableCollection<Category> Categories { get; set; }
+        // Se inyectan el AuthService e IConfiguration para obtener la Azure Function Key y los tokens.
+        private readonly AuthService _authService;
+        private readonly IConfiguration _configuration;
 
-        public HomeViewModel()
+        // Colección de categorías que se llenará con las categorías estáticas y con la respuesta de la API.
+        public ObservableCollection<Category> Categories { get; set; } = new ObservableCollection<Category>();
+
+        // Constructor con inyección de dependencias.
+        public HomeViewModel(AuthService authService, IConfiguration configuration)
         {
-            Categories = new ObservableCollection<Category>
+            _authService = authService;
+            _configuration = configuration;
+        }
+
+        /// <summary>
+        /// Método que obtiene las categorías invocando la API de Azure Functions
+        /// y agrega además las categorías estáticas "Recomendaciones para ti" y "Seguir leyendo".
+        /// </summary>
+        [RelayCommand]
+        public async Task LoadCategoriesAsync()
+        {
+            // Recuperar la Azure Function Key desde la configuración.
+            var functionKey = _configuration["AzureFunctionKey"];
+            if (string.IsNullOrWhiteSpace(functionKey))
             {
-                new Category("Recomendaciones para ti", new ObservableCollection<Book>
+                await Shell.Current.DisplayAlert("Error", "La AzureFunctionKey no está configurada.", "OK");
+                return;
+            }
+
+            // Recuperar el token de acceso previamente almacenado.
+            var accessToken = await _authService.GetAccessTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await Shell.Current.DisplayAlert("Error", "No se encontró el token de acceso. Inicie sesión nuevamente.", "OK");
+                return;
+            }
+
+            // Construir la URL para invocar la API con la acción 'getcategories' y el parámetro 'accesstoken'
+            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}" +
+                      $"&action=getcategories&accesstoken={Uri.EscapeDataString(accessToken)}";
+
+            using (var httpClient = new HttpClient())
+            {
+                try
                 {
-                    new Book { ImageSource = "image1.png" },
-                    new Book { ImageSource = "image2.png" }
-                }),
-                new Category("Seguir leyendo", new ObservableCollection<Book>
+                    // Primero, limpiar la colección y agregar las categorías estáticas.
+                    Categories.Clear();
+
+                    // Agregar categoría estática "Recomendaciones para ti" sin libros.
+                    Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
+
+                    // Agregar categoría estática "Seguir leyendo" sin libros.
+                    Categories.Add(new Category(0, "Seguir leyendo", new ObservableCollection<Book>()));
+
+                    // Realizar la llamada a la API.
+                    var response = await httpClient.GetAsync(url);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorMessage = await response.Content.ReadAsStringAsync();
+                        await Shell.Current.DisplayAlert("Error", $"Error al obtener las categorías: {errorMessage}", "OK");
+                        return;
+                    }
+
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    // Configurar opciones de deserialización (ignorando mayúsculas/minúsculas).
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    // Deserializar la respuesta en una lista de Category (el modelo ya actualizado).
+                    var categoriesFromApi = JsonSerializer.Deserialize<List<Category>>(responseContent, options);
+                    if (categoriesFromApi == null)
+                    {
+                        await Shell.Current.DisplayAlert("Error", "La respuesta no contiene categorías válidas.", "OK");
+                        return;
+                    }
+
+                    // Agregar las categorías obtenidas de la API a la colección.
+                    foreach (var category in categoriesFromApi)
+                    {
+                        // Asegurarse de que la propiedad Books esté inicializada.
+                        if (category.Books == null)
+                            category.Books = new ObservableCollection<Book>();
+
+                        Categories.Add(category);
+                    }
+                }
+                catch (Exception ex)
                 {
-                    new Book { ImageSource = "image3.png" },
-                    new Book { ImageSource = "image4.png" }
-                }),
-                new Category("Aventuras", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image5.png" },
-                    new Book { ImageSource = "image6.png" }
-                }),
-                new Category("Fantástico", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image7.png" },
-                    new Book { ImageSource = "image8.png" }
-                }),
-                new Category("Intriga", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image9.png" },
-                    new Book { ImageSource = "image10.png" }
-                }),
-                new Category("Infantil y juvenil", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image9.png" },
-                    new Book { ImageSource = "image10.png" }
-                }),
-                new Category("Terror", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image9.png" },
-                    new Book { ImageSource = "image10.png" }
-                }),
-                new Category("Clásico", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image9.png" },
-                    new Book { ImageSource = "image10.png" }
-                }),
-                new Category("Ciencia ficción", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image9.png" },
-                    new Book { ImageSource = "image10.png" }
-                }),
-                new Category("Ciencia", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image9.png" },
-                    new Book { ImageSource = "image10.png" }
-                }),
-                new Category("Humor", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image9.png" },
-                    new Book { ImageSource = "image10.png" }
-                }),
-                new Category("Novela", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image9.png" },
-                    new Book { ImageSource = "image10.png" }
-                }),
-                new Category("Cuentos", new ObservableCollection<Book>
-                {
-                    new Book { ImageSource = "image9.png" },
-                    new Book { ImageSource = "image10.png" }
-                })
-            };
+                    await Shell.Current.DisplayAlert("Error", $"Excepción al obtener categorías: {ex.Message}", "OK");
+                }
+            }
         }
 
         [RelayCommand]
@@ -100,8 +128,8 @@ namespace SmartRead.MVVM.ViewModels
         [RelayCommand]
         public Task NavigateToCategories()
         {
-            var categoriesPopup = new CategoriesPopup();  // Crear el Popup
-            Application.Current.MainPage.ShowPopup(categoriesPopup);  // Mostrar el Popup
+            var categoriesPopup = new CategoriesPopup();  // Crear el Popup.
+            Application.Current.MainPage.ShowPopup(categoriesPopup);  // Mostrar el Popup.
             return Task.CompletedTask;
         }
     }
