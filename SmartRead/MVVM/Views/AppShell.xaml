@@ -8,100 +8,69 @@
        xmlns:Auth="clr-namespace:SmartRead.MVVM.Views.User.Authentication"
        Title="SmartRead"
        BackgroundColor="Black"
-       FlyoutIcon="menu.png"
+       Shell.FlyoutBehavior="Disabled"
        Shell.TabBarBackgroundColor="Black"
        Shell.TabBarForegroundColor="#C9C9C9"
        Shell.TabBarTitleColor="#C9C9C9"
-       Shell.TabBarUnselectedColor="#555462">
+       Shell.TabBarUnselectedColor="#555462"
+       Shell.NavBarIsVisible="False">
 
-
-
-    <!-- Páginas de autenticación -->
+    <!-- Páginas de autenticación (no aparecen en la navegación principal) -->
     <ShellContent
         Title="Loading"
         ContentTemplate="{DataTemplate Auth:LoadingPage}"
         Route="Loading"
-        Shell.FlyoutBehavior="Disabled"
         Shell.FlyoutItemIsVisible="False" />
 
     <ShellContent 
         FlyoutItemIsVisible="False" 
-        Shell.FlyoutBehavior="Disabled" 
         Route="login" 
         ContentTemplate="{DataTemplate User:LoginPage}" />
     <ShellContent 
         FlyoutItemIsVisible="False" 
-        Shell.FlyoutBehavior="Disabled" 
         Route="register" 
         ContentTemplate="{DataTemplate User:RegisterPage}" />
     <ShellContent 
         FlyoutItemIsVisible="False" 
-        Shell.FlyoutBehavior="Disabled" 
         Route="forgotpassword" 
         ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />
 
-    <!-- Resto de paginas que no forman parte del Flyout pero que nos interesa manejarlas con Shell, Antencion, es importante para estas paginas poner  
-    FlyoutItemIsVisible="False" 
-    Shell.FlyoutBehavior="Disabled" 
-    para que NO aparezcan automaticamente en el Flyout igual que lo hacemos con las de autenticación-->
-
     <ShellContent 
         FlyoutItemIsVisible="False" 
-        Shell.FlyoutBehavior="Disabled" 
         Route="info" 
         ContentTemplate="{DataTemplate Book:InfoPage}" />
 
-
-
-    <!-- TabBar para navegación principal -->
-    <FlyoutItem Title="Menú principal">
-
-        <!-- Tab Home -->
+    <!-- Definición de las pestañas principales -->
+    <TabBar>
+        <!-- Pestaña "Inicio" -->
         <ShellContent
              Title="Inicio"
              Icon="home.png"
              ContentTemplate="{DataTemplate Book:HomePage}"
-             Route="home">
+             Route="home" />
 
-        </ShellContent>
-
-        <!-- Tab News -->
+        <!-- Pestaña "Novedades" -->
         <ShellContent
              Title="Novedades"
              Icon="news.png"
              ContentTemplate="{DataTemplate Book:NewsPage}"
-             Route="news">
+             Route="news" />
 
-        </ShellContent>
-
-        <!-- Tab Profile -->
+        <!-- Pestaña "Perfil" -->
         <ShellContent
              Title="Perfil"
              Icon="account.png"
              ContentTemplate="{DataTemplate Account:ProfilePage}"
-             Route="profile">
+             Route="profile" />
+    </TabBar>
 
-        </ShellContent>
-    </FlyoutItem>
-
-    <FlyoutItem Title="Configuración" Icon="settings.png">
+    <!-- Otra pestaña para Configuración (opcional) -->
+    <TabBar>
         <ShellContent 
+            Title="Configuración"
+            Icon="settings.png"
             Route="settings" 
             ContentTemplate="{DataTemplate Account:SettingsPage}" />
-    </FlyoutItem>
-
-    <Shell.FlyoutFooter>
-        <StackLayout Padding="10">
-            <Button Text="Logout"
-                TextColor="White"
-                BackgroundColor="#FF5722"
-                FontSize="13"
-                FontAttributes="Bold"
-                CornerRadius="10"
-                HeightRequest="50"
-                Clicked="OnLogoutClicked"/>
-        </StackLayout>
-    </Shell.FlyoutFooter>
-
+    </TabBar>
 
 </Shell>

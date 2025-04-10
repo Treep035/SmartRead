@@ -3,120 +3,118 @@
              xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
              x:Class="SmartRead.MVVM.Views.Book.HomePage"
              BackgroundColor="Black">
+    <!-- Grid con tres filas:
+         - Fila 0: Header
+         - Fila 1: Botón de Categorías (inicialmente desplegada con HeightRequest=40)
+         - Fila 2: Contenido principal -->
+    <Grid RowDefinitions="Auto,Auto,*">
 
-    <ScrollView>
-        <StackLayout>
+        <!-- Fila 0: Header con botón de Buscar o título -->
+        <Grid Grid.Row="0" BackgroundColor="Black" Padding="10,20,10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!-- Título o Logo -->
+            <Label Text="SmartRead"
+                   TextColor="White"
+                   FontSize="24"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start" />
+            <!-- Botón de Buscar -->
+            <Button Grid.Column="1"
+                    Text="Buscar"
+                    TextColor="White"
+                    BackgroundColor="Transparent"
+                    BorderColor="White"
+                    BorderWidth="1"
+                    Command="{Binding SearchCommand}" />
+        </Grid>
 
-            <!-- Sección de imagen de fondo y barra superior -->
-            <Grid>
-                <Image Source="home_image.png"
-                       Aspect="AspectFill"
-                       VerticalOptions="FillAndExpand"
-                       HorizontalOptions="FillAndExpand" />
-
-                <Image Source="Search.png"
-                       HeightRequest="30"
-                       WidthRequest="30"
-                       HorizontalOptions="End"
-                       VerticalOptions="Start"
-                       Margin="10" />
-
-                <StackLayout Orientation="Horizontal"
+        <!-- Fila 1: Botón de Categorías -->
+        <!-- Inicia desplegada (HeightRequest="40") para coincidir con el botón de Buscar -->
+        <StackLayout x:Name="CategoriesButtonRow"
+                     Grid.Row="1"
+                     Orientation="Horizontal"
                      HorizontalOptions="Center"
-                     VerticalOptions="Start"
-                     Margin="0,50,0,0"
-                     Spacing="50">
-                    <Label Text="Libros"
-                           TextColor="White"
-                           FontSize="16"
-                           FontAttributes="Bold"/>
-                    <Label Text="Novelas"
-                           TextColor="White"
-                           FontSize="16"
-                           FontAttributes="Bold"/>
-                    <Label Text="Categorías"
-                           TextColor="White"
-                           FontSize="16"
-                           FontAttributes="Bold">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateToCategoriesCommand}" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                </StackLayout>
-
-                <StackLayout Orientation="Horizontal"
-                             HorizontalOptions="Center"
-                             VerticalOptions="End"
-                             Margin="0,0,0,20"
-                             Spacing="60">
-
-                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="2">
-                        <Image Source="list.png" WidthRequest="30" HeightRequest="30"/>
-                        <Label Text="Añadir a" TextColor="White" FontSize="13" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
-                        <Label Text="la lista" TextColor="White" FontSize="13" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
-                    </StackLayout>
-
-                    <Button Text="Leer"
-                            TextColor="Black"
-                            BackgroundColor="White"
-                            FontSize="13"
-                            FontAttributes="Bold"
-                            CornerRadius="10"
-                            Padding="10,5"
-                            HeightRequest="50"
-                            WidthRequest="70"/>
-
-                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="5">
-                        <Image Source="info.png" WidthRequest="30" HeightRequest="30"/>
-                        <Label Text="Info" TextColor="White" FontSize="13" FontAttributes="Bold" Margin="2,0,0,0"/>
-                    </StackLayout>
-                </StackLayout>
-            </Grid>
-
-            <!-- Lista de Categorías descargadas desde la API -->
-            <CollectionView ItemsSource="{Binding Categories}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout>
-                            <!-- Título de la Categoría -->
-                            <Label Text="{Binding Name}"
-                                   FontSize="18"
-                                   TextColor="White"
-                                   Margin="10,20,0,10"/>
-
-                            <!-- Carrusel de Libros (si tienes datos para ello) -->
-                            <CollectionView ItemsSource="{Binding Books}"
-                                            ItemsLayout="HorizontalList"
-                                            HeightRequest="200">
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Frame Padding="0"
-                                               HasShadow="False"
-                                               BackgroundColor="Transparent"
-                                               BorderColor="Transparent"
-                                               CornerRadius="10"
-                                               WidthRequest="140"
-                                               HeightRequest="200">
-                                            <Image Source="{Binding ImageSource}"
-                                                   Aspect="AspectFit"
-                                                   HeightRequest="200"
-                                                   WidthRequest="140">
-                                                <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer 
-                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
-                                                         CommandParameter="{Binding .}" />
-                                                </Image.GestureRecognizers>
-                                            </Image>
-                                        </Frame>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
+                     Padding="10"
+                     IsVisible="True"
+                     HeightRequest="65">
+            <Button Text="Categorías"
+                    TextColor="White"
+                    BackgroundColor="Transparent"
+                    BorderColor="White"
+                    BorderWidth="1"
+                    Command="{Binding NavigateToCategoriesCommand}" />
         </StackLayout>
-    </ScrollView>
+
+        <!-- Fila 2: Contenido principal con ScrollView; se asigna el evento Scrolled -->
+        <ScrollView Grid.Row="2" Scrolled="OnScrollViewScrolled">
+            <VerticalStackLayout Spacing="20">
+                <!-- Banner destacado -->
+                <Grid HeightRequest="350">
+                    <Image Source="home_image.png"
+                           Aspect="AspectFit"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="FillAndExpand" />
+                    <BoxView BackgroundColor="#80000000"
+                             HorizontalOptions="FillAndExpand"
+                             VerticalOptions="FillAndExpand" />
+                    <VerticalStackLayout HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Spacing="10">
+                        <Label Text="Contenido Destacado"
+                               FontSize="24"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center" />
+                        <Button Text="Reproducir"
+                                BackgroundColor="White"
+                                TextColor="Black"
+                                BorderColor="White"
+                                BorderWidth="1"
+                                CornerRadius="5"
+                                Padding="10,5"
+                                Command="{Binding PlayCommand}" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- Lista de Categorías con carruseles horizontales -->
+                <CollectionView ItemsSource="{Binding Categories}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="{Binding Name}"
+                                       FontSize="20"
+                                       TextColor="White"
+                                       Margin="10,0" />
+                                <CollectionView ItemsSource="{Binding Books}"
+                                                ItemsLayout="HorizontalList"
+                                                HeightRequest="200">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame Padding="0"
+                                                   WidthRequest="140"
+                                                   HeightRequest="200"
+                                                   CornerRadius="5"
+                                                   HasShadow="False"
+                                                   BackgroundColor="Transparent">
+                                                <Image Source="{Binding ImageSource}"
+                                                       Aspect="AspectFill">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
+                                                                              CommandParameter="{Binding .}" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
