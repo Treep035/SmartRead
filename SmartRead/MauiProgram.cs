@@ -9,6 +9,7 @@ using SmartRead.MVVM.Views.User;
 using SmartRead.MVVM.Views.User.Account;
 using SmartRead.MVVM.Views.User.Authentication;
 using Microsoft.Extensions.Configuration;
+using Xe.AcrylicView;
 
 
 namespace SmartRead
@@ -22,6 +23,7 @@ namespace SmartRead
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseAcrylicView()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

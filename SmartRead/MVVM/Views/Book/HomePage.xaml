@@ -1,144 +1,147 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
+             xmlns:ui="clr-namespace:Xe.AcrylicView;assembly=Xe.AcrylicView"
              x:Class="SmartRead.MVVM.Views.Book.HomePage"
              BackgroundColor="Black">
-    <!-- Grid con tres filas:
-         - Fila 0: Header
-         - Fila 1: Botón de Categorías (inicialmente desplegada con HeightRequest=40)
-         - Fila 2: Contenido principal -->
-    <Grid RowDefinitions="Auto,Auto,*">
-
-        <!-- Fila 0: Header con botón de Buscar o título -->
-        <Grid Grid.Row="0" BackgroundColor="Black" Padding="10,20,10,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <!-- Título o Logo -->
-            <Label Text="SmartRead"
-                   TextColor="White"
-                   FontSize="24"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Start" />
-            <!-- Botón de Buscar -->
-            <Button Grid.Column="1"
-                    Text="Buscar"
-                    TextColor="White"
-                    BackgroundColor="Transparent"
-                    BorderColor="White"
-                    BorderWidth="1"
-                    Command="{Binding SearchCommand}" />
-        </Grid>
-
-        <!-- Fila 1: Botón de Categorías -->
-        <!-- Inicia desplegada (HeightRequest="40") para coincidir con el botón de Buscar -->
-        <StackLayout x:Name="CategoriesButtonRow"
-                     Grid.Row="1"
-                     Orientation="Horizontal"
-                     HorizontalOptions="Center"
-                     Padding="10"
-                     IsVisible="True"
-                     HeightRequest="65">
-            <Frame Padding="15,5"
-                       BackgroundColor="Transparent"
-                       BorderColor="#95BBBBBB"
-                       CornerRadius="15"
-                       HasShadow="False">
-                <StackLayout Orientation="Horizontal"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center"
-                                 Spacing="8">
-                    <Label Text="Categorías"
-                               TextColor="#BBBBBB"
-                               FontSize="18"
-                               VerticalOptions="Center"/>
-                    <Image Source="down.png"
-                               HeightRequest="16"
-                               WidthRequest="16"
-                               VerticalOptions="Center"/>
-                </StackLayout>
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding NavigateToCategoriesCommand}" />
-                </Frame.GestureRecognizers>
-            </Frame>
-        </StackLayout>
-
-        <!-- Fila 2: Contenido principal con ScrollView; se asigna el evento Scrolled -->
-        <ScrollView Grid.Row="2" Scrolled="OnScrollViewScrolled">
-            <VerticalStackLayout Spacing="20">
-                <!-- Sección de imagen de fondo y barra superior -->
-                <Grid>
-                    <Frame Padding="0"
-           Margin="0"
-           CornerRadius="20"
-           BorderColor="Transparent"
-           BackgroundColor="Transparent"
-           HasShadow="False"
-           IsClippedToBounds="True"
-           HorizontalOptions="Center"
-           VerticalOptions="FillAndExpand"
-           WidthRequest="350">
-                        <Image Source="home_image2.png"
-               Aspect="AspectFill"
-               VerticalOptions="FillAndExpand"
-               HorizontalOptions="FillAndExpand" />
-                    </Frame>
-                    <StackLayout Orientation="Horizontal"
+    <Grid RowDefinitions="Auto,*">
+        <!-- Contenedor superior con efecto acrílico y opacidad diluida -->
+        <ui:AcrylicView EffectStyle="Custom"
+                        VerticalOptions="Start"
+                        Margin="0"
+                        TintOpacity="0.2"
+                        BorderColor="Transparent"
+                        BorderThickness="0"
+                        CornerRadius="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!-- Fila 0: Header -->
+                <Grid Grid.Row="0" BackgroundColor="Transparent" Padding="10,20,10,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="SmartRead"
+                           TextColor="White"
+                           FontSize="24"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start" />
+                    <Button Grid.Column="1"
+                            Text="Buscar"
+                            TextColor="White"
+                            BackgroundColor="Transparent"
+                            BorderColor="White"
+                            BorderWidth="1"
+                            Command="{Binding SearchCommand}" />
+                </Grid>
+                <!-- Fila 1: Botón de Categorías -->
+                <StackLayout x:Name="CategoriesButtonRow"
+                             Grid.Row="1"
+                             Orientation="Horizontal"
                              HorizontalOptions="Center"
-                             VerticalOptions="End"
-                             Margin="0,0,0,20"
-                             Spacing="15">
-
-                        <Frame Padding="0"
-                           BackgroundColor="White"
-                           CornerRadius="5"
-                           HeightRequest="45"
-                           WidthRequest="160"
-                           BorderColor="Transparent"
+                             Padding="10"
+                             HeightRequest="65">
+                    <Frame Padding="15,5"
+                           BackgroundColor="Transparent"
+                           BorderColor="#95BBBBBB"
+                           CornerRadius="15"
                            HasShadow="False">
-                            <StackLayout Orientation="Horizontal"
+                        <StackLayout Orientation="Horizontal"
                                      HorizontalOptions="Center"
                                      VerticalOptions="Center"
-                                     Padding="10,5"
-                                     Spacing="18">
-                                <Image Source="read.png"
-                                   HeightRequest="22"
-                                   WidthRequest="22"
-                                   VerticalOptions="Center"/>
-                                <Label Text="Leer"
-                                   TextColor="Black"
+                                     Spacing="8">
+                            <Label Text="Categorías"
+                                   TextColor="#BBBBBB"
                                    FontSize="18"
-                                   FontAttributes="Bold"
                                    VerticalOptions="Center"/>
+                            <Image Source="down.png"
+                                   HeightRequest="16"
+                                   WidthRequest="16"
+                                   VerticalOptions="Center"/>
+                        </StackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToCategoriesCommand}" />
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                </StackLayout>
+            </Grid>
+        </ui:AcrylicView>
+
+        <!-- Fila 2: Contenido principal -->
+        <ScrollView Grid.Row="1" Scrolled="OnScrollViewScrolled">
+            <VerticalStackLayout Spacing="20">
+                <!-- Ejemplo de contenido principal -->
+                <Grid>
+                    <Frame Padding="0"
+                           Margin="0"
+                           CornerRadius="20"
+                           BorderColor="Transparent"
+                           BackgroundColor="Transparent"
+                           HasShadow="False"
+                           IsClippedToBounds="True"
+                           HorizontalOptions="Center"
+                           VerticalOptions="FillAndExpand"
+                           WidthRequest="350">
+                        <Image Source="home_image2.png"
+                               Aspect="AspectFill"
+                               VerticalOptions="FillAndExpand"
+                               HorizontalOptions="FillAndExpand" />
+                    </Frame>
+                    <StackLayout Orientation="Horizontal"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="End"
+                                 Margin="0,0,0,20"
+                                 Spacing="15">
+                        <Frame Padding="0"
+                               BackgroundColor="White"
+                               CornerRadius="5"
+                               HeightRequest="45"
+                               WidthRequest="160"
+                               BorderColor="Transparent"
+                               HasShadow="False">
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center"
+                                         Padding="10,5"
+                                         Spacing="18">
+                                <Image Source="read.png"
+                                       HeightRequest="22"
+                                       WidthRequest="22"
+                                       VerticalOptions="Center"/>
+                                <Label Text="Leer"
+                                       TextColor="Black"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
                             </StackLayout>
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding LeerCommand}" />
                             </Frame.GestureRecognizers>
                         </Frame>
-
-
                         <Frame Padding="0"
-                           BackgroundColor="#CC808080"
-                           CornerRadius="5"
-                           HeightRequest="45"
-                           WidthRequest="160"
-                           BorderColor="Transparent"
-                           HasShadow="False">
+                               BackgroundColor="#CC808080"
+                               CornerRadius="5"
+                               HeightRequest="45"
+                               WidthRequest="160"
+                               BorderColor="Transparent"
+                               HasShadow="False">
                             <StackLayout Orientation="Horizontal"
-                                     HorizontalOptions="Center"
-                                     VerticalOptions="Center"
-                                     Padding="10,5"
-                                     Spacing="18">
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center"
+                                         Padding="10,5"
+                                         Spacing="18">
                                 <Image Source="list.png"
-                                   HeightRequest="22"
-                                   WidthRequest="22"
-                                   VerticalOptions="Center"/>
+                                       HeightRequest="22"
+                                       WidthRequest="22"
+                                       VerticalOptions="Center"/>
                                 <Label Text="Mi lista"
-                                   TextColor="White"
-                                   FontSize="18"
-                                   FontAttributes="Bold"
-                                   VerticalOptions="Center"/>
+                                       TextColor="White"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
                             </StackLayout>
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding LeerCommand}" />
@@ -146,7 +149,6 @@
                         </Frame>
                     </StackLayout>
                 </Grid>
-
                 <!-- Lista de Categorías con carruseles horizontales -->
                 <CollectionView ItemsSource="{Binding Categories}">
                     <CollectionView.ItemTemplate>
@@ -155,7 +157,7 @@
                                 <Label Text="{Binding Name}"
                                        FontSize="20"
                                        TextColor="White"
-                                       Margin="10,0" />
+                                       Margin="10,0"/>
                                 <CollectionView ItemsSource="{Binding Books}"
                                                 ItemsLayout="HorizontalList"
                                                 HeightRequest="200">
