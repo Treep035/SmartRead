@@ -4,12 +4,14 @@
              xmlns:ui="clr-namespace:Xe.AcrylicView;assembly=Xe.AcrylicView"
              x:Class="SmartRead.MVVM.Views.Book.HomePage"
              BackgroundColor="Black">
+
     <Grid RowDefinitions="Auto,*">
-        <!-- Contenedor superior con efecto acrílico y opacidad diluida -->
+        <!-- Contenedor superior con efecto acrílico -->
         <ui:AcrylicView EffectStyle="Custom"
                         VerticalOptions="Start"
                         Margin="0"
-                        TintOpacity="0.2"
+                        TintOpacity="0.4"
+                        TintColor="Black"
                         BorderColor="Transparent"
                         BorderThickness="0"
                         CornerRadius="0">
@@ -70,7 +72,7 @@
             </Grid>
         </ui:AcrylicView>
 
-        <!-- Fila 2: Contenido principal -->
+        <!-- Contenido principal -->
         <ScrollView Grid.Row="1" Scrolled="OnScrollViewScrolled">
             <VerticalStackLayout Spacing="20">
                 <!-- Ejemplo de contenido principal -->
@@ -149,18 +151,30 @@
                         </Frame>
                     </StackLayout>
                 </Grid>
+
                 <!-- Lista de Categorías con carruseles horizontales -->
-                <CollectionView ItemsSource="{Binding Categories}">
+                <CollectionView ItemsSource="{Binding Categories}" SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
+                            <!-- Contenedor para cada categoría -->
                             <VerticalStackLayout Spacing="10">
+                                <!-- Al tocar la celda se invoca el comando para cargar más libros de la categoría -->
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LoadMoreBooksByCategoryCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </VerticalStackLayout.GestureRecognizers>
                                 <Label Text="{Binding Name}"
                                        FontSize="20"
                                        TextColor="White"
                                        Margin="10,0"/>
+                                <!-- Carrusel horizontal de libros -->
                                 <CollectionView ItemsSource="{Binding Books}"
                                                 ItemsLayout="HorizontalList"
-                                                HeightRequest="200">
+                                                HeightRequest="200"
+                                                RemainingItemsThreshold="2"
+                                                RemainingItemsThresholdReachedCommand="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LoadMoreBooksByCategoryCommand}"
+                                                RemainingItemsThresholdReachedCommandParameter="{Binding .}">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
                                             <Frame Padding="0"
@@ -169,11 +183,12 @@
                                                    CornerRadius="5"
                                                    HasShadow="False"
                                                    BackgroundColor="Transparent">
-                                                <Image Source="{Binding ImageSource}"
+                                                <Image Source="{Binding CoverImageUrl}"
                                                        Aspect="AspectFill">
                                                     <Image.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
-                                                                              CommandParameter="{Binding .}" />
+                                                        <TapGestureRecognizer 
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
+                                                            CommandParameter="{Binding .}" />
                                                     </Image.GestureRecognizers>
                                                 </Image>
                                             </Frame>
