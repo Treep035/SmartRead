@@ -47,7 +47,11 @@ namespace SmartRead
             builder.Services.AddTransient<ForgotPasswordPage>();
             builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<ProfilePage>();
+
             builder.Services.AddTransient<HomePage>();
+            builder.Services.AddSingleton<HomeViewModel>();
+
+
             builder.Services.AddSingleton<NewsViewModel>();
             builder.Services.AddTransient<NewsPage>();
             

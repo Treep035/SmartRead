@@ -38,6 +38,13 @@ namespace SmartRead.MVVM.ViewModels
         [RelayCommand]
         public async Task LoadCategoriesAsync()
         {
+            // Si ya se han cargado las categorías, no las volvemos a cargar.
+            if (Categories != null && Categories.Count > 0)
+            {
+                Debug.WriteLine("Las categorías ya están cargadas; se omite la carga.");
+                return;
+            }
+
             var functionKey = _configuration["AzureFunctionKey"];
             if (string.IsNullOrWhiteSpace(functionKey))
             {
@@ -59,11 +66,15 @@ namespace SmartRead.MVVM.ViewModels
             {
                 try
                 {
-                    Categories.Clear();
+                    // Si queremos conservar los datos previos, no se hace Categories.Clear()
+                    // Categories.Clear();
 
-                    // Agregar categorías estáticas
-                    Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
-                    Categories.Add(new Category(0, "Seguir leyendo", new ObservableCollection<Book>()));
+                    // Agregar categorías estáticas si aún no están en la colección.
+                    if (Categories.Count == 0)
+                    {
+                        Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
+                        Categories.Add(new Category(0, "Seguir leyendo", new ObservableCollection<Book>()));
+                    }
 
                     var response = await httpClient.GetAsync(url);
                     if (!response.IsSuccessStatusCode)
@@ -83,23 +94,28 @@ namespace SmartRead.MVVM.ViewModels
                         return;
                     }
 
-                    // Agregar categorías obtenidas de la API.
+                    // Agregar las categorías obtenidas de la API sin eliminar las que ya están cargadas.
                     foreach (var category in categoriesFromApi)
                     {
-                        if (category.Books == null)
-                            category.Books = new ObservableCollection<Book>();
+                        // Evitar duplicados (si el IdCategory ya existe)
+                        if (!Categories.Any(c => c.IdCategory == category.IdCategory))
+                        {
+                            if (category.Books == null)
+                                category.Books = new ObservableCollection<Book>();
 
-                        Categories.Add(category);
-                        // Inicialmente se asume que la categoría tiene más libros.
-                        _noMoreBooks[category.IdCategory] = false;
+                            Categories.Add(category);
+                            // Inicialmente se asume que la categoría tiene más libros.
+                            _noMoreBooks[category.IdCategory] = false;
+                        }
                     }
 
-                    // Para cada categoría obtenida (excluyendo las estáticas con IdCategory 0)
-                    foreach (var category in Categories)
+                    // Para cada categoría obtenida (excluyendo las estáticas con IdCategory 0) cargamos la primera tanda de libros,
+                    // siempre y cuando aún no se hayan cargado.
+                    foreach (var category in Categories.Where(c => c.IdCategory != 0))
                     {
-                        if (category.IdCategory != 0)
+                        // Si la colección de libros está vacía, se realiza la carga inicial.
+                        if (category.Books == null || category.Books.Count == 0)
                         {
-                            // Carga inicial: carga la primera tanda de libros de cada categoría.
                             await LoadMoreBooksByCategoryAsync(category);
                         }
                     }
@@ -110,6 +126,7 @@ namespace SmartRead.MVVM.ViewModels
                 }
             }
         }
+
 
         /// <summary>
         /// Carga inicial o incremental de libros para una categoría.
