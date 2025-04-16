@@ -207,8 +207,22 @@ namespace SmartRead.MVVM.ViewModels
         [RelayCommand]
         public async Task NavigateToInfo(Book book)
         {
-            await Shell.Current.DisplayAlert("Libro seleccionado", $"Has pulsado el libro: {book.Title}", "OK");
+            try
+            {
+                // Navegar a la página InfoPage, pasando el objeto Book como parámetro.
+                var navigationParameters = new Dictionary<string, object>
+                {
+                    { "book", book }
+                };
+
+                await Shell.Current.GoToAsync($"//info", navigationParameters);
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"No se pudo navegar a la información del libro: {ex.Message}", "OK");
+            }
         }
+
 
         [RelayCommand]
         public Task NavigateToCategories()

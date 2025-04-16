@@ -1,74 +1,117 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
              x:Class="SmartRead.MVVM.Views.Book.InfoPage"
              BackgroundColor="Black">
 
     <Grid>
-        <!-- Imagen de fondo -->
-        <Image Source="image1.png"
+        <!-- Capa 0: Imagen de portada de fondo -->
+        <Image Source="{Binding Book.CoverImageUrl}"
                Aspect="AspectFill"
                VerticalOptions="FillAndExpand"
                HorizontalOptions="FillAndExpand" />
 
-        <!-- Botón de cerrar, superpuesto en la esquina superior derecha -->
-        <Image Source="close.png"
-               HorizontalOptions="End"
-               VerticalOptions="Start"
-               Margin="10">
-            <Image.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding CloseCommand}" />
-            </Image.GestureRecognizers>
-        </Image>
+        <!-- Capa 1: Overlay oscuro para mejorar legibilidad -->
+        <BoxView Color="#99000000"
+                 Opacity="0.4"
+                 VerticalOptions="FillAndExpand"
+                 HorizontalOptions="FillAndExpand" />
 
-        <!-- Frame con la descripción, posicionado al fondo -->
-        <Frame BackgroundColor="#2D2D2D"
-               Padding="30"
-               HasShadow="False"
-               BorderColor="Transparent"
-               CornerRadius="0"
-               VerticalOptions="End"
-               HeightRequest="270"
-               Margin="0">
-            <StackLayout>
-                <!-- Botón Leer -->
-                <Button Text="Leer"
-                        BackgroundColor="White"
-                        TextColor="Black"
-                        FontSize="14"
-                        CornerRadius="10"
-                        WidthRequest="350"
-                        HorizontalOptions="Center"
-                        Padding="10"
-                        Margin="0,0,0,20" />
+        <!-- Capa 2: Contenido principal con ScrollView en caso de textos largos -->
+        <ScrollView>
+            <StackLayout Spacing="20" Padding="20" VerticalOptions="FillAndExpand">
+                <!-- Botón de cerrar, posicionado en la parte superior -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <!-- Espacio vacío para centrar el contenido -->
+                    <Label Grid.Column="0" Text="" />
 
-                <!-- Descripción principal -->
-                <Label Text="Un drama criminal épico sobre el vínculo inquebrantable entre padres e hijos"
-                       FontSize="16"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
-                       Margin="0,0,0,5" />
+                    <ImageButton
+                         Source="close.png"
+                         Clicked="ClosePopup"
+                         HorizontalOptions="Center"
+                         Padding="10"
+                         BackgroundColor="Transparent"
+                         Margin="0,80,0,0"/>
 
-                <!-- Nombre del autor -->
-                <Label Text="Naira Gamboa"
-                       FontSize="14"
-                       TextColor="#ADADAD"/>
+                </Grid>
 
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="90" Margin="0,20,0,0">
-                    <StackLayout Orientation="Vertical" HorizontalOptions="Center">
-                        <Image Source="list.png" WidthRequest="20" HeightRequest="20"/>
-                        <Label Text="Lista" FontSize="14" TextColor="White" HorizontalOptions="Center" Margin="0,10,0,0"/>
+                <!-- Información principal del libro -->
+                <Frame BackgroundColor="#2D2D2D"
+                       CornerRadius="10"
+                       Padding="20"
+                       HasShadow="True"
+                       Opacity="0.9">
+                    <StackLayout Spacing="15">
+                        <!-- Título del Libro -->
+                        <Label Text="{Binding Book.Title}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center" />
+
+                        <!-- Autor y Fecha de Publicación -->
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                            <Label Text="{Binding Book.Author}"
+                                   FontSize="16"
+                                   TextColor="#ADADAD" />
+                            <!-- Publicar la fecha si está disponible -->
+                            <Label Text="{Binding Book.PublishedDate, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                   FontSize="16"
+                                   TextColor="#ADADAD" />
+                        </StackLayout>
+
+                        <!-- Descripción -->
+                        <Label Text="{Binding Book.Description}"
+                               FontSize="16"
+                               TextColor="White"
+                               HorizontalOptions="FillAndExpand" />
+
+                        <!-- Botón para leer el libro -->
+                        <Button Text="Leer"
+                                BackgroundColor="White"
+                                TextColor="Black"
+                                FontSize="16"
+                                CornerRadius="8"
+                                HorizontalOptions="Center"
+                                WidthRequest="200"
+                                Padding="10"/>
+
+                        <!-- Sección de Opciones (Lista, Comparte, Valorar) -->
+                        <StackLayout Orientation="Horizontal"
+                                     HorizontalOptions="Center"
+                                     Spacing="40">
+                            <StackLayout HorizontalOptions="Center">
+                                <Image Source="list.png" WidthRequest="24" HeightRequest="24"/>
+                                <Label Text="Lista"
+                                       FontSize="14"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       Margin="0,5,0,0"/>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="Center">
+                                <Image Source="share.png" WidthRequest="24" HeightRequest="24"/>
+                                <Label Text="Comparte"
+                                       FontSize="14"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       Margin="0,5,0,0"/>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="Center">
+                                <Image Source="rate.png" WidthRequest="24" HeightRequest="24"/>
+                                <Label Text="Valorar"
+                                       FontSize="14"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       Margin="0,5,0,0"/>
+                            </StackLayout>
+                        </StackLayout>
                     </StackLayout>
-                    <StackLayout Orientation="Vertical" HorizontalOptions="Center">
-                        <Image Source="share.png" WidthRequest="20" HeightRequest="20"/>
-                        <Label Text="Comparte" FontSize="14" TextColor="White" HorizontalOptions="Center" Margin="0,10,0,0"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Vertical" HorizontalOptions="Center">
-                        <Image Source="rate.png" WidthRequest="20" HeightRequest="20"/>
-                        <Label Text="Valorar" FontSize="14" TextColor="White" HorizontalOptions="Center" Margin="0,10,0,0"/>
-                    </StackLayout>
-                </StackLayout>
+                </Frame>
             </StackLayout>
-        </Frame>
+        </ScrollView>
     </Grid>
 </ContentPage>

@@ -1,50 +1,37 @@
-﻿using System.Collections.Generic;
-using System.Windows.Input;
+﻿using System;
+using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls;
 using SmartRead.MVVM.Models;
 
 namespace SmartRead.MVVM.ViewModels
 {
-    public class InfoPageViewModel : IQueryAttributable
+    // Hereda de ObservableObject para disponer de la implementación de INotifyPropertyChanged
+    public partial class InfoPageViewModel : ObservableObject, IQueryAttributable
     {
-        // Propiedad para la información que se muestra en la página
-        private Info _info;
-        public Info Info
-        {
-            get => _info;
-            set
-            {
-                _info = value;
-                // Si usas INotifyPropertyChanged, notificar los cambios aquí
-            }
-        }
+        // Con el atributo ObservableProperty se genera la propiedad Book y se notifica los cambios
+        [ObservableProperty]
+        private Book book;
 
-        // Comando para cerrar la página
-        public ICommand CloseCommand { get; }
+        // Definición del comando para cerrar la página, utilizando RelayCommand
+        public IRelayCommand CloseCommand { get; }
 
         public InfoPageViewModel()
         {
-            CloseCommand = new Command(async () =>
-            {
-                try
-                {
-                    Console.WriteLine("Navegando hacia atrás...");
-                    // Regresa a la página anterior en la pila de navegación
-                    await Shell.Current.Navigation.PopAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error al intentar navegar hacia atrás: {ex.Message}");
-                }
-            });
+          
         }
 
-        // Manejo de parámetros pasados a la página (en este caso, la Info)
+        // Se recibe el parámetro 'book' desde la navegación mediante la Query
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            if (query.ContainsKey("info") && query["info"] is string infoTitle)
+            if (query.TryGetValue("book", out var bookObj) && bookObj is Book book)
             {
-                Info = new Info { Title = infoTitle }; // O lo que necesites hacer con el parámetro
+                // Asignamos el valor recibido
+                Book = book;
+
+                // Si es necesario, se puede procesar la ruta del fichero para obtener Author y Title
+                Book.ParseAndSetAuthorTitleFromFilePath();
             }
         }
     }

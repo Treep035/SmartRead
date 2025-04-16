@@ -11,5 +11,13 @@ namespace SmartRead.MVVM.Views.Book
             InitializeComponent();
             BindingContext = new InfoPageViewModel(); // Establecer el ViewModel como BindingContext
         }
+        private async void ClosePopup(object sender, EventArgs e)
+        {
+            // Si la página se abrió de forma modal:
+            // await Navigation.PopModalAsync();
+
+            // Si la página se ha navegado usando Navigation.PushAsync, usa:
+            await Shell.Current.GoToAsync("..");
+        }
     }
 }
