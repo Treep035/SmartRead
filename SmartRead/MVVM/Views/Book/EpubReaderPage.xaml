@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SmartRead.MVVM.Views.Book.EpubReaderPage"
+    Title="Lector EPUB">
+    <ContentPage.Content>
+        <WebView VerticalOptions="FillAndExpand"
+                 HorizontalOptions="FillAndExpand">
+            <WebView.Source>
+                <HtmlWebViewSource 
+                    Html="{Binding EpubContentHtml}" />
+            </WebView.Source>
+        </WebView>
+    </ContentPage.Content>
+</ContentPage>

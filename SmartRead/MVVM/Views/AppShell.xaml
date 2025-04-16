@@ -40,6 +40,12 @@
         Route="info" 
         ContentTemplate="{DataTemplate Book:InfoPage}" />
 
+    <ShellContent 
+       FlyoutItemIsVisible="False" 
+       Route="epub" 
+       ContentTemplate="{DataTemplate Book:EpubReaderPage}" />
+
+
     <!-- Definición de las pestañas principales -->
     <TabBar>
         <!-- Pestaña "Inicio" -->

@@ -65,7 +65,7 @@
 
                         <!-- Botón para leer el libro -->
                         <Button Text="Leer"
-                                Command="{Binding ReadCommand}"
+                                Command="{Binding OpenBookCommand}"
                                 BackgroundColor="White"
                                 TextColor="Black"
                                 FontSize="16"
