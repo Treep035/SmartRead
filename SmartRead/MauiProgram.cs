@@ -9,6 +9,7 @@ using SmartRead.MVVM.Views.User;
 using SmartRead.MVVM.Views.User.Account;
 using SmartRead.MVVM.Views.User.Authentication;
 using Microsoft.Extensions.Configuration;
+using Xe.AcrylicView;
 
 
 namespace SmartRead
@@ -22,6 +23,7 @@ namespace SmartRead
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseAcrylicView()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -45,7 +47,11 @@ namespace SmartRead
             builder.Services.AddTransient<ForgotPasswordPage>();
             builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<ProfilePage>();
+
             builder.Services.AddTransient<HomePage>();
+            builder.Services.AddSingleton<HomeViewModel>();
+
+
             builder.Services.AddSingleton<NewsViewModel>();
             builder.Services.AddTransient<NewsPage>();
             
