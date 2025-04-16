@@ -15,7 +15,7 @@ namespace SmartRead.MVVM.Views.Book
         // Método que cierra el popup cuando el botón es presionado
         private void ClosePopup(object sender, EventArgs e)
         {
-            this.Close(); // Método que cierra el popup
+            this.Close(); 
         }
     }
 }

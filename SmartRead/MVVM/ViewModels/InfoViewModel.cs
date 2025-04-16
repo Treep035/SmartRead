@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls;
@@ -7,30 +8,33 @@ using SmartRead.MVVM.Models;
 
 namespace SmartRead.MVVM.ViewModels
 {
-    // Hereda de ObservableObject para disponer de la implementación de INotifyPropertyChanged
     public partial class InfoPageViewModel : ObservableObject, IQueryAttributable
     {
-        // Con el atributo ObservableProperty se genera la propiedad Book y se notifica los cambios
         [ObservableProperty]
         private Book book;
 
-        // Definición del comando para cerrar la página, utilizando RelayCommand
-        public IRelayCommand CloseCommand { get; }
+        // Comando para leer el libro y mostrar la URL
+        public IRelayCommand ReadCommand { get; }
 
         public InfoPageViewModel()
         {
-          
+            ReadCommand = new RelayCommand(OnRead);
         }
 
-        // Se recibe el parámetro 'book' desde la navegación mediante la Query
+        private async void OnRead()
+        {
+            // Muestra la URL del libro obtenida desde la propiedad FileUrl
+            string message = Book?.FileUrl ?? "URL no disponible";
+            await Shell.Current.DisplayAlert("URL del Libro", message, "OK");
+            Debug.WriteLine(message);
+
+        }
+
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             if (query.TryGetValue("book", out var bookObj) && bookObj is Book book)
             {
-                // Asignamos el valor recibido
                 Book = book;
-
-                // Si es necesario, se puede procesar la ruta del fichero para obtener Author y Title
                 Book.ParseAndSetAuthorTitleFromFilePath();
             }
         }

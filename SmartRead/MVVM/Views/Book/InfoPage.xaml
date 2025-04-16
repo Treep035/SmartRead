@@ -5,19 +5,12 @@
              BackgroundColor="Black">
 
     <Grid>
-        <!-- Capa 0: Imagen de portada de fondo -->
         <Image Source="{Binding Book.CoverImageUrl}"
                Aspect="AspectFill"
                VerticalOptions="FillAndExpand"
-               HorizontalOptions="FillAndExpand" />
+               HorizontalOptions="FillAndExpand" 
+               Opacity="0.4"/>
 
-        <!-- Capa 1: Overlay oscuro para mejorar legibilidad -->
-        <BoxView Color="#99000000"
-                 Opacity="0.4"
-                 VerticalOptions="FillAndExpand"
-                 HorizontalOptions="FillAndExpand" />
-
-        <!-- Capa 2: Contenido principal con ScrollView en caso de textos largos -->
         <ScrollView>
             <StackLayout Spacing="20" Padding="20" VerticalOptions="FillAndExpand">
                 <!-- Botón de cerrar, posicionado en la parte superior -->
@@ -32,10 +25,10 @@
                     <ImageButton
                          Source="close.png"
                          Clicked="ClosePopup"
-                         HorizontalOptions="Center"
+                         HorizontalOptions="End"
+                         VerticalOptions="Start"
                          Padding="10"
-                         BackgroundColor="Transparent"
-                         Margin="0,80,0,0"/>
+                         BackgroundColor="Transparent"/>
 
                 </Grid>
 
@@ -72,6 +65,7 @@
 
                         <!-- Botón para leer el libro -->
                         <Button Text="Leer"
+                                Command="{Binding ReadCommand}"
                                 BackgroundColor="White"
                                 TextColor="Black"
                                 FontSize="16"
