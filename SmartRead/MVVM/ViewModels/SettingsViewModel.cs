@@ -23,6 +23,23 @@ namespace SmartRead.MVVM.ViewModels
             LoadSettings();
         }
 
+
+        public List<string> ListaIdiomas { get; } = new()
+{
+    "Español",
+    "Inglés"
+};
+        public List<string> ListaTemas { get; } = new()
+{
+    "Oscuro",
+    "Claro"
+};
+        public List<string> ListaTamañosLetra { get; } = new()
+{
+    "12.0",
+    "12.5"
+};
+
         // Método para cargar las configuraciones (ya no necesitas manipular los Pickers directamente aquí)
         private void LoadSettings()
         {
@@ -32,23 +49,26 @@ namespace SmartRead.MVVM.ViewModels
 
         // Método para guardar configuración de idioma
         [RelayCommand]
-        private void OnIdiomaChanged()
+        private void OnIdiomaChangedCommand(string value)
         {
-            Preferences.Set("idioma", idioma); // Guardar el valor seleccionado
+            Preferences.Set("idioma", value); // Guardar el valor seleccionado
+            Idioma = value; // Actualiza la propiedad Idioma
         }
 
         // Método para guardar configuración de tema
         [RelayCommand]
-        private void OnTemaChanged()
+        private void OnTemaChangedCommand(string value)
         {
-            Preferences.Set("tema", tema); // Guardar el valor seleccionado
+            Preferences.Set("tema", value); // Guardar el valor seleccionado
+            Tema = value; // Actualiza la propiedad Idioma
         }
 
         // Método para guardar configuración de tamaño de letra
         [RelayCommand]
-        private void OnTamañoLetraChanged()
+        private void OnTamañoLetraChangedCommand(string value)
         {
-            Preferences.Set("tamañoLetra", tamañoLetra); // Guardar el valor seleccionado
+            Preferences.Set("tamañoLetra", value); // Guardar el valor seleccionado
+            TamañoLetra = value;
         }
     }
 }

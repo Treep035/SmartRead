@@ -1,17 +1,20 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using SmartRead.MVVM.ViewModels;
+using System.Diagnostics;
 
 namespace SmartRead.MVVM.Views.User.Account;
 
 public partial class SettingsPage : ContentPage
 {
-	public SettingsPage()
+    public SettingsPage()
 	{
 		InitializeComponent();
         BindingContext = new SettingsViewModel();
     }
-    private void OnCustomButtonClicked(object sender, EventArgs e)
+
+    private async void Close(object sender, EventArgs e)
     {
-        // Desplegar el flyout (abre el menú lateral)
-        Shell.Current.FlyoutIsPresented = true;
+        await Shell.Current.GoToAsync("//profile");
     }
+
 }

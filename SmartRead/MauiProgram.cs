@@ -10,7 +10,7 @@ using SmartRead.MVVM.Views.User.Account;
 using SmartRead.MVVM.Views.User.Authentication;
 using Microsoft.Extensions.Configuration;
 using Xe.AcrylicView;
-
+using Syncfusion.Maui.Core.Hosting;
 
 namespace SmartRead
 {
@@ -24,6 +24,7 @@ namespace SmartRead
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseAcrylicView()
+                .ConfigureSyncfusionCore()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -54,7 +55,7 @@ namespace SmartRead
 
             builder.Services.AddSingleton<NewsViewModel>();
             builder.Services.AddTransient<NewsPage>();
-            
+
 
 
 

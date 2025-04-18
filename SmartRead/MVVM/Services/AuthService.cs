@@ -25,6 +25,8 @@ namespace SmartRead.MVVM.Services
         /// </summary>
         public async Task<bool> IsAuthenticatedAsync()
         {
+            ClearTokensAsync();
+
             // Recuperar el token de acceso almacenado.
             var accessToken = await GetAccessTokenAsync();
             if (string.IsNullOrWhiteSpace(accessToken))
@@ -99,6 +101,9 @@ namespace SmartRead.MVVM.Services
         {
             SecureStorage.Remove("access_token");
             SecureStorage.Remove("refresh_token");
+
+            Preferences.Default.Remove(AuthStateKey);
+
         }
 
         public void Login()
@@ -108,7 +113,6 @@ namespace SmartRead.MVVM.Services
 
         public void Logout()
         {
-            Preferences.Default.Remove(AuthStateKey);
         }
     }
 }
