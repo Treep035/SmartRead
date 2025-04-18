@@ -77,6 +77,9 @@
 	  <Compile Update="MVVM\Views\Book\CategoriesPopup.xaml.cs">
 	    <DependentUpon>CategoriesPopup.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="MVVM\Views\User\Account\AccountPage.xaml.cs">
+	    <DependentUpon>AccountPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -96,6 +99,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\Book\NewsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="MVVM\Views\User\Account\AccountPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\User\Authentication\ForgotPasswordPage.xaml">

@@ -25,7 +25,6 @@ namespace SmartRead.MVVM.Services
         /// </summary>
         public async Task<bool> IsAuthenticatedAsync()
         {
-            ClearTokensAsync();
 
             // Recuperar el token de acceso almacenado.
             var accessToken = await GetAccessTokenAsync();

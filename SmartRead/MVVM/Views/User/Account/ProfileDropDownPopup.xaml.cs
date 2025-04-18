@@ -76,5 +76,11 @@ namespace SmartRead.MVVM.Views.User.Account
             await Shell.Current.GoToAsync("//settings");
             await ClosePopupAsync();
         }
+
+        private async void OnAccountTapped(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//account");
+            await ClosePopupAsync();
+        }
     }
 }

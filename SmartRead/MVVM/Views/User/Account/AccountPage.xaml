@@ -1,0 +1,156 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartRead.MVVM.Views.User.Account.AccountPage"
+             BackgroundColor="#000000"
+             Title="Gestión de cuenta"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:SmartRead.MVVM.ViewModels">
+
+    <ContentPage.BindingContext>
+        <local:AccountViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,40,25,0" Spacing="50">
+
+            <!-- Título con botón de cierre -->
+            <Grid ColumnDefinitions="*, Auto, *" VerticalOptions="Center" Padding="0,10">
+                <Label Grid.Column="1"
+                       Text="Gestión de cuenta"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       Margin="0,3,0,0"/>
+                <ImageButton Grid.Column="2"
+                             Source="close.png"
+                             Clicked="Close"
+                             HeightRequest="32"
+                             WidthRequest="32"
+                             HorizontalOptions="End"
+                             VerticalOptions="Start"
+                             Margin="0,0,0,10"/>
+            </Grid>
+
+            <Frame BackgroundColor="#F0F0F0"
+                   CornerRadius="10"
+                   Margin="20,0"
+                   Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Plan de Suscripción"
+                            LineBreakMode="WordWrap"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            TextColor="#333333" />
+                    <VerticalStackLayout Spacing="5">
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="Plan Actual:"
+                               LineBreakMode="WordWrap"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#333333" />
+                            <Label Text="Premium"
+                                   LineBreakMode="WordWrap"
+                                   FontSize="14"
+                                   TextColor="#333333" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="Precio:"
+                                   LineBreakMode="WordWrap"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Label Text="€15.99/mes"
+                                   LineBreakMode="WordWrap"
+                                   FontSize="14"
+                                   TextColor="#333333" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="Renovación:"
+                                   LineBreakMode="WordWrap"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Label Text="15 de marzo de 2025"
+                                   LineBreakMode="WordWrap"
+                                   FontSize="14"
+                                   TextColor="#333333" />
+                        </HorizontalStackLayout>
+                        <Button Margin="5"
+                                BackgroundColor="White"
+                                BorderColor="Transparent"
+                                Text="Cancelar suscripción"
+                                TextColor="#000000"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#F0F0F0"
+                   CornerRadius="10"
+                   Margin="20,0"
+                   Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Métodos de pago"
+                            LineBreakMode="WordWrap"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            TextColor="#333333" />
+                    <Frame BackgroundColor="#E0E0E0" BorderColor="Transparent" Margin="0" Padding="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Tarjeta de Crédito"
+                                   LineBreakMode="WordWrap"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Label Text="Visa **** 1234"
+                                    LineBreakMode="WordWrap"
+                                    FontSize="14"
+                                    TextColor="#333333" />
+                            <Label Text="Expira: 12/27"
+                                    LineBreakMode="WordWrap"
+                                    FontSize="14"
+                                    TextColor="#333333" />
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame BackgroundColor="#E0E0E0" BorderColor="Transparent" Margin="0" Padding="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Tarjeta de Débito"
+               LineBreakMode="WordWrap"
+               FontSize="16"
+               FontAttributes="Bold"
+               TextColor="#333333" />
+                            <Label Text="MasterCard **** 5678"
+                LineBreakMode="WordWrap"
+                FontSize="14"
+                TextColor="#333333" />
+                            <Label Text="Expira: 05/26"
+                LineBreakMode="WordWrap"
+                FontSize="14"
+                TextColor="#333333" />
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame BackgroundColor="#E0E0E0" BorderColor="Transparent" Margin="0" Padding="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="PayPal"
+               LineBreakMode="WordWrap"
+               FontSize="16"
+               FontAttributes="Bold"
+               TextColor="#333333" />
+                            <Label Text="usuario@correo.com"
+                LineBreakMode="WordWrap"
+                FontSize="14"
+                TextColor="#333333" />
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Button Margin="5"
+        BackgroundColor="White"
+        BorderColor="Transparent"
+        Text="Añadir método de pago"
+        TextColor="#000000"/>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

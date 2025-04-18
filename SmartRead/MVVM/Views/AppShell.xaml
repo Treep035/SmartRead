@@ -70,13 +70,15 @@
              Route="profile" />
     </TabBar>
 
-    <!-- Otra pestaña para Configuración (opcional) -->
-    <TabBar>
-        <ShellContent 
-            Title="Configuración"
-            Icon="settings.png"
-            Route="settings" 
-            ContentTemplate="{DataTemplate Account:SettingsPage}" />
-    </TabBar>
+    <ShellContent 
+        Title="Configuración"
+        Icon="settings.png"
+        Route="settings" 
+        ContentTemplate="{DataTemplate Account:SettingsPage}" />
+    <ShellContent 
+        Title="Account"
+        Icon="account.png"
+        Route="account" 
+        ContentTemplate="{DataTemplate Account:AccountPage}" />
 
 </Shell>

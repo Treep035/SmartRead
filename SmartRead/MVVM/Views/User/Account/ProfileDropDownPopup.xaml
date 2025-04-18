@@ -67,17 +67,23 @@
                     </Frame>
 
                     <!-- Cuenta -->
-                    <HorizontalStackLayout Spacing="15">
-                        <Image Source="account.png"
-                               WidthRequest="30"
-                               HeightRequest="30"
-                               VerticalOptions="Center"/>
-                        <Label Text="Cuenta" 
-                               FontSize="18" 
-                               TextColor="White" 
-                               FontAttributes="Bold"
-                               VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
+                    <Frame HasShadow="False" Padding="0" BackgroundColor="Transparent" BorderColor="Transparent">
+                        <HorizontalStackLayout Spacing="15">
+                            <Image Source="account.png"
+                                   WidthRequest="30"
+                                   HeightRequest="30"
+                                   VerticalOptions="Center"/>
+                            <Label Text="Cuenta" 
+                                   FontSize="18" 
+                                   TextColor="White" 
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAccountTapped"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
 
                     <!-- Cerrar sesión -->
                     <HorizontalStackLayout Spacing="15">

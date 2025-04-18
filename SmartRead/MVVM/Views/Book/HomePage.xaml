@@ -21,7 +21,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <!-- Fila 0: Header -->
-                <Grid Grid.Row="0" BackgroundColor="Transparent" Padding="10,20,10,10">
+                <Grid Grid.Row="0" BackgroundColor="Transparent" Padding="20,20,10,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -31,19 +31,24 @@
                            FontSize="24"
                            VerticalOptions="Center"
                            HorizontalOptions="Start" />
-                    <Button Grid.Column="1"
-                            Text="Buscar"
-                            TextColor="White"
-                            BackgroundColor="Transparent"
-                            BorderColor="White"
-                            BorderWidth="1"
-                            Command="{Binding SearchCommand}" />
+                    <ImageButton Grid.Column="1"
+             Source="search.png"
+             BackgroundColor="Transparent"
+             BorderColor="Transparent"
+             BorderWidth="1"
+             HeightRequest="40"
+             WidthRequest="40"
+             Command="{Binding SearchCommand}"
+             HorizontalOptions="Center"
+             VerticalOptions="Center"
+             Padding="5"/>
+
                 </Grid>
                 <!-- Fila 1: Botón de Categorías -->
                 <StackLayout x:Name="CategoriesButtonRow"
                              Grid.Row="1"
                              Orientation="Horizontal"
-                             HorizontalOptions="Center"
+                             HorizontalOptions="Start"
                              Padding="10"
                              HeightRequest="65">
                     <Frame Padding="15,5"
@@ -157,7 +162,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <!-- Contenedor para cada categoría -->
-                            <VerticalStackLayout Spacing="10">
+                            <VerticalStackLayout Spacing="10" Margin="5">
                                 <!-- Al tocar la celda se invoca el comando para cargar más libros de la categoría -->
                                 <VerticalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
@@ -170,11 +175,15 @@
                                        Margin="10,0"/>
                                 <!-- Carrusel horizontal de libros -->
                                 <CollectionView ItemsSource="{Binding Books}"
-                                                ItemsLayout="HorizontalList"
                                                 HeightRequest="200"
                                                 RemainingItemsThreshold="2"
+                                                Margin="5"
                                                 RemainingItemsThresholdReachedCommand="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LoadMoreBooksByCategoryCommand}"
                                                 RemainingItemsThresholdReachedCommandParameter="{Binding .}">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal"
+                                                            ItemSpacing="10" />
+                                    </CollectionView.ItemsLayout>
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
                                             <Frame Padding="0"
@@ -182,6 +191,7 @@
                                                    HeightRequest="200"
                                                    CornerRadius="5"
                                                    HasShadow="False"
+                                                   BorderColor="Transparent"
                                                    BackgroundColor="Transparent">
                                                 <Image Source="{Binding CoverImageUrl}"
                                                        Aspect="AspectFill">
