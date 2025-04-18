@@ -41,6 +41,11 @@
         ContentTemplate="{DataTemplate Book:InfoPage}" />
 
     <ShellContent 
+    FlyoutItemIsVisible="False" 
+    Route="search" 
+    ContentTemplate="{DataTemplate Book:SearchPage}" />
+
+    <ShellContent 
        FlyoutItemIsVisible="False" 
        Route="epub" 
        ContentTemplate="{DataTemplate Book:EpubReaderPage}" />

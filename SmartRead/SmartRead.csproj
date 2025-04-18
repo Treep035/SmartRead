@@ -77,6 +77,9 @@
 	  <Compile Update="MVVM\Views\Book\CategoriesPopup.xaml.cs">
 	    <DependentUpon>CategoriesPopup.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="MVVM\Views\Book\SearchPage.xaml.cs">
+	    <DependentUpon>SearchPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="MVVM\Views\User\Account\AccountPage.xaml.cs">
 	    <DependentUpon>AccountPage.xaml</DependentUpon>
 	  </Compile>
@@ -90,6 +93,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\Book\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="MVVM\Views\Book\SearchPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\Book\InfoPage.xaml">

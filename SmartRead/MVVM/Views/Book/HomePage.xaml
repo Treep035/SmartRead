@@ -38,7 +38,7 @@
              BorderWidth="1"
              HeightRequest="40"
              WidthRequest="40"
-             Command="{Binding SearchCommand}"
+             Command="{Binding NavigateToSearchCommand}"
              HorizontalOptions="Center"
              VerticalOptions="Center"
              Padding="5"/>

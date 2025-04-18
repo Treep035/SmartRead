@@ -231,5 +231,12 @@ namespace SmartRead.MVVM.ViewModels
             Application.Current.MainPage.ShowPopup(categoriesPopup);
             return Task.CompletedTask;
         }
+
+        [RelayCommand]
+        public async Task NavigateToSearch()
+
+        {
+            await Shell.Current.GoToAsync("//search");
+        }
     }
 }

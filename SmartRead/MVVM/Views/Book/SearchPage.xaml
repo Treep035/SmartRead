@@ -1,0 +1,73 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
+             x:Class="SmartRead.MVVM.Views.Book.SearchPage"
+             BackgroundColor="Black">
+
+    <ContentPage.BindingContext>
+        <vm:SearchViewModel/>
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+            <!-- Rectángulo con el campo de búsqueda y el icono de cierre -->
+            <Grid BackgroundColor="#1F1F1F" Padding="20" HeightRequest="80" HorizontalOptions="FillAndExpand">
+                <!-- Definir 2 columnas: una para la búsqueda y otra para el icono de cierre -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <!-- Columna para la búsqueda y el icono de búsqueda -->
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Columna para el icono de cierre -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Rectángulo con el icono de búsqueda y el Entry -->
+                <Frame Grid.Column="0"
+                       BackgroundColor="#353535"
+                       CornerRadius="10"
+                       BorderColor="Transparent"
+                       Padding="10"
+                       VerticalOptions="Center"
+                       HorizontalOptions="FillAndExpand"
+                       HasShadow="False">
+                    <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center">
+                        <!-- Icono de búsqueda -->
+                        <Image Source="search.png"
+                               WidthRequest="20"
+                               HeightRequest="20"
+                               Margin="0,0,10,0"
+                               VerticalOptions="Center" />
+
+                        <!-- Campo de texto para la búsqueda -->
+                        <Entry Grid.Column="1"
+                               Placeholder="What do you want to read to?"
+                               FontSize="14"
+                               TextColor="White"
+                               PlaceholderColor="#888"
+                               BackgroundColor="Transparent"
+                               VerticalOptions="Center"
+                               HeightRequest="40" />
+                    </Grid>
+                </Frame>
+
+                <!-- Imagen de cerrar alineada a la derecha -->
+                <Image Grid.Column="1"
+                       Source="close.png"
+                       WidthRequest="20"
+                       HeightRequest="20"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Margin="15,0,5,0">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Close" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+
+            <!-- Aquí puedes añadir más contenido si lo deseas -->
+            <StackLayout Padding="20" Spacing="10">
+                <!-- Contenido adicional en negro -->
+            </StackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
