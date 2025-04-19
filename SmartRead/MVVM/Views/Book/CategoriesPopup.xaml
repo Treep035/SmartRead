@@ -5,34 +5,44 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="SmartRead.MVVM.Views.Book.CategoriesPopup"
     Color="#80000000">
-    <!-- Esta es la propiedad clave a agregar -->
 
-    <!-- Contenido transparente -->
-    <ContentView BackgroundColor="Transparent">
-        <StackLayout Padding="20" 
+    <Grid BackgroundColor="Transparent"
+          VerticalOptions="FillAndExpand"
+          HorizontalOptions="FillAndExpand"
+          WidthRequest="{OnPlatform Android=1000, iOS=1000, WinUI=1000}"
+          HeightRequest="{OnPlatform Android=2000, iOS=2000, WinUI=2000}">
+
+        <StackLayout Padding="20"
                      VerticalOptions="FillAndExpand"
-                     HorizontalOptions="Center" 
+                     HorizontalOptions="FillAndExpand"
                      BackgroundColor="Transparent">
-            <CollectionView ItemsSource="{Binding CategoryNames}" HeightRequest="500" HorizontalOptions="Center" VerticalOptions="FillAndExpand">
+
+            <CollectionView ItemsSource="{Binding Categories}"
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand"
+                            SelectionMode="Single"
+                            SelectionChanged="OnCategorySelected">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Label Text="{Binding}" 
-                               TextColor="White" 
-                               FontSize="18" 
+                        <Label Text="{Binding Name}"
+                               TextColor="White"
+                               FontSize="18"
                                Padding="10"
+                               HorizontalOptions="FillAndExpand"
                                HorizontalTextAlignment="Center"
                                VerticalTextAlignment="Center"
                                Margin="0,15"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
             <ImageButton Source="close.png"
                          Clicked="ClosePopup"
                          HorizontalOptions="Center"
+                         VerticalOptions="End"
                          Padding="10"
                          BackgroundColor="Transparent"
-                         Margin="0,80,0,0"/>
+                         Margin="0,30,0,0"/>
         </StackLayout>
-    </ContentView>
-
+    </Grid>
 </toolkit:Popup>

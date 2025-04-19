@@ -5,7 +5,7 @@ using SmartRead.MVVM.ViewModels;
 
 namespace SmartRead.MVVM.Views.Book
 {
-    public partial class HomePage : ContentPage
+    public partial class HomePage : ContentPage, IQueryAttributable
     {
         private const double TopThreshold = 50;       // Umbral para forzar la expansión
         private const double ExpandedHeight = 60;       // Altura cuando se despliega la fila (igual al botón de Buscar)
@@ -78,6 +78,23 @@ namespace SmartRead.MVVM.Views.Book
                                           CollapsedHeight,
                                           Easing.CubicIn);
             animation.Commit(this, "CollapseCategoriesRow", 16, 250, finished: (v, c) => CategoriesButtonRow.HeightRequest = CollapsedHeight);
+        }
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            if (query.ContainsKey("selectedCategory"))
+            {
+                string selectedCategory = query["selectedCategory"] as string;
+                selectedCategory = Uri.UnescapeDataString(selectedCategory);
+
+                if (!string.IsNullOrEmpty(selectedCategory) && BindingContext is HomeViewModel vm)
+                {
+                    vm.SelectedCategoryLabel = selectedCategory;
+                    vm.SelectedCategoryImage = "close";
+                    vm.SelectedCategory = true;
+                    // Si también quieres filtrar libros o ejecutar lógica:
+                    // await vm.LoadBooksByCategory(selectedCategory);
+                }
+            }
         }
     }
 }

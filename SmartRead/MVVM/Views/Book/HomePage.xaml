@@ -60,11 +60,11 @@
                                      HorizontalOptions="Center"
                                      VerticalOptions="Center"
                                      Spacing="8">
-                            <Label Text="Categorías"
+                            <Label Text="{Binding SelectedCategoryLabel}"
                                    TextColor="#BBBBBB"
                                    FontSize="18"
                                    VerticalOptions="Center"/>
-                            <Image Source="down.png"
+                            <Image Source="{Binding SelectedCategoryImageWithExtension}"
                                    HeightRequest="16"
                                    WidthRequest="16"
                                    VerticalOptions="Center"/>

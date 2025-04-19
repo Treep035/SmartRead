@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -21,13 +22,50 @@ namespace SmartRead.MVVM.ViewModels
         private readonly AuthService _authService;
         private readonly IConfiguration _configuration;
 
-        // Tamaño de página para la carga paginada.
+        private readonly Dictionary<int, bool> _isLoadingBooks = new();
+
+        private bool _selectedCategory = false;
+        private string _selectedCategoryLabel = "Categorias";
+        private string _selectedCategoryImage = "down";
+
+        private List<Category> _originalCategories = new List<Category>();
+
+        public string SelectedCategoryImageWithExtension => $"{_selectedCategoryImage}.png";
+
+        public bool SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                if (SetProperty(ref _selectedCategory, value))
+                    UpdateCategories();
+            }
+        }
+
+        public string SelectedCategoryLabel
+        {
+            get => _selectedCategoryLabel;
+            set
+            {
+                if (SetProperty(ref _selectedCategoryLabel, value) && _selectedCategory)
+                    UpdateCategories();
+            }
+        }
+
+        public string SelectedCategoryImage
+        {
+            get => _selectedCategoryImage;
+            set
+            {
+                SetProperty(ref _selectedCategoryImage, value);
+                OnPropertyChanged(nameof(SelectedCategoryImageWithExtension));
+            }
+        }
+
         private const int PageSize = 10;
+        private readonly Dictionary<int, bool> _noMoreBooks = new();
 
-        // Diccionario para llevar un seguimiento si ya se cargaron todos los libros de una categoría.
-        private readonly Dictionary<int, bool> _noMoreBooks = new Dictionary<int, bool>();
-
-        public ObservableCollection<Category> Categories { get; set; } = new ObservableCollection<Category>();
+        public ObservableCollection<Category> Categories { get; } = new();
 
         public HomeViewModel(AuthService authService, IConfiguration configuration)
         {
@@ -35,15 +73,33 @@ namespace SmartRead.MVVM.ViewModels
             _configuration = configuration;
         }
 
+        private void UpdateCategories()
+        {
+            // Guardamos una copia antes de modificar
+            List<Category> snapshot;
+            if (_selectedCategory)
+            {
+                // solo la que coincide
+                snapshot = Categories
+                    .Where(c => c.Name.Equals(_selectedCategoryLabel, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+            else
+            {
+                // restauramos el orden original
+                snapshot = _originalCategories.ToList();
+            }
+
+            Categories.Clear();
+            foreach (var cat in snapshot)
+                Categories.Add(cat);
+        }
+
         [RelayCommand]
         public async Task LoadCategoriesAsync()
         {
-            // Si ya se han cargado las categorías, no las volvemos a cargar.
-            if (Categories != null && Categories.Count > 0)
-            {
-                Debug.WriteLine("Las categorías ya están cargadas; se omite la carga.");
+            if (Categories.Count > 1)
                 return;
-            }
 
             var functionKey = _configuration["AzureFunctionKey"];
             if (string.IsNullOrWhiteSpace(functionKey))
@@ -62,181 +118,135 @@ namespace SmartRead.MVVM.ViewModels
             var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}" +
                       $"&action=getcategories&accesstoken={Uri.EscapeDataString(accessToken)}";
 
-            using (var httpClient = new HttpClient())
+            using var httpClient = new HttpClient();
+            try
             {
-                try
+                if (Categories.Count == 0)
                 {
-                    // Si queremos conservar los datos previos, no se hace Categories.Clear()
-                    // Categories.Clear();
+                    Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
+                    Categories.Add(new Category(0, "Seguir leyendo", new ObservableCollection<Book>()));
+                }
 
-                    // Agregar categorías estáticas si aún no están en la colección.
-                    if (Categories.Count == 0)
+                var response = await httpClient.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var msg = await response.Content.ReadAsStringAsync();
+                    await Shell.Current.DisplayAlert("Error", $"Error al obtener categorías: {msg}", "OK");
+                    return;
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                var list = JsonSerializer.Deserialize<List<Category>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (list == null) return;
+
+                // lista temporal para no tocar Categories en el foreach
+                var toAdd = new List<Category>();
+                foreach (var cat in list)
+                {
+                    if (!Categories.Any(c => c.IdCategory == cat.IdCategory))
                     {
-                        Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
-                        Categories.Add(new Category(0, "Seguir leyendo", new ObservableCollection<Book>()));
-                    }
-
-                    var response = await httpClient.GetAsync(url);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        var errorMessage = await response.Content.ReadAsStringAsync();
-                        await Shell.Current.DisplayAlert("Error", $"Error al obtener las categorías: {errorMessage}", "OK");
-                        return;
-                    }
-
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-                    var categoriesFromApi = JsonSerializer.Deserialize<List<Category>>(responseContent, options);
-                    if (categoriesFromApi == null)
-                    {
-                        await Shell.Current.DisplayAlert("Error", "La respuesta no contiene categorías válidas.", "OK");
-                        return;
-                    }
-
-                    // Agregar las categorías obtenidas de la API sin eliminar las que ya están cargadas.
-                    foreach (var category in categoriesFromApi)
-                    {
-                        // Evitar duplicados (si el IdCategory ya existe)
-                        if (!Categories.Any(c => c.IdCategory == category.IdCategory))
-                        {
-                            if (category.Books == null)
-                                category.Books = new ObservableCollection<Book>();
-
-                            Categories.Add(category);
-                            // Inicialmente se asume que la categoría tiene más libros.
-                            _noMoreBooks[category.IdCategory] = false;
-                        }
-                    }
-
-                    // Para cada categoría obtenida (excluyendo las estáticas con IdCategory 0) cargamos la primera tanda de libros,
-                    // siempre y cuando aún no se hayan cargado.
-                    foreach (var category in Categories.Where(c => c.IdCategory != 0))
-                    {
-                        // Si la colección de libros está vacía, se realiza la carga inicial.
-                        if (category.Books == null || category.Books.Count == 0)
-                        {
-                            await LoadMoreBooksByCategoryAsync(category);
-                        }
+                        cat.Books ??= new ObservableCollection<Book>();
+                        toAdd.Add(cat);
+                        _noMoreBooks[cat.IdCategory] = false;
                     }
                 }
-                catch (Exception ex)
+
+                foreach (var cat in toAdd)
+                    Categories.Add(cat);
+
+                _originalCategories = Categories.ToList();
+
+                // snapshot para iterar sin que rompa si UpdateCategories limpia
+                var loadSnapshot = Categories.Where(c => c.IdCategory != 0).ToList();
+                foreach (var cat in loadSnapshot)
                 {
-                    await Shell.Current.DisplayAlert("Error", $"Excepción al obtener categorías: {ex.Message}", "OK");
+                    if (cat.Books.Count == 0)
+                        await LoadMoreBooksByCategoryAsync(cat);
                 }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Excepción al obtener categorías: {ex.Message}", "OK");
             }
         }
 
-
-        /// <summary>
-        /// Carga inicial o incremental de libros para una categoría.
-        /// Si se solicita carga incremental, no se limpia la colección existente.
-        /// </summary>
         [RelayCommand]
         public async Task LoadMoreBooksByCategoryAsync(Category category)
         {
-            if (category == null)
-            {
-                await Shell.Current.DisplayAlert("Error", "No se seleccionó ninguna categoría.", "OK");
-                return;
-            }
-
-            // Si ya se determinó que no hay más libros para esa categoría, se sale.
-            if (_noMoreBooks.TryGetValue(category.IdCategory, out bool noMore) && noMore)
+            if (_isLoadingBooks.TryGetValue(category.IdCategory, out var running) && running)
                 return;
 
-            var functionKey = _configuration["AzureFunctionKey"];
-            if (string.IsNullOrWhiteSpace(functionKey))
+            _isLoadingBooks[category.IdCategory] = true;
+            try
             {
-                await Shell.Current.DisplayAlert("Error", "La AzureFunctionKey no está configurada.", "OK");
-                return;
-            }
+                var functionKey = _configuration["AzureFunctionKey"];
+                var accessToken = await _authService.GetAccessTokenAsync();
+                var offset = category.Books.Count;
+                var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}" +
+                          $"&action=getbooksbycategory&categoryId={category.IdCategory}&offset={offset}&limit={PageSize}" +
+                          $"&accesstoken={Uri.EscapeDataString(accessToken)}";
 
-            var accessToken = await _authService.GetAccessTokenAsync();
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                await Shell.Current.DisplayAlert("Error", "No se encontró el token de acceso. Inicie sesión nuevamente.", "OK");
-                return;
-            }
-
-            // Offset = cantidad de libros ya cargados, limit = PageSize.
-            int currentOffset = category.Books.Count;
-
-            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}" +
-                      $"&action=getbooksbycategory&categoryId={category.IdCategory}" +
-                      $"&offset={currentOffset}&limit={PageSize}" +
-                      $"&accesstoken={Uri.EscapeDataString(accessToken)}";
-
-            using (var httpClient = new HttpClient())
-            {
-                try
+                using var httpClient = new HttpClient();
+                var resp = await httpClient.GetAsync(url);
+                if (!resp.IsSuccessStatusCode)
                 {
-                    var response = await httpClient.GetAsync(url);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        var errorMessage = await response.Content.ReadAsStringAsync();
-                        await Shell.Current.DisplayAlert("Error", $"Error al obtener los libros: {errorMessage}", "OK");
-                        return;
-                    }
-
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-                    var booksFromApi = JsonSerializer.Deserialize<List<Book>>(responseContent, options);
-                    if (booksFromApi == null || booksFromApi.Count == 0)
-                    {
-                        // Marcar que ya no hay más libros para esta categoría.
-                        _noMoreBooks[category.IdCategory] = true;
-                        return;
-                    }
-
-                    foreach (var book in booksFromApi)
-                    {
-                        book.ParseAndSetAuthorTitleFromFilePath();
-                        Debug.WriteLine($"[LoadMoreBooksByCategoryAsync] CoverImageUrl para '{book.Title}': {book.CoverImageUrl}");
-                        category.Books.Add(book);
-                    }
+                    var msg = await resp.Content.ReadAsStringAsync();
+                    await Shell.Current.DisplayAlert("Error", $"Error al obtener libros: {msg}", "OK");
+                    return;
                 }
-                catch (Exception ex)
+
+                var json = await resp.Content.ReadAsStringAsync();
+                var books = JsonSerializer.Deserialize<List<Book>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (books == null || books.Count == 0)
                 {
-                    await Shell.Current.DisplayAlert("Error", $"Excepción al obtener libros: {ex.Message}", "OK");
+                    _noMoreBooks[category.IdCategory] = true;
+                    return;
                 }
+
+                foreach (var bk in books)
+                {
+                    bk.ParseAndSetAuthorTitleFromFilePath();
+                    category.Books.Add(bk);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Excepción al obtener libros: {ex.Message}", "OK");
+            }
+            finally
+            {
+                _isLoadingBooks[category.IdCategory] = false;
             }
         }
 
         [RelayCommand]
         public async Task NavigateToInfo(Book book)
         {
-            try
-            {
-                // Navegar a la página InfoPage, pasando el objeto Book como parámetro.
-                var navigationParameters = new Dictionary<string, object>
-                {
-                    { "book", book }
-                };
-
-                await Shell.Current.GoToAsync($"//info", navigationParameters);
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Error", $"No se pudo navegar a la información del libro: {ex.Message}", "OK");
-            }
+            var p = new Dictionary<string, object> { ["book"] = book };
+            await Shell.Current.GoToAsync("//info", p);
         }
-
 
         [RelayCommand]
         public Task NavigateToCategories()
         {
-            var categoriesPopup = new CategoriesPopup();
-            Application.Current.MainPage.ShowPopup(categoriesPopup);
+            if (SelectedCategory)
+            {
+                SelectedCategory = false;
+                SelectedCategoryLabel = "Categorías";
+                SelectedCategoryImage = "down";
+            }
+            else
+            {
+                var popup = new CategoriesPopup(_authService, _configuration);
+                Application.Current.MainPage.ShowPopup(popup);
+            }
             return Task.CompletedTask;
         }
 
         [RelayCommand]
         public async Task NavigateToSearch()
-
-        {
-            await Shell.Current.GoToAsync("//search");
-        }
+            => await Shell.Current.GoToAsync("//search");
     }
 }
