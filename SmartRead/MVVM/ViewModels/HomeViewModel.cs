@@ -21,13 +21,12 @@ namespace SmartRead.MVVM.ViewModels
     {
         private readonly AuthService _authService;
         private readonly IConfiguration _configuration;
-
         private readonly Dictionary<int, bool> _isLoadingBooks = new();
-
         private bool _selectedCategory = false;
-        private string _selectedCategoryLabel = "Categorias";
+        private string _selectedCategoryLabel = "Categorías";
         private string _selectedCategoryImage = "down";
-
+        private const int PageSize = 10;
+        private readonly Dictionary<int, bool> _noMoreBooks = new();
         private List<Category> _originalCategories = new List<Category>();
 
         public string SelectedCategoryImageWithExtension => $"{_selectedCategoryImage}.png";
@@ -62,10 +61,13 @@ namespace SmartRead.MVVM.ViewModels
             }
         }
 
-        private const int PageSize = 10;
-        private readonly Dictionary<int, bool> _noMoreBooks = new();
-
         public ObservableCollection<Category> Categories { get; } = new();
+        public ObservableCollection<Category> FilteredCategories { get; } = new();
+
+        /// <summary>
+        /// Acceso público de la lista original para inyectarla en el popup.
+        /// </summary>
+        public IReadOnlyList<Category> OriginalCategories => _originalCategories;
 
         public HomeViewModel(AuthService authService, IConfiguration configuration)
         {
@@ -75,24 +77,20 @@ namespace SmartRead.MVVM.ViewModels
 
         private void UpdateCategories()
         {
-            // Guardamos una copia antes de modificar
-            List<Category> snapshot;
-            if (_selectedCategory)
+            if (SelectedCategory)
             {
-                // solo la que coincide
-                snapshot = Categories
-                    .Where(c => c.Name.Equals(_selectedCategoryLabel, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+                // Sólo la categoría seleccionada
+                FilteredCategories.Clear();
+                var match = _originalCategories
+                    .FirstOrDefault(c => c.Name.Equals(SelectedCategoryLabel, StringComparison.OrdinalIgnoreCase));
+                if (match != null)
+                    FilteredCategories.Add(match);
             }
             else
             {
-                // restauramos el orden original
-                snapshot = _originalCategories.ToList();
+                // Quitamos el filtro
+                FilteredCategories.Clear();
             }
-
-            Categories.Clear();
-            foreach (var cat in snapshot)
-                Categories.Add(cat);
         }
 
         [RelayCommand]
@@ -121,6 +119,7 @@ namespace SmartRead.MVVM.ViewModels
             using var httpClient = new HttpClient();
             try
             {
+                // Añadimos secciones fijas
                 if (Categories.Count == 0)
                 {
                     Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
@@ -140,7 +139,7 @@ namespace SmartRead.MVVM.ViewModels
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 if (list == null) return;
 
-                // lista temporal para no tocar Categories en el foreach
+                // Añadimos sólo las nuevas categorías
                 var toAdd = new List<Category>();
                 foreach (var cat in list)
                 {
@@ -151,13 +150,13 @@ namespace SmartRead.MVVM.ViewModels
                         _noMoreBooks[cat.IdCategory] = false;
                     }
                 }
-
                 foreach (var cat in toAdd)
                     Categories.Add(cat);
 
+                // Guardamos la copia original
                 _originalCategories = Categories.ToList();
 
-                // snapshot para iterar sin que rompa si UpdateCategories limpia
+                // Cargamos los libros de cada categoría
                 var loadSnapshot = Categories.Where(c => c.IdCategory != 0).ToList();
                 foreach (var cat in loadSnapshot)
                 {
@@ -239,7 +238,7 @@ namespace SmartRead.MVVM.ViewModels
             }
             else
             {
-                var popup = new CategoriesPopup(_authService, _configuration);
+                var popup = new CategoriesPopup(_authService, _configuration, OriginalCategories);
                 Application.Current.MainPage.ShowPopup(popup);
             }
             return Task.CompletedTask;

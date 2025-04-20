@@ -1,73 +1,84 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
-             xmlns:ui="clr-namespace:Xe.AcrylicView;assembly=Xe.AcrylicView"
-             x:Class="SmartRead.MVVM.Views.Book.HomePage"
-             BackgroundColor="Black">
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
+    xmlns:ui="clr-namespace:Xe.AcrylicView;assembly=Xe.AcrylicView"
+    xmlns:conv="clr-namespace:SmartRead.MVVM.Converters"
+    x:Class="SmartRead.MVVM.Views.Book.HomePage"
+    BackgroundColor="Black">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*">
-        <!-- Contenedor superior con efecto acrílico -->
-        <ui:AcrylicView EffectStyle="Custom"
-                        VerticalOptions="Start"
-                        Margin="0"
-                        TintOpacity="0.4"
-                        TintColor="Black"
-                        BorderColor="Transparent"
-                        BorderThickness="0"
-                        CornerRadius="0">
+        <!-- HEADER ACRÍLICO Y BOTÓN DE BÚSQUEDA -->
+        <ui:AcrylicView
+        EffectStyle="Custom"
+        VerticalOptions="Start"
+        Margin="0"
+        TintOpacity="0.4"
+        TintColor="Black"
+        BorderColor="Transparent"
+        BorderThickness="0"
+        CornerRadius="0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <!-- Fila 0: Header -->
-                <Grid Grid.Row="0" BackgroundColor="Transparent" Padding="20,20,10,10">
+
+                <!-- Fila 0: Título y búsqueda -->
+                <Grid Grid.Row="0" Padding="20,20,10,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Label Text="SmartRead"
-                           TextColor="White"
-                           FontSize="24"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Start" />
-                    <ImageButton Grid.Column="1"
-             Source="search.png"
-             BackgroundColor="Transparent"
-             BorderColor="Transparent"
-             BorderWidth="1"
-             HeightRequest="40"
-             WidthRequest="40"
-             Command="{Binding NavigateToSearchCommand}"
-             HorizontalOptions="Center"
-             VerticalOptions="Center"
-             Padding="5"/>
-
+                    <Label
+              Text="SmartRead"
+              TextColor="White"
+              FontSize="24"
+              VerticalOptions="Center"/>
+                    <ImageButton
+              Grid.Column="1"
+              Source="search.png"
+              BackgroundColor="Transparent"
+              HeightRequest="40"
+              WidthRequest="40"
+              Command="{Binding NavigateToSearchCommand}"
+              Padding="5"/>
                 </Grid>
-                <!-- Fila 1: Botón de Categorías -->
-                <StackLayout x:Name="CategoriesButtonRow"
-                             Grid.Row="1"
-                             Orientation="Horizontal"
-                             HorizontalOptions="Start"
-                             Padding="10"
-                             HeightRequest="65">
-                    <Frame Padding="15,5"
-                           BackgroundColor="Transparent"
-                           BorderColor="#95BBBBBB"
-                           CornerRadius="15"
-                           HasShadow="False">
-                        <StackLayout Orientation="Horizontal"
-                                     HorizontalOptions="Center"
-                                     VerticalOptions="Center"
-                                     Spacing="8">
-                            <Label Text="{Binding SelectedCategoryLabel}"
-                                   TextColor="#BBBBBB"
-                                   FontSize="18"
-                                   VerticalOptions="Center"/>
-                            <Image Source="{Binding SelectedCategoryImageWithExtension}"
-                                   HeightRequest="16"
-                                   WidthRequest="16"
-                                   VerticalOptions="Center"/>
+
+                <!-- Fila 1: Selector de categorías -->
+                <StackLayout
+            x:Name="CategoriesButtonRow"
+            Grid.Row="1"
+            Orientation="Horizontal"
+            HorizontalOptions="Start"
+            Padding="10"
+            HeightRequest="65">
+                    <Frame
+              Padding="15,5"
+              BackgroundColor="Transparent"
+              BorderColor="#95BBBBBB"
+              CornerRadius="15"
+              HasShadow="False">
+                        <StackLayout
+                Orientation="Horizontal"
+                Spacing="8"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                            <Label
+                  Text="{Binding SelectedCategoryLabel}"
+                  TextColor="#BBBBBB"
+                  FontSize="18"/>
+                            <Image
+                  Source="{Binding SelectedCategoryImageWithExtension}"
+                  HeightRequest="16"
+                  WidthRequest="16"/>
                         </StackLayout>
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding NavigateToCategoriesCommand}" />
@@ -77,10 +88,10 @@
             </Grid>
         </ui:AcrylicView>
 
-        <!-- Contenido principal -->
+        <!-- CONTENIDO PRINCIPAL -->
         <ScrollView Grid.Row="1" Scrolled="OnScrollViewScrolled">
             <VerticalStackLayout Spacing="20">
-                <!-- Ejemplo de contenido principal -->
+                <!-- Banner principal y botones Leer/Mi lista (sin cambios) -->
                 <Grid>
                     <Frame Padding="0"
                            Margin="0"
@@ -156,49 +167,53 @@
                         </Frame>
                     </StackLayout>
                 </Grid>
+                <!-- === LISTA DE CATEGORÍAS === -->
 
-                <!-- Lista de Categorías con carruseles horizontales -->
-                <CollectionView ItemsSource="{Binding Categories}" SelectionMode="None">
+                <!-- 1) Todas las categorías -->
+                <CollectionView
+            x:Name="AllCategoriesCV"
+            IsVisible="{Binding SelectedCategory, Converter={StaticResource InverseBoolConverter}}"
+            ItemsSource="{Binding Categories}"
+            SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <!-- Contenedor para cada categoría -->
                             <VerticalStackLayout Spacing="10" Margin="5">
-                                <!-- Al tocar la celda se invoca el comando para cargar más libros de la categoría -->
                                 <VerticalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LoadMoreBooksByCategoryCommand}"
-                                        CommandParameter="{Binding .}" />
+                      Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LoadMoreBooksByCategoryCommand}"
+                      CommandParameter="{Binding .}" />
                                 </VerticalStackLayout.GestureRecognizers>
-                                <Label Text="{Binding Name}"
-                                       FontSize="20"
-                                       TextColor="White"
-                                       Margin="10,0"/>
-                                <!-- Carrusel horizontal de libros -->
-                                <CollectionView ItemsSource="{Binding Books}"
-                                                HeightRequest="200"
-                                                RemainingItemsThreshold="2"
-                                                Margin="5"
-                                                RemainingItemsThresholdReachedCommand="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LoadMoreBooksByCategoryCommand}"
-                                                RemainingItemsThresholdReachedCommandParameter="{Binding .}">
+                                <Label
+                    Text="{Binding Name}"
+                    FontSize="20"
+                    TextColor="White"
+                    Margin="10,0"/>
+                                <CollectionView
+                    ItemsSource="{Binding Books}"
+                    HeightRequest="200"
+                    RemainingItemsThreshold="2"
+                    Margin="5"
+                    RemainingItemsThresholdReachedCommand="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LoadMoreBooksByCategoryCommand}"
+                    RemainingItemsThresholdReachedCommandParameter="{Binding .}">
                                     <CollectionView.ItemsLayout>
-                                        <LinearItemsLayout Orientation="Horizontal"
-                                                            ItemSpacing="10" />
+                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
                                     </CollectionView.ItemsLayout>
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Frame Padding="0"
-                                                   WidthRequest="140"
-                                                   HeightRequest="200"
-                                                   CornerRadius="5"
-                                                   HasShadow="False"
-                                                   BorderColor="Transparent"
-                                                   BackgroundColor="Transparent">
-                                                <Image Source="{Binding CoverImageUrl}"
-                                                       Aspect="AspectFill">
+                                            <Frame
+                          Padding="0"
+                          WidthRequest="140"
+                          HeightRequest="200"
+                          CornerRadius="5"
+                          HasShadow="False"
+                          BackgroundColor="Transparent">
+                                                <Image
+                            Source="{Binding CoverImageUrl}"
+                            Aspect="AspectFill">
                                                     <Image.GestureRecognizers>
-                                                        <TapGestureRecognizer 
-                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
-                                                            CommandParameter="{Binding .}" />
+                                                        <TapGestureRecognizer
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
+                                CommandParameter="{Binding .}" />
                                                     </Image.GestureRecognizers>
                                                 </Image>
                                             </Frame>
@@ -209,6 +224,58 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+
+                <!-- 2) Sólo la categoría filtrada -->
+                <CollectionView
+            x:Name="FilteredCategoriesCV"
+            IsVisible="{Binding SelectedCategory}"
+            ItemsSource="{Binding FilteredCategories}"
+            SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout Spacing="10" Margin="5">
+                                <Label
+                    Text="{Binding Name}"
+                    FontSize="20"
+                    TextColor="White"
+                    Margin="10,0"/>
+                                <CollectionView
+                    ItemsSource="{Binding Books}"
+                    HeightRequest="200"
+                    RemainingItemsThreshold="2"
+                    Margin="5"
+                    RemainingItemsThresholdReachedCommand="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.LoadMoreBooksByCategoryCommand}"
+                    RemainingItemsThresholdReachedCommandParameter="{Binding .}">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame
+                          Padding="0"
+                          WidthRequest="140"
+                          HeightRequest="200"
+                          CornerRadius="5"
+                          HasShadow="False"
+                          BackgroundColor="Transparent">
+                                                <Image
+                            Source="{Binding CoverImageUrl}"
+                            Aspect="AspectFill">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
+                                CommandParameter="{Binding .}" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
