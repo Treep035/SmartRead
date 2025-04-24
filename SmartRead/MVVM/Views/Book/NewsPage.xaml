@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
-             xmlns:ui="clr-namespace:Xe.AcrylicView;assembly=Xe.AcrylicView"
-             x:Class="SmartRead.MVVM.Views.Book.NewsPage"
-             BackgroundColor="Black"
-             Title="Noticias">
-
-    <ContentPage.BindingContext>
-        <vm:NewsViewModel />
-    </ContentPage.BindingContext>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ui="clr-namespace:Xe.AcrylicView;assembly=Xe.AcrylicView"
+    x:Class="SmartRead.MVVM.Views.Book.NewsPage"
+    BackgroundColor="Black"
+    Title="Noticias">
 
     <Grid RowDefinitions="Auto,*">
         <!-- HEADER ACRÍLICO Y BOTÓN DE BÚSQUEDA -->
@@ -29,16 +25,12 @@
                 </Grid.RowDefinitions>
 
                 <!-- Fila 0: Título y búsqueda -->
-                <Grid Grid.Row="0" Padding="20,20,10,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                <Grid Grid.Row="0" Padding="20,20,10,10" ColumnDefinitions="*,Auto">
                     <Label
                         Text="SmartRead"
                         TextColor="White"
                         FontSize="24"
-                        VerticalOptions="Center"/>
+                        VerticalOptions="Center" />
                     <ImageButton
                         Grid.Column="1"
                         Source="search.png"
@@ -46,19 +38,18 @@
                         HeightRequest="40"
                         WidthRequest="40"
                         Command="{Binding NavigateToSearchCommand}"
-                        Padding="5"/>
+                        Padding="5" />
                 </Grid>
 
                 <!-- Fila 1: Botones de filtro estilo HomePage -->
                 <StackLayout
-                    x:Name="FiltersButtonRow"
                     Grid.Row="1"
                     Orientation="Horizontal"
                     HorizontalOptions="Start"
                     Padding="10"
                     HeightRequest="65"
                     Spacing="15">
-                    
+
                     <!-- Botón Populares -->
                     <Frame
                         Padding="15,5"
@@ -66,29 +57,69 @@
                         BorderColor="#95BBBBBB"
                         CornerRadius="15"
                         HasShadow="False">
-                        <StackLayout Orientation="Horizontal" Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
-                            <Label Text="Populares" TextColor="#BBBBBB" FontSize="18"/>
-                            <Image Source="populares_icon.png" HeightRequest="16" WidthRequest="16"/>
-                        </StackLayout>
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding CargarPopularesCommand}" />
                         </Frame.GestureRecognizers>
+                        <Frame.Triggers>
+                            <DataTrigger
+                                TargetType="Frame"
+                                Binding="{Binding PopularSelected}"
+                                Value="True">
+                                <Setter Property="BorderColor" Value="White" />
+                            </DataTrigger>
+                        </Frame.Triggers>
+                        <StackLayout Orientation="Horizontal" Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label
+                                Text="Populares"
+                                FontSize="18"
+                                TextColor="#BBBBBB">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        TargetType="Label"
+                                        Binding="{Binding PopularSelected}"
+                                        Value="True">
+                                        <Setter Property="TextColor" Value="White" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <Image Source="populares_icon.png" HeightRequest="16" WidthRequest="16" />
+                        </StackLayout>
                     </Frame>
 
-                    <!-- Botón Novedades -->
+                    <!-- Botón Recientes -->
                     <Frame
                         Padding="15,5"
                         BackgroundColor="Transparent"
                         BorderColor="#95BBBBBB"
                         CornerRadius="15"
                         HasShadow="False">
-                        <StackLayout Orientation="Horizontal" Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
-                            <Label Text="Novedades" TextColor="#BBBBBB" FontSize="18"/>
-                            <Image Source="novedades_icon.png" HeightRequest="16" WidthRequest="16"/>
-                        </StackLayout>
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding CargarNovedadesCommand}" />
+                            <TapGestureRecognizer Command="{Binding CargarRecientesCommand}" />
                         </Frame.GestureRecognizers>
+                        <Frame.Triggers>
+                            <DataTrigger
+                                TargetType="Frame"
+                                Binding="{Binding NovedadesSelected}"
+                                Value="True">
+                                <Setter Property="BorderColor" Value="White" />
+                            </DataTrigger>
+                        </Frame.Triggers>
+                        <StackLayout Orientation="Horizontal" Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label
+                                Text="Recientes"
+                                FontSize="18"
+                                TextColor="#BBBBBB">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        TargetType="Label"
+                                        Binding="{Binding NovedadesSelected}"
+                                        Value="True">
+                                        <Setter Property="TextColor" Value="White" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <Image Source="novedades_icon.png" HeightRequest="16" WidthRequest="16" />
+                        </StackLayout>
                     </Frame>
 
                 </StackLayout>
@@ -98,74 +129,85 @@
         <!-- CONTENIDO PRINCIPAL -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Spacing="20" Padding="10,0">
-                <CollectionView ItemsSource="{Binding LibrosActuales}"
-                ItemsLayout="VerticalList"
-                Margin="0,10">
+                <CollectionView
+                    ItemsSource="{Binding LibrosActuales}"
+                    ItemsLayout="VerticalList"
+                    Margin="0,10">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame BackgroundColor="#1E1E1E"
-                   CornerRadius="12"
-                   Padding="12"
-                   Margin="0,15"
-                   HasShadow="False"
-                   BorderColor="#333">
-                                <!-- Quitamos la HeightRequest fija del Grid para que sea auto -->
-                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Frame
+                                BackgroundColor="#1E1E1E"
+                                CornerRadius="12"
+                                Padding="12"
+                                Margin="0,15"
+                                HasShadow="False"
+                                BorderColor="#333">
 
-                                    <!-- Frame idéntico al de HomePage, ¡con esquinas recortadas! -->
-                                    <Frame Grid.Column="0"
-                           Padding="0"
-                           WidthRequest="140"
-                           HeightRequest="200"
-                           CornerRadius="10"
-                           HasShadow="False"
-                           BackgroundColor="Transparent"
-                           BorderColor="Transparent"
-                           >
-                                        <Image Source="{Binding Imagen}"
-                               Aspect="AspectFill"
-                               VerticalOptions="Fill"
-                               HorizontalOptions="Fill">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
-                                    CommandParameter="{Binding .}" />
-                                            </Image.GestureRecognizers>
-                                        </Image>
+                                <!-- Navegar a InfoPage -->
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                          Path=BindingContext.NavigateToInfoCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
+
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                    <!-- Portada -->
+                                    <Frame
+                                        Padding="0"
+                                        WidthRequest="140"
+                                        HeightRequest="200"
+                                        CornerRadius="5"
+                                        HasShadow="False"
+                                        BackgroundColor="Transparent">
+                                        <Image
+                                            Source="{Binding CoverImageUrl}"
+                                            Aspect="AspectFill" />
                                     </Frame>
 
-                                    <!-- Resto de la ficha (título, descripción y botones) -->
-                                    <VerticalStackLayout Grid.Column="1"
-                                         Padding="0"
-                                         Spacing="6"
-                                         VerticalOptions="FillAndExpand">
-                                        <Label Text="{Binding Titulo}"
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               TextColor="White"
-                               LineBreakMode="TailTruncation" />
-                                        <Label Text="{Binding Descripcion}"
-                               FontSize="14"
-                               TextColor="#CCCCCC"
-                               LineBreakMode="WordWrap"
-                               MaxLines="3" />
-                                        <HorizontalStackLayout Spacing="12"
-                                               Margin="0,10,0,0"
-                                               VerticalOptions="End">
-                                            <Button Text="Leer ahora"
-                                    BackgroundColor="White"
-                                    TextColor="Black"
-                                    CornerRadius="6"
-                                    Padding="20,8"
-                                    FontAttributes="Bold"
-                                    FontSize="13" />
-                                            <Button Text="Lista"
-                                    ImageSource="list.png"
-                                    BackgroundColor="#2A2A2A"
-                                    TextColor="White"
-                                    CornerRadius="6"
-                                    Padding="20,8"
-                                    FontSize="13" />
+                                    <!-- Texto y botones -->
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Spacing="6"
+                                        VerticalOptions="FillAndExpand">
+                                        <Label
+                                            Text="{Binding Title}"
+                                            FontSize="20"
+                                            FontAttributes="Bold"
+                                            TextColor="White"
+                                            LineBreakMode="TailTruncation" />
+                                        <Label
+                                            Text="{Binding Description}"
+                                            FontSize="14"
+                                            TextColor="#CCCCCC"
+                                            LineBreakMode="WordWrap"
+                                            MaxLines="3" />
+
+                                        <HorizontalStackLayout
+                                            Spacing="12"
+                                            Margin="0,10,0,0"
+                                            VerticalOptions="End">
+                                            <!-- Aquí vinculamos al nuevo comando OpenBookCommand -->
+                                            <Button
+                                                Text="Leer ahora"
+                                                FontAttributes="Bold"
+                                                FontSize="13"
+                                                BackgroundColor="White"
+                                                TextColor="Black"
+                                                CornerRadius="6"
+                                                Padding="20,8"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                                  Path=BindingContext.OpenBookCommand}"
+                                                CommandParameter="{Binding .}" />
+
+                                            <Button
+                                                Text="Lista"
+                                                ImageSource="list.png"
+                                                BackgroundColor="#2A2A2A"
+                                                TextColor="White"
+                                                CornerRadius="6"
+                                                Padding="20,8"
+                                                FontSize="13" />
                                         </HorizontalStackLayout>
                                     </VerticalStackLayout>
                                 </Grid>
@@ -173,10 +215,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
             </VerticalStackLayout>
         </ScrollView>
-
-
     </Grid>
 </ContentPage>
