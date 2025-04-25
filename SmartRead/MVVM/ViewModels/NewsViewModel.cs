@@ -1,5 +1,4 @@
-﻿// SmartRead.MVVM.ViewModels/NewsViewModel.cs
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -36,7 +35,7 @@ namespace SmartRead.MVVM.ViewModels
         private bool novedadesSelected = false;
 
         public IAsyncRelayCommand<Book> OpenBookCommand { get; }
-        public IRelayCommand CargarPopularesCommand { get; }
+        public IAsyncRelayCommand CargarPopularesCommand { get; }
         public IAsyncRelayCommand CargarRecientesCommand { get; }
         public IRelayCommand<Book> NavigateToInfoCommand { get; }
 
@@ -45,7 +44,7 @@ namespace SmartRead.MVVM.ViewModels
             _authService = authService;
             _configuration = configuration;
 
-            CargarPopularesCommand = new RelayCommand(CargarPopulares);
+            CargarPopularesCommand = new AsyncRelayCommand(CargarPopularesAsync);
             CargarRecientesCommand = new AsyncRelayCommand(CargarRecientesAsync);
             NavigateToInfoCommand = new RelayCommand<Book>(async book =>
             {
@@ -69,36 +68,58 @@ namespace SmartRead.MVVM.ViewModels
             }
         }
 
-        private void CargarPopulares()
+        private async Task CargarPopularesAsync()
         {
             if (_isBusy) return;
-            PopularSelected = true;
-            NovedadesSelected = false;
-            LibrosActuales.Clear();
-
-            if (_cachedPopulares is not null)
+            _isBusy = true;
+            try
             {
-                foreach (var bk in _cachedPopulares)
+                PopularSelected = true;
+                NovedadesSelected = false;
+                LibrosActuales.Clear();
+
+                if (_cachedPopulares is not null)
+                {
+                    foreach (var bk in _cachedPopulares)
+                        LibrosActuales.Add(bk);
+                    return;
+                }
+
+                var functionKey = _configuration["AzureFunctionKey"]
+                                  ?? throw new InvalidOperationException("AzureFunctionKey no configurada.");
+
+                var accessToken = await _authService.GetAccessTokenAsync()
+                    ?? throw new InvalidOperationException("No se encontró token de acceso.");
+
+                var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function" +
+                          $"?code={functionKey}" +
+                          $"&action=getpopularbooks" +
+                          $"&accesstoken={Uri.EscapeDataString(accessToken)}";
+
+                using var httpClient = new HttpClient();
+                var resp = await httpClient.GetAsync(url);
+                resp.EnsureSuccessStatusCode();
+
+                var json = await resp.Content.ReadAsStringAsync();
+                var lista = JsonSerializer.Deserialize<List<Book>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                    ?? new List<Book>();
+
+                foreach (var bk in lista)
+                    bk.ParseAndSetAuthorTitleFromFilePath();
+
+                _cachedPopulares = lista;
+                foreach (var bk in lista)
                     LibrosActuales.Add(bk);
-                return;
             }
-
-            var listaHardcode = new[]
+            catch (Exception ex)
             {
-                new Book { Title = "Don Quijote de la Mancha", /* …resto…*/ },
-                new Book { Title = "Cien años de soledad",    /* …resto…*/ },
-                new Book { Title = "El Principito",           /* …resto…*/ }
+                Debug.WriteLine($"[NewsViewModel] Error en CargarPopularesAsync: {ex.Message}");
             }
-            .Select(b =>
+            finally
             {
-                b.ParseAndSetAuthorTitleFromFilePath();
-                return b;
-            })
-            .ToList();
-
-            _cachedPopulares = listaHardcode;
-            foreach (var bk in listaHardcode)
-                LibrosActuales.Add(bk);
+                _isBusy = false;
+            }
         }
 
         private async Task CargarRecientesAsync()
@@ -168,11 +189,9 @@ namespace SmartRead.MVVM.ViewModels
             {
                 Debug.WriteLine($"Descargando: {book.FileUrl}");
 
-                // Nombre único para no pisar otras descargas
                 string localFileName = $"{Guid.NewGuid()}.epub";
                 string localFilePath = Path.Combine(FileSystem.CacheDirectory, localFileName);
 
-                // Descarga por streaming
                 using (var client = new HttpClient())
                 using (Stream httpStream = await client.GetStreamAsync(book.FileUrl))
                 using (FileStream fs = File.Create(localFilePath))
@@ -180,7 +199,6 @@ namespace SmartRead.MVVM.ViewModels
                     await httpStream.CopyToAsync(fs);
                 }
 
-                // Lectura del EPUB
                 using (FileStream epubStream = File.OpenRead(localFilePath))
                 {
                     EpubBook epubBook = await Task.Run(() => EpubReader.ReadBook(epubStream));

@@ -25,7 +25,6 @@ namespace SmartRead.MVVM.Views
 
             if (rutasProtegidas.Any(ruta => e.Target.Location.OriginalString.Contains(ruta)))
             {
-                // Comprobaci�n sincr�nica del estado (sin delay)
                 bool isAuthenticated = Preferences.Default.Get("AuthState", false);
 
                 if (!isAuthenticated)

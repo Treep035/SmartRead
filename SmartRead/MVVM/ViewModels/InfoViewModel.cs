@@ -11,7 +11,7 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using SmartRead.MVVM.Models;
 using SmartRead.MVVM.Services;
-using VersOne.Epub; 
+using VersOne.Epub;
 
 namespace SmartRead.MVVM.ViewModels
 {
@@ -107,7 +107,7 @@ namespace SmartRead.MVVM.ViewModels
             {
                 await Shell.Current.DisplayAlert("Error", "No se encontró token de acceso. Inicia sesión nuevamente.", "OK");
                 return;
-            }        
+            }
             string url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function" +
                          $"?code={functionKey}" +
                          $"&action=addreview" +

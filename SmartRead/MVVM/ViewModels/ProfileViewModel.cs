@@ -8,7 +8,7 @@ namespace SmartRead.ViewModels
     public class ProfileViewModel
     {
         public ICommand TapGestureCommand { get; }
-        public ObservableCollection<Category> Categories { get; set; }  // "Mi Lista" y "Leídos recientemente" (con carrusel)
+        public ObservableCollection<Category> Categories { get; set; }  
 
 
 
@@ -16,7 +16,6 @@ namespace SmartRead.ViewModels
         {
             TapGestureCommand = new Command(async () => await OnMenuClicked());
 
-            // 🔹 SECCIÓN: "Mi Lista" y "Leídos recientemente" (CARRUSEL) 🔹
             Categories = new ObservableCollection<Category>
             {
                 new Category("Libros que te han gustado", new ObservableCollection<Book>

@@ -51,20 +51,22 @@
                     Spacing="15">
 
                     <!-- Botón Populares -->
+                    <!-- Botón Populares -->
                     <Frame
                         Padding="15,5"
                         BackgroundColor="Transparent"
                         BorderColor="#95BBBBBB"
                         CornerRadius="15"
-                        HasShadow="False">
+                        HasShadow="False">      
                         <Frame.GestureRecognizers>
+                            <!-- Aquí sólo llama al RelayCommand que filtra localmente -->
                             <TapGestureRecognizer Command="{Binding CargarPopularesCommand}" />
                         </Frame.GestureRecognizers>
                         <Frame.Triggers>
                             <DataTrigger
                                 TargetType="Frame"
                                 Binding="{Binding PopularSelected}"
-                                Value="True">
+                                Value="True">       
                                 <Setter Property="BorderColor" Value="White" />
                             </DataTrigger>
                         </Frame.Triggers>
@@ -85,6 +87,7 @@
                             <Image Source="populares_icon.png" HeightRequest="16" WidthRequest="16" />
                         </StackLayout>
                     </Frame>
+
 
                     <!-- Botón Recientes -->
                     <Frame
