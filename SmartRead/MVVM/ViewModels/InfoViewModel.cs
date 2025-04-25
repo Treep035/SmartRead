@@ -6,30 +6,31 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using SmartRead.MVVM.Models;
-using VersOne.Epub; // Asegúrate de tener instalada la librería Vers-One/EpubReader desde NuGet
+using SmartRead.MVVM.Services;
+using VersOne.Epub; 
 
 namespace SmartRead.MVVM.ViewModels
 {
     public partial class InfoPageViewModel : ObservableObject, IQueryAttributable
     {
+        private readonly AuthService _authService;
+        private readonly IConfiguration _configuration;
+
         [ObservableProperty]
         private Book book;
 
-        // Comando para abrir y visualizar el libro utilizando Vers-One/EpubReader
-        public IAsyncRelayCommand OpenBookCommand { get; }
-
-        public InfoPageViewModel()
+        public InfoPageViewModel(AuthService authService, IConfiguration configuration)
         {
-            OpenBookCommand = new AsyncRelayCommand(OpenBookAsync);
+            _authService = authService;
+            _configuration = configuration;
+
         }
 
-        /// <summary>
-        /// Descarga el libro desde la URL, lo guarda localmente, lo lee utilizando Vers-One/EpubReader
-        /// y navega a EpubReaderPage pasando el objeto EpubBook.
-        /// </summary>
+        [RelayCommand]
         private async Task OpenBookAsync()
         {
             if (Book == null || string.IsNullOrEmpty(Book.FileUrl))
@@ -91,5 +92,52 @@ namespace SmartRead.MVVM.ViewModels
                 Book.ParseAndSetAuthorTitleFromFilePath();
             }
         }
+
+        internal async Task SubmitReviewAsync(int rating)
+        {
+            var functionKey = _configuration["AzureFunctionKey"];
+            if (string.IsNullOrWhiteSpace(functionKey))
+            {
+                await Shell.Current.DisplayAlert("Error", "La AzureFunctionKey no está configurada.", "OK");
+                return;
+            }
+
+            var accessToken = await _authService.GetAccessTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await Shell.Current.DisplayAlert("Error", "No se encontró token de acceso. Inicia sesión nuevamente.", "OK");
+                return;
+            }        
+            string url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function" +
+                         $"?code={functionKey}" +
+                         $"&action=addreview" +
+                         $"&bookId={Book.IdBook}" +
+                         $"&rating={rating}" +
+                         $"&comment=" + Uri.EscapeDataString("") +
+                         $"&accesstoken=" + Uri.EscapeDataString(accessToken);
+
+            using var httpClient = new HttpClient();
+            try
+            {
+                var response = await httpClient.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorMsg = await response.Content.ReadAsStringAsync();
+                    await Shell.Current.DisplayAlert("Error",
+                        $"Error al enviar valoración: {errorMsg}", "OK");
+                    return;
+                }
+
+                // Si quisieras procesar un JSON de respuesta, aquí lo deserializas
+                await Shell.Current.DisplayAlert("¡Gracias!", "Tu valoración ha sido enviada.", "OK");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error",
+                    $"Excepción al enviar valoración: {ex.Message}", "OK");
+            }
+        }
     }
+
 }
+

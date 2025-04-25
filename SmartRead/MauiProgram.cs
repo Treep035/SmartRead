@@ -41,6 +41,9 @@ namespace SmartRead
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
             builder.Services.AddTransient<ForgotPasswordViewModel>();
+            builder.Services.AddSingleton<HomeViewModel>();
+            builder.Services.AddSingleton<NewsViewModel>();
+            builder.Services.AddTransient<InfoPageViewModel>();
 
             // Registrar Vistas
             builder.Services.AddTransient<LoginPage>();
@@ -48,14 +51,9 @@ namespace SmartRead
             builder.Services.AddTransient<ForgotPasswordPage>();
             builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<ProfilePage>();
-
+            builder.Services.AddTransient<InfoPage>();
             builder.Services.AddTransient<HomePage>();
-            builder.Services.AddSingleton<HomeViewModel>();
-
-
-            builder.Services.AddSingleton<NewsViewModel>();
             builder.Services.AddTransient<NewsPage>();
-
 
 
 
