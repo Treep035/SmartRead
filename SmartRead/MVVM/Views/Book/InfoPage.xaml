@@ -79,20 +79,22 @@
                                      HorizontalOptions="Center"
                                      Spacing="40">
                             <StackLayout HorizontalOptions="Center">
-                                <Image Source="list.png" WidthRequest="24" HeightRequest="24"/>
-                                <Label Text="Lista"
-                                       FontSize="14"
-                                       TextColor="White"
-                                       HorizontalOptions="Center"
-                                       Margin="0,5,0,0"/>
+                                <ImageButton
+                                    Source="list.png"
+                                    Command="{Binding AddToListCommand}"
+                                    WidthRequest="24"
+                                    HeightRequest="24"
+                                    Margin="0,5,0,0"/>
+                                <Label Text="Lista" FontSize="14" TextColor="White" />
                             </StackLayout>
                             <StackLayout HorizontalOptions="Center">
-                                <Image Source="share.png" WidthRequest="24" HeightRequest="24"/>
-                                <Label Text="Comparte"
-                                       FontSize="14"
-                                       TextColor="White"
-                                       HorizontalOptions="Center"
-                                       Margin="0,5,0,0"/>
+                                <ImageButton
+                                    Source="share.png"
+                                    Command="{Binding ShareCommand}"
+                                    WidthRequest="24"
+                                    HeightRequest="24"
+                                    Margin="0,5,0,0"/>
+                                <Label Text="Comparte" FontSize="14" TextColor="White" />
                             </StackLayout>
                             <StackLayout HorizontalOptions="Center">
                                 <Image Source="rate.png" WidthRequest="24" HeightRequest="24"/>

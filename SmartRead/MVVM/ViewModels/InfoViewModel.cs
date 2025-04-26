@@ -92,6 +92,52 @@ namespace SmartRead.MVVM.ViewModels
                 Book.ParseAndSetAuthorTitleFromFilePath();
             }
         }
+        [RelayCommand]
+        internal async Task AddToListAsync()
+        {
+            var functionKey = _configuration["AzureFunctionKey"];
+            if (string.IsNullOrWhiteSpace(functionKey))
+            {
+                await Shell.Current.DisplayAlert("Error", "La AzureFunctionKey no está configurada.", "OK");
+                return;
+            }
+
+            var accessToken = await _authService.GetAccessTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await Shell.Current.DisplayAlert("Error", "No se encontró token de acceso. Inicia sesión nuevamente.", "OK");
+                return;
+            }
+
+            // Construimos la URL para agregar a la lista
+            string url =
+                $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function" +
+                $"?code={functionKey}" +
+                $"&action=addtolist" +
+                $"&bookId={Book.IdBook}" +
+                $"&accesstoken={Uri.EscapeDataString(accessToken)}";
+
+            using var httpClient = new HttpClient();
+            try
+            {
+                var response = await httpClient.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    string errorMsg = await response.Content.ReadAsStringAsync();
+                    await Shell.Current.DisplayAlert("Error",
+                        $"Error al añadir a la lista: {errorMsg}", "OK");
+                    return;
+                }
+
+                await Shell.Current.DisplayAlert("¡Listo!",
+                    "El libro ha sido añadido a tu lista.", "OK");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error",
+                    $"Excepción al añadir a la lista: {ex.Message}", "OK");
+            }
+        }
 
         internal async Task SubmitReviewAsync(int rating)
         {

@@ -179,14 +179,18 @@
                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenBookCommand}"
                                                   CommandParameter="{Binding .}" />
                                             <Button
-                                                  Text="Lista"
-                                                  ImageSource="list.png"
-                                                  BackgroundColor="#2A2A2A"
-                                                  TextColor="White"
-                                                  CornerRadius="6"
-                                                  Padding="20,8"
-                                                  FontSize="13"
-                                                  HorizontalOptions="FillAndExpand" />
+                                                Text="Lista"
+                                                ImageSource="list.png"
+                                                BackgroundColor="#2A2A2A"
+                                                TextColor="White"
+                                                CornerRadius="6"
+                                                Padding="20,8"
+                                                FontSize="13"
+                                                HorizontalOptions="FillAndExpand"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, 
+                                                Path=BindingContext.AddToListCommand}"
+                                                CommandParameter="{Binding .}" />
+
                                         </StackLayout>
                                     </VerticalStackLayout>
                                 </Grid>
