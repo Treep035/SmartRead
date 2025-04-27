@@ -23,10 +23,11 @@ namespace SmartRead.MVVM.ViewModels
         [ObservableProperty]
         private Book book;
 
-        public InfoPageViewModel(AuthService authService, IConfiguration configuration)
+        public InfoPageViewModel(AuthService authService, IConfiguration configuration) //LocalDatabaseService databaseService
         {
             _authService = authService;
             _configuration = configuration;
+            //_databaseService = databaseService;
 
         }
 
@@ -58,6 +59,8 @@ namespace SmartRead.MVVM.ViewModels
 
                         // Se guarda el archivo en el sistema de archivos local
                         File.WriteAllBytes(localFilePath, fileBytes);
+
+                        //await _databaseService.AddClickAsync(Book.Id.ToString(), Book.Category);
 
                         // Abrir y leer el EPUB utilizando Vers-One/EpubReader
                         using (FileStream fileStream = File.OpenRead(localFilePath))
