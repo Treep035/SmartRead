@@ -44,6 +44,8 @@ namespace SmartRead
             builder.Services.AddSingleton<HomeViewModel>();
             builder.Services.AddSingleton<NewsViewModel>();
             builder.Services.AddTransient<InfoPageViewModel>();
+            builder.Services.AddTransient<SearchViewModel>();
+
 
             // Registrar Vistas
             builder.Services.AddTransient<LoginPage>();
@@ -54,6 +56,8 @@ namespace SmartRead
             builder.Services.AddTransient<InfoPage>();
             builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<NewsPage>();
+            builder.Services.AddTransient<SearchPage>();
+
 
 
 

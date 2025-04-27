@@ -1,73 +1,100 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
-             x:Class="SmartRead.MVVM.Views.Book.SearchPage"
-             BackgroundColor="Black">
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
+    xmlns:models="clr-namespace:SmartRead.MVVM.Models"
+    x:Class="SmartRead.MVVM.Views.Book.SearchPage"
+    x:DataType="vm:SearchViewModel"
+    BackgroundColor="Black">
 
-    <ContentPage.BindingContext>
-        <vm:SearchViewModel/>
-    </ContentPage.BindingContext>
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Grid
+          Grid.Row="0"
+          BackgroundColor="#1F1F1F"
+          Padding="16"
+          HeightRequest="80"
+          HorizontalOptions="FillAndExpand"
+          VerticalOptions="Start">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="0">
-            <!-- Rectángulo con el campo de búsqueda y el icono de cierre -->
-            <Grid BackgroundColor="#1F1F1F" Padding="20" HeightRequest="80" HorizontalOptions="FillAndExpand">
-                <!-- Definir 2 columnas: una para la búsqueda y otra para el icono de cierre -->
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <!-- Columna para la búsqueda y el icono de búsqueda -->
-                    <ColumnDefinition Width="Auto" />
-                    <!-- Columna para el icono de cierre -->
-                </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-                <!-- Rectángulo con el icono de búsqueda y el Entry -->
-                <Frame Grid.Column="0"
-                       BackgroundColor="#353535"
-                       CornerRadius="10"
-                       BorderColor="Transparent"
-                       Padding="10"
-                       VerticalOptions="Center"
-                       HorizontalOptions="FillAndExpand"
-                       HasShadow="False">
-                    <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center">
-                        <!-- Icono de búsqueda -->
-                        <Image Source="search.png"
-                               WidthRequest="20"
-                               HeightRequest="20"
-                               Margin="0,0,10,0"
-                               VerticalOptions="Center" />
+            <SearchBar
+                Grid.Column="0"
+                Text="{Binding SearchText}"
+                Placeholder="¿Qué quieres leer?"
+                FontSize="14"
+                TextColor="White"
+                PlaceholderColor="#888"
+                BackgroundColor="#353535"
+                HeightRequest="40"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="Center"
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding SearchText}" />    
 
-                        <!-- Campo de texto para la búsqueda -->
-                        <Entry Grid.Column="1"
-                               Placeholder="What do you want to read to?"
-                               FontSize="14"
-                               TextColor="White"
-                               PlaceholderColor="#888"
-                               BackgroundColor="Transparent"
-                               VerticalOptions="Center"
-                               HeightRequest="40" />
-                    </Grid>
-                </Frame>
+            <ImageButton
+                Grid.Column="1"
+                Source="close.png"
+                WidthRequest="36"
+                HeightRequest="36"
+                BackgroundColor="Transparent"
+                Margin="12,0,0,0"
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                Command="{Binding CloseSearchCommand}" />
+                </Grid>
 
-                <!-- Imagen de cerrar alineada a la derecha -->
-                <Image Grid.Column="1"
-                       Source="close.png"
-                       WidthRequest="20"
-                       HeightRequest="20"
-                       VerticalOptions="Center"
-                       HorizontalOptions="End"
-                       Margin="15,0,5,0">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Close" />
-                    </Image.GestureRecognizers>
-                </Image>
-            </Grid>
+        <!-- Resultados: CollectionView sin ScrollView envolvente -->
+        <CollectionView
+          Grid.Row="1"
+          ItemsSource="{Binding SearchResults}"
+          SelectionMode="None"
+          Margin="20,10"
+          VerticalOptions="FillAndExpand"
+          ItemSizingStrategy="MeasureFirstItem">
 
-            <!-- Aquí puedes añadir más contenido si lo deseas -->
-            <StackLayout Padding="20" Spacing="10">
-                <!-- Contenido adicional en negro -->
-            </StackLayout>
+            <!-- EmptyView -->
+            <CollectionView.EmptyView>
+                <Label
+                  Text="Sin resultados"
+                  TextColor="#888"
+                  HorizontalOptions="Center"
+                  VerticalOptions="CenterAndExpand" />
+            </CollectionView.EmptyView>
 
-        </VerticalStackLayout>
-    </ScrollView>
+            <!-- Template -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Book">
+                    <Frame
+                        BackgroundColor="#2D2D2D"
+                        CornerRadius="8"
+                        Padding="10"
+                        Margin="0,5">
+                        <StackLayout Orientation="Horizontal" Spacing="10">
+                            <Image
+                                Source="{Binding CoverImageUrl}"
+                                WidthRequest="50"
+                                HeightRequest="70"
+                                Aspect="AspectFill" />  
+                            <StackLayout>
+                                <Label
+                                  Text="{Binding Title}"
+                                  FontAttributes="Bold"
+                                  TextColor="White" />
+                                <Label
+                                  Text="{Binding Author}"
+                                  FontSize="12"
+                                  TextColor="#ADADAD" />
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>
