@@ -47,32 +47,85 @@ namespace SmartRead.MVVM.ViewModels
             sb.AppendLine("<head>");
             sb.AppendLine("<meta charset=\"utf-8\">");
             sb.AppendLine("<style>");
-            sb.AppendLine("body { font-family: sans-serif; line-height: 1.6; padding: 1em; }");
-            sb.AppendLine("img { display: block; margin: 1em auto; max-width: 100% !important; height: auto !important; width: auto; object-fit: contain; }");
+            sb.AppendLine(@"
+        html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+#container {
+    column-width: 100vw;
+    column-gap: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: normal; /* importante para que el contenido fluya verticalmente dentro de la página */
+}
+
+.page {
+    display: inline-block;
+    width: 100vw;
+    height: 100vh;
+    vertical-align: top;
+    box-sizing: border-box;
+    padding: 1em;
+    font-family: sans-serif;
+    font-size: 1.1em;
+    line-height: 1.6;
+    overflow-wrap: break-word;   /* <-- clave */
+    word-break: break-word;      /* <-- clave */
+    white-space: normal;         /* <-- para que no se quede en una sola línea */
+}
+
+        img {
+            display: block;
+            margin: 1em auto;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+    ");
             sb.AppendLine("</style>");
             sb.AppendLine("</head>");
             sb.AppendLine("<body>");
+            sb.AppendLine("<div id=\"container\">");
 
             if (EpubBook?.ReadingOrder != null)
             {
-                // Si no te interesa la portada, puedes hacer: .Skip(1) 
                 foreach (var chapter in EpubBook.ReadingOrder)
                 {
-                    // 1) Quitar CSS/JS incrustado
                     string strippedHtml = StripEpubStylesAndScripts(chapter.Content);
-                    // 2) Quitar atributos width/height de <img>
                     string cleanedHtml = RemoveImgDimensions(strippedHtml);
-                    // 3) Incrustar imágenes como Base64
                     string inlinedHtml = InlineImagesInHtml(cleanedHtml, EpubBook);
-                    sb.AppendLine(inlinedHtml);
+
+                    // Insertar contenido como "páginas"
+                    sb.AppendLine($"<div class=\"page\">{inlinedHtml}</div>");
                 }
             }
 
+            sb.AppendLine("</div>");
+            sb.AppendLine(@"
+        <script>
+            let container = document.getElementById('container');
+            document.body.addEventListener('click', function (e) {
+                const x = e.clientX;
+                const width = window.innerWidth;
+                if (x < width * 0.3) {
+                    container.scrollBy({ left: -width, behavior: 'smooth' });
+                } else if (x > width * 0.7) {
+                    container.scrollBy({ left: width, behavior: 'smooth' });
+                }
+            });
+        </script>");
             sb.AppendLine("</body>");
             sb.AppendLine("</html>");
 
             EpubContentHtml = sb.ToString();
         }
+
 
         /// <summary>
         /// Elimina bloques <script>, <style> y <link rel="stylesheet"> del HTML.
