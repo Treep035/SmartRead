@@ -10,19 +10,5 @@ namespace SmartRead.MVVM.Views.Book
             InitializeComponent();
             BindingContext = new EpubReaderViewModel();
         }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            var vm = BindingContext as EpubReaderViewModel;
-            if (!string.IsNullOrWhiteSpace(vm?.EpubContentHtml))
-            {
-                epubWebView.Source = new HtmlWebViewSource
-                {
-                    Html = vm.EpubContentHtml
-                };
-            }
-        }
     }
 }

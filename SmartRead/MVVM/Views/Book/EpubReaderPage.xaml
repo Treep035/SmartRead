@@ -3,15 +3,14 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="SmartRead.MVVM.Views.Book.EpubReaderPage"
-    Title="Lector EPUB"
-    x:DataType="vm:EpubReaderViewModel"
-    xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels">
-
+    Title="Lector EPUB">
     <ContentPage.Content>
-        <WebView 
-            x:Name="epubWebView"
-            VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"
-            Source="{Binding EpubContentHtml, Mode=OneWay}" />
+        <WebView VerticalOptions="FillAndExpand"
+                 HorizontalOptions="FillAndExpand">
+            <WebView.Source>
+                <HtmlWebViewSource 
+                    Html="{Binding EpubContentHtml}" />
+            </WebView.Source>
+        </WebView>
     </ContentPage.Content>
 </ContentPage>
