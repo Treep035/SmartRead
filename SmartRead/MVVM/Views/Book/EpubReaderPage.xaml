@@ -1,16 +1,78 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
     x:Class="SmartRead.MVVM.Views.Book.EpubReaderPage"
     Title="Lector EPUB">
-    <ContentPage.Content>
-        <WebView VerticalOptions="FillAndExpand"
+
+    <ContentPage.Resources>
+        <!-- Contenedor del header -->
+        <Style x:Key="HeaderContainerStyle" TargetType="StackLayout">
+            <Setter Property="BackgroundColor" Value="#F5F5F5" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            <Setter Property="Spacing" Value="10" />
+        </Style>
+
+        <!-- Texto del header -->
+        <Style x:Key="HeaderLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="Large" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#333333" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+        </Style>
+
+        <!-- Botones discretos -->
+        <Style x:Key="SubtleButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="TextColor" Value="#333333" />
+            <Setter Property="BorderColor" Value="#CCCCCC" />
+            <Setter Property="BorderWidth" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="FontSize" Value="Medium" />
+            <Setter Property="FontAttributes" Value="None" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
+        <!-- HEADER con botón Salir (izquierda), título (centro) y Configurar (derecha) -->
+        <StackLayout Grid.Row="0" Style="{StaticResource HeaderContainerStyle}">
+            <!-- Botón para salir -->
+            <Button Text="Salir"
+                    Command="{Binding ExitCommand}"
+                    Style="{StaticResource SubtleButtonStyle}" />
+
+            <!-- Título centrado -->
+            <Label Text="Lector EPUB" Style="{StaticResource HeaderLabelStyle}" />
+
+            <!-- Botón para configurar -->
+            <Button Text="Configurar"
+                    Command="{Binding SettingsCommand}"
+                    Style="{StaticResource SubtleButtonStyle}" />
+        </StackLayout>
+
+        <!-- WebView para renderizar el HTML -->
+        <WebView Grid.Row="1"
+                 VerticalOptions="FillAndExpand"
                  HorizontalOptions="FillAndExpand">
             <WebView.Source>
-                <HtmlWebViewSource 
-                    Html="{Binding EpubContentHtml}" />
+                <HtmlWebViewSource Html="{Binding EpubContentHtml}" />
             </WebView.Source>
         </WebView>
-    </ContentPage.Content>
+
+        <!-- Botones de navegación -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" Padding="10" ColumnSpacing="10">
+            <Button Text="Anterior"
+                    Command="{Binding GoPreviousCommand}"
+                    Style="{StaticResource SubtleButtonStyle}" />
+            <Button Text="Siguiente"
+                    Grid.Column="1"
+                    Command="{Binding GoNextCommand}"
+                    Style="{StaticResource SubtleButtonStyle}" />
+        </Grid>
+    </Grid>
 </ContentPage>
