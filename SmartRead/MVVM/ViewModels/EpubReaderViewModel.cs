@@ -1,5 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui;
+using Microsoft.Maui.Graphics.Text;
+using SmartRead.MVVM.Views.Book;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,10 +29,24 @@ namespace SmartRead.MVVM.ViewModels
         [ObservableProperty]
         private int currentChapter;
 
+        [ObservableProperty]
+        private double fontSize = 16;
+
+        [ObservableProperty]
+        private string backgroundColor = "#ffffff";
+
+        [ObservableProperty]
+        private string textColor = "#121212";
+
+        [ObservableProperty]
+        private string colorTheme = "Claro";
+
         // Instancias únicas de los comandos de navegación
         public IRelayCommand GoPreviousCommand { get; }
         public IRelayCommand GoNextCommand { get; }
         public ICommand ExitCommand { get; }
+
+        public IRelayCommand SettingsCommand { get; }
 
         public EpubReaderViewModel()
         {
@@ -36,6 +54,7 @@ namespace SmartRead.MVVM.ViewModels
             GoPreviousCommand = new RelayCommand(GoPrevious, CanGoPrevious);
             GoNextCommand = new RelayCommand(GoNext, CanGoNext);
             ExitCommand = new Command(async () => await Shell.Current.GoToAsync("//info"));
+            SettingsCommand = new RelayCommand(OpenSettings);
 
         }
 
@@ -88,7 +107,7 @@ namespace SmartRead.MVVM.ViewModels
             var chapter = EpubBook.ReadingOrder[CurrentChapter];
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("<html><head><meta charset=\"utf-8\"><style>");
-            sb.AppendLine("body { font-family: sans-serif; line-height: 1.6; padding: 1em; }");
+            sb.AppendLine($"body {{ font-size: {fontSize}px; font-family: sans-serif; line-height: 1.6; padding: 1em; background-color: {backgroundColor}; color: {textColor}; }}");
             sb.AppendLine("img { display: block; margin: 1em auto; max-width: 100% !important; height: auto !important; object-fit: contain; }");
             sb.AppendLine("footer { text-align: center; font-size: 0.9em; color: #666; margin-top: 2em; }");
             sb.AppendLine("</style></head><body>");
@@ -195,6 +214,51 @@ namespace SmartRead.MVVM.ViewModels
                 ".svg" => "image/svg+xml",
                 _ => "application/octet-stream",
             };
+        }
+
+        private void OpenSettings()
+        {
+            // Este método se ejecuta desde el botón
+            var currentPage = Application.Current.MainPage;
+            if (currentPage is Shell shell &&
+                shell.CurrentPage is ContentPage contentPage)
+            {
+                var popup = new SettingsPopup
+                {
+                    BindingContext = this // <-- Aquí pasas el ViewModel actual
+                };
+                contentPage.ShowPopup(popup);
+            }
+        }
+
+        public void UpdateFontSize(double fontSize)
+        {
+            // Actualiza el estilo del cuerpo del HTML con el nuevo tamaño de fuente
+            if (!string.IsNullOrEmpty(EpubContentHtml))
+            {
+                FontSize = fontSize;
+
+                // Regenera el HTML con el nuevo tamaño de fuente
+                UpdateHtml();
+
+                Console.WriteLine("Font size updated to: " + fontSize);
+            }
+        }
+
+        public void UpdateColorTheme(string backgroundColor, string textColor, string colorTheme)
+        {
+            // Actualiza el estilo del cuerpo del HTML con el nuevo tamaño de fuente
+            if (!string.IsNullOrEmpty(EpubContentHtml))
+            {
+                BackgroundColor = backgroundColor;
+                TextColor = textColor;
+                ColorTheme = colorTheme;
+
+                // Regenera el HTML con el nuevo tamaño de fuente
+                UpdateHtml();
+
+                Console.WriteLine("Color theme updated to: " + backgroundColor + " and " + textColor);
+            }
         }
     }
 }

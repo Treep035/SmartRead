@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="SmartRead.MVVM.Views.Book.SettingsPopup"
+    Size="300,300">
+
+    <VerticalStackLayout Padding="20" Spacing="15" BackgroundColor="White">
+        <Label Text="Configuración" FontSize="20" FontAttributes="Bold" />
+        <!-- Aquí puedes poner controles como Switch, ComboBox, etc -->
+        <Label Text="Tema:" Margin="0,0,0,-10"/>
+        <Picker x:Name="ThemePicker"
+                Title="{Binding ColorTheme}"
+                SelectedIndexChanged="ThemePicker_SelectedIndexChanged">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Claro</x:String>
+                    <x:String>Oscuro</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+        <Label Text="Tamaño letra:" />
+        <Slider x:Name="FontSizeSlider"
+                MinimumTrackColor="#272727"
+                MaximumTrackColor="LightGray"
+                ThumbColor="#121212"
+                Minimum="12"
+                Maximum="30"
+                Value="{Binding FontSize}" 
+                ValueChanged="FontSizeSlider_ValueChanged" />
+        <Button Text="Cerrar" Clicked="Close_Clicked" BackgroundColor="#121212" />
+    </VerticalStackLayout>
+</toolkit:Popup>

@@ -78,6 +78,9 @@
 	  <Compile Update="MVVM\Views\Book\CategoriesPopup.xaml.cs">
 	    <DependentUpon>CategoriesPopup.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="MVVM\Views\Book\EpubSettingsPage.xaml.cs">
+	    <DependentUpon>EpubSettingsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="MVVM\Views\Book\SearchPage.xaml.cs">
 	    <DependentUpon>SearchPage.xaml</DependentUpon>
 	  </Compile>
@@ -88,6 +91,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="MVVM\Views\AppShell.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="MVVM\Views\Book\EpubSettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\Book\EpubReaderPage.xaml">
