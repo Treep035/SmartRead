@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SmartRead.MVVM.Views.User.Authentication.SplashPage"
+    BackgroundColor="Black">
+
+    <!-- Carga el SVG animado -->
+    <WebView x:Name="SplashWebView"
+           VerticalOptions="FillAndExpand"
+           HorizontalOptions="FillAndExpand"
+           Margin="0"/>
+</ContentPage>

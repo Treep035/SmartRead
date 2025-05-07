@@ -57,6 +57,7 @@ namespace SmartRead
             builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<NewsPage>();
             builder.Services.AddTransient<SearchPage>();
+            builder.Services.AddTransient<SplashPage>();
 
 
 
