@@ -7,20 +7,23 @@ namespace SmartRead.MVVM.Services
     {
         private readonly string _categoryCountsPath;
         private readonly string _categoriesPath;
+        private readonly string _preferencesPath;
 
         public JsonDatabaseService(string basePath)
         {
             _categoryCountsPath = Path.Combine(basePath, "categoryCounts.json");
             _categoriesPath = Path.Combine(basePath, "categories.json");
+            _preferencesPath = Path.Combine(basePath, "userPreferences.json");
 
             EnsureFileExists(_categoryCountsPath);
             EnsureFileExists(_categoriesPath);
+            EnsureFileExists(_preferencesPath, defaultJson: JsonSerializer.Serialize(new UserPreferences()));
         }
 
-        private void EnsureFileExists(string path)
+        private void EnsureFileExists(string path, string defaultJson = "[]")
         {
             if (!File.Exists(path))
-                File.WriteAllText(path, "[]");
+                File.WriteAllText(path, defaultJson);
         }
 
         // Incrementa contador de categoría
@@ -79,6 +82,17 @@ namespace SmartRead.MVVM.Services
         {
             var json = await File.ReadAllTextAsync(_categoriesPath);
             return JsonSerializer.Deserialize<List<string>>(json) ?? new();
+        }
+        public async Task<UserPreferences> LoadPreferencesAsync()
+        {
+            var json = await File.ReadAllTextAsync(_preferencesPath);
+            return JsonSerializer.Deserialize<UserPreferences>(json) ?? new UserPreferences();
+        }
+
+        public async Task SavePreferencesAsync(UserPreferences preferences)
+        {
+            var json = JsonSerializer.Serialize(preferences);
+            await File.WriteAllTextAsync(_preferencesPath, json);
         }
     }
 }

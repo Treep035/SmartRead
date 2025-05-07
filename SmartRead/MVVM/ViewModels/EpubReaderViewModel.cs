@@ -4,6 +4,8 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui;
 using Microsoft.Maui.Graphics.Text;
 using SmartRead.MVVM.Views.Book;
+using SmartRead.MVVM.Services;
+using SmartRead.MVVM.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,6 +43,8 @@ namespace SmartRead.MVVM.ViewModels
         [ObservableProperty]
         private string colorTheme = "Claro";
 
+        private readonly JsonDatabaseService _jsonService;
+
         // Instancias únicas de los comandos de navegación
         public IRelayCommand GoPreviousCommand { get; }
         public IRelayCommand GoNextCommand { get; }
@@ -50,12 +54,34 @@ namespace SmartRead.MVVM.ViewModels
 
         public EpubReaderViewModel()
         {
+            _jsonService = new JsonDatabaseService(FileSystem.AppDataDirectory);
+
+            _ = InitializePreferencesAsync();
+
             // Creamos los comandos pasándoles sus métodos y condiciones
             GoPreviousCommand = new RelayCommand(GoPrevious, CanGoPrevious);
             GoNextCommand = new RelayCommand(GoNext, CanGoNext);
             ExitCommand = new Command(async () => await Shell.Current.GoToAsync("//info"));
             SettingsCommand = new RelayCommand(OpenSettings);
 
+        }
+
+        private async Task InitializePreferencesAsync()
+        {
+            // Esperar que las preferencias sean cargadas antes de continuar
+            await LoadUserPreferencesAsync();
+
+            // Después de cargar las preferencias, puedes aplicar otras lógicas, como actualizar el HTML si es necesario
+            UpdateHtml(); // Aquí aseguras que el contenido HTML se actualice una vez que las preferencias estén disponibles
+        }
+
+        private async Task LoadUserPreferencesAsync()
+        {
+            var prefs = await _jsonService.LoadPreferencesAsync();
+            FontSize = prefs.FontSize;
+            BackgroundColor = prefs.BackgroundColor;
+            TextColor = prefs.TextColor;
+            ColorTheme = prefs.ColorTheme;
         }
 
         /// <summary>
@@ -231,7 +257,7 @@ namespace SmartRead.MVVM.ViewModels
             }
         }
 
-        public void UpdateFontSize(double fontSize)
+        public async void UpdateFontSize(double fontSize)
         {
             // Actualiza el estilo del cuerpo del HTML con el nuevo tamaño de fuente
             if (!string.IsNullOrEmpty(EpubContentHtml))
@@ -242,10 +268,18 @@ namespace SmartRead.MVVM.ViewModels
                 UpdateHtml();
 
                 Console.WriteLine("Font size updated to: " + fontSize);
+
+                await _jsonService.SavePreferencesAsync(new UserPreferences
+                {
+                    FontSize = this.FontSize,
+                    BackgroundColor = this.BackgroundColor,
+                    TextColor = this.TextColor,
+                    ColorTheme = this.ColorTheme
+                });
             }
         }
 
-        public void UpdateColorTheme(string backgroundColor, string textColor, string colorTheme)
+        public async void UpdateColorTheme(string backgroundColor, string textColor, string colorTheme)
         {
             // Actualiza el estilo del cuerpo del HTML con el nuevo tamaño de fuente
             if (!string.IsNullOrEmpty(EpubContentHtml))
@@ -258,6 +292,14 @@ namespace SmartRead.MVVM.ViewModels
                 UpdateHtml();
 
                 Console.WriteLine("Color theme updated to: " + backgroundColor + " and " + textColor);
+
+                await _jsonService.SavePreferencesAsync(new UserPreferences
+                {
+                    FontSize = this.FontSize,
+                    BackgroundColor = this.BackgroundColor,
+                    TextColor = this.TextColor,
+                    ColorTheme = this.ColorTheme
+                });
             }
         }
     }
