@@ -6,60 +6,68 @@
              BackgroundImageSource="background.png"
              NavigationPage.HasNavigationBar="False">
 
+    <!-- ScrollView para soportar pantallas pequeñas -->
+    <ScrollView>
+        <Grid Padding="20"
+              HorizontalOptions="FillAndExpand"
+              VerticalOptions="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
+            <!-- Contenedor centrado con ancho fijo básico -->
+            <Frame Grid.Column="1"
+                   BackgroundColor="#BE1F1F1F"
+                   Padding="20"
+                   HasShadow="False"
+                   CornerRadius="10"
+                   HorizontalOptions="FillAndExpand"
+                   WidthRequest="300">
+                <VerticalStackLayout Spacing="15">
+                    <Image Source="smartread.png"
+                           HorizontalOptions="Center"
+                           HeightRequest="100" />
 
-    <Grid VerticalOptions="Center" HorizontalOptions="Center" Padding="30">
-        <Grid BackgroundColor="#BE1F1F1F" Padding="20" WidthRequest="300" VerticalOptions="Center">
-            <VerticalStackLayout Spacing="15">
-                <Image Source="smartread.png" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="100"/>
-
-                <Entry Placeholder="Correo electrónico"
-                       BackgroundColor="#BE1F1F1F"
-                       TextColor="White"
-                       HeightRequest="50"
-                       Text="{Binding Email}" />
-
-                <Entry Placeholder="Contraseña"
-                       BackgroundColor="#BE1F1F1F"
-                       TextColor="White"
-                       HeightRequest="50"
-                       IsPassword="True"
-                       Text="{Binding Password}" />
-
-                <Label Text="¿Olvidaste tu contraseña?"
-                       TextColor="#808080">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding NavigateToForgotPasswordCommand}" />
-                    </Label.GestureRecognizers>
-                </Label>
-
-                <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Start" Spacing="10">
-                    <CheckBox Color="White"
-                              HeightRequest="24"
-                              WidthRequest="24"
-                              IsChecked="{Binding RememberMe}" />
-                    <Label Text="Recuérdame"
+                    <Entry Placeholder="Correo electrónico"
+                           BackgroundColor="#BE1F1F1F"
                            TextColor="White"
-                           VerticalOptions="Center"
-                           FontSize="16"/>
-                </HorizontalStackLayout>
+                           HeightRequest="50"
+                           Text="{Binding Email}" />
 
-                <Button Text="Iniciar sesión"
-                        BackgroundColor="White"
-                        TextColor="Black"
-                        HeightRequest="40"
-                        VerticalOptions="End"
-                        Command="{Binding LoginCommand}" />
+                    <Entry Placeholder="Contraseña"
+                           BackgroundColor="#BE1F1F1F"
+                           TextColor="White"
+                           HeightRequest="50"
+                           IsPassword="True"
+                           Text="{Binding Password}" />
 
-                <Label Text="¿No estás registrado? Regístrate"
-                       HorizontalOptions="Center"
-                       TextColor="#808080">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding NavigateToRegisterCommand}" />
-                    </Label.GestureRecognizers>
-                </Label>
+                    <Label Text="¿Olvidaste tu contraseña?"
+                           TextColor="#808080"
+                           HorizontalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToForgotPasswordCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
 
-            </VerticalStackLayout>
+                    <!-- Se elimina RememberMe -->
+
+                    <Button Text="Iniciar sesión"
+                            BackgroundColor="White"
+                            TextColor="Black"
+                            HeightRequest="40"
+                            Command="{Binding LoginCommand}" />
+
+                    <Label Text="¿No estás registrado? Regístrate"
+                           TextColor="#808080"
+                           HorizontalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToRegisterCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </VerticalStackLayout>
+            </Frame>
         </Grid>
-    </Grid>
+    </ScrollView>
 </ContentPage>

@@ -19,18 +19,32 @@ namespace SmartRead.MVVM.ViewModels
         private readonly AuthService _authService;
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
+        public IRelayCommand<Book> NavigateToInfoCommand { get; }
+
 
         public SearchViewModel(AuthService authService, IConfiguration configuration)
         {
             _authService = authService;
             _configuration = configuration;
             _httpClient = new HttpClient();
+
+            NavigateToInfoCommand = new RelayCommand<Book>(async book =>
+            {
+                if (book == null) return;
+                var p = new Dictionary<string, object>
+                {
+                    ["book"] = book,
+                    ["source"] = "search"
+                };
+                await Shell.Current.GoToAsync("//info", p);
+            });
         }
 
         [ObservableProperty]
         private string searchText;
 
         public ObservableCollection<Book> SearchResults { get; } = new();
+
 
         [RelayCommand]
         private async Task SearchAsync(string query)

@@ -14,16 +14,13 @@ namespace SmartRead.MVVM.ViewModels
     public partial class LoginViewModel : ObservableObject
     {
         private readonly AuthService _authService;
-        private readonly IConfiguration _configuration;  
+        private readonly IConfiguration _configuration;
 
         [ObservableProperty]
         private string email;
 
         [ObservableProperty]
         private string password;
-
-        [ObservableProperty]
-        private bool rememberMe;
 
         // Se inyectan AuthService e IConfiguration en el constructor
         public LoginViewModel(AuthService authService, IConfiguration configuration)
@@ -41,27 +38,15 @@ namespace SmartRead.MVVM.ViewModels
                 return;
             }
 
-            if (RememberMe)
+            bool success = await LoginAsync(Email, Password);
+            if (!success)
             {
-                bool success = await LoginAsync(Email, Password);
-                if (!success)
-                {
-                    // Se detiene el proceso si no se pudo iniciar sesión correctamente.
-                    return;
-                }
-            }
-            else
-            {
-                bool success = await LoginAsync(Email, Password);
-                if (!success)
-                {
-                    // Se detiene el proceso si no se pudo iniciar sesión correctamente.
-                    return;
-                }
+                // Se detiene el proceso si no se pudo iniciar sesión correctamente.
+                return;
             }
 
             _authService.Login();
-            await Shell.Current.GoToAsync($"//home");
+            await Shell.Current.GoToAsync("//home");
             await Shell.Current.DisplayAlert("Éxito", "Inicio de sesión exitoso", "OK");
         }
 
@@ -122,30 +107,6 @@ namespace SmartRead.MVVM.ViewModels
                 }
             }
         }
-
-
-        // public async Task LoginAsync(string username, string password)
-        // {
-        //     // Lógica para autenticar al usuario (simulación).
-        //     // string accessToken = _authService.GenerateRandomToken(32);
-        //     // string refreshToken = _authService.GenerateRandomToken(64);
-
-        //     // await _authService.SaveAccessTokenAsync(accessToken);
-        //     // await _authService.SaveRefreshTokenAsync(refreshToken);
-        //     // Console.WriteLine($"Access Token: {accessToken}");
-        //     // Console.WriteLine($"Refresh Token: {refreshToken}");
-        // }
-
-        // public async Task GetStoredTokensAsync()
-        // {
-        //     // var accessToken = await _authService.GetAccessTokenAsync();
-        //     // var refreshToken = await _authService.GetRefreshTokenAsync();
-
-        //     // Console.WriteLine($"Access Token: {accessToken}");
-        //     // Console.WriteLine($"Refresh Token: {refreshToken}");
-        // }
-
-
 
         [RelayCommand]
         public async Task NavigateToRegister()

@@ -10,33 +10,55 @@
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
+        <!-- Header mejorado con SearchBox customizada -->
         <Grid
-          Grid.Row="0"
-          BackgroundColor="#1F1F1F"
-          Padding="16"
-          HeightRequest="80"
-          HorizontalOptions="FillAndExpand"
-          VerticalOptions="Start">
+    Grid.Row="0"
+    BackgroundColor="#1F1F1F"
+    Padding="16"
+    HeightRequest="80"
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="Start">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <SearchBar
+            <!-- Contenedor redondeado con sombra ligera -->
+            <Frame
                 Grid.Column="0"
+                Padding="0"
+                HasShadow="True"
+                CornerRadius="24"
+                BackgroundColor="#353535"
+                HeightRequest="48"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="Center">
+
+                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8" Padding="12,0">
+                    <!-- Icono de lupa -->
+                    <Image
+                Source="search_icon.png"
+                WidthRequest="20"
+                HeightRequest="20"
+                VerticalOptions="Center" />
+
+                    <!-- Entrada de texto -->
+                    <Entry
+                Grid.Column="1"
                 Text="{Binding SearchText}"
                 Placeholder="¿Qué quieres leer?"
                 FontSize="14"
                 TextColor="White"
                 PlaceholderColor="#888"
-                BackgroundColor="#353535"
-                HeightRequest="40"
-                HorizontalOptions="FillAndExpand"
+                BackgroundColor="Transparent"
                 VerticalOptions="Center"
-                SearchCommand="{Binding SearchCommand}"
-                SearchCommandParameter="{Binding SearchText}" />    
+                ReturnType="Search"
+                />
+                </Grid>
+            </Frame>
 
+            <!-- Botón de cerrar búsqueda -->
             <ImageButton
                 Grid.Column="1"
                 Source="close.png"
@@ -47,54 +69,85 @@
                 HorizontalOptions="End"
                 VerticalOptions="Center"
                 Command="{Binding CloseSearchCommand}" />
-                </Grid>
+        </Grid>
+
 
         <!-- Resultados: CollectionView sin ScrollView envolvente -->
-        <CollectionView
-          Grid.Row="1"
-          ItemsSource="{Binding SearchResults}"
-          SelectionMode="None"
-          Margin="20,10"
-          VerticalOptions="FillAndExpand"
-          ItemSizingStrategy="MeasureFirstItem">
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="20" Padding="10,0">
+                <CollectionView
+                    ItemsSource="{Binding SearchResults}"
+                    Margin="0,10"
+                    SelectionMode="None">
 
-            <!-- EmptyView -->
-            <CollectionView.EmptyView>
-                <Label
-                  Text="Sin resultados"
-                  TextColor="#888"
-                  HorizontalOptions="Center"
-                  VerticalOptions="CenterAndExpand" />
-            </CollectionView.EmptyView>
+                    <CollectionView.EmptyView>
+                        <Label
+                            Text="Sin resultados"
+                            TextColor="#888"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand" />
+                    </CollectionView.EmptyView>
 
-            <!-- Template -->
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Book">
-                    <Frame
-                        BackgroundColor="#2D2D2D"
-                        CornerRadius="8"
-                        Padding="10"
-                        Margin="0,5">
-                        <StackLayout Orientation="Horizontal" Spacing="10">
-                            <Image
-                                Source="{Binding CoverImageUrl}"
-                                WidthRequest="50"
-                                HeightRequest="70"
-                                Aspect="AspectFill" />  
-                            <StackLayout>
-                                <Label
-                                  Text="{Binding Title}"
-                                  FontAttributes="Bold"
-                                  TextColor="White" />
-                                <Label
-                                  Text="{Binding Author}"
-                                  FontSize="12"
-                                  TextColor="#ADADAD" />
-                            </StackLayout>
-                        </StackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                    <!-- Diseño idéntico a NewsPage sin botones ni descripción -->
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical">
+                            <GridItemsLayout.Span>
+                                <OnIdiom x:TypeArguments="x:Int32" Phone="1" Tablet="2" />
+                            </GridItemsLayout.Span>
+                        </GridItemsLayout>
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Book">
+                            <Frame
+                                BackgroundColor="#1E1E1E"
+                                CornerRadius="12"
+                                Padding="12"
+                                Margin="0,15"
+                                HasShadow="False"
+                                BorderColor="#333">
+
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},                Path=BindingContext.NavigateToInfoCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
+
+                                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12">
+                                    <!-- Portada -->
+                                    <Frame
+                                        Padding="0"
+                                        WidthRequest="70"
+                                        HeightRequest="100"
+                                        CornerRadius="5"
+                                        HasShadow="False"
+                                        BackgroundColor="Transparent">
+                                        <Image Source="{Binding CoverImageUrl}" Aspect="AspectFill" />
+                                    </Frame>
+
+                                    <!-- Título y Autor -->
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Spacing="6"
+                                        VerticalOptions="Start">
+                                        <Label
+                                            Text="{Binding Title}"
+                                            FontSize="{OnIdiom Phone=18, Tablet=22}"
+                                            FontAttributes="Bold"
+                                            TextColor="White"
+                                            LineBreakMode="TailTruncation" />
+                                        <Label
+                                            Text="{Binding Author}"
+                                            FontSize="{OnIdiom Phone=12, Tablet=14}"
+                                            TextColor="#CCCCCC"
+                                            LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
     </Grid>
 </ContentPage>
