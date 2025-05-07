@@ -10,55 +10,33 @@
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
-        <!-- Header mejorado con SearchBox customizada -->
         <Grid
-    Grid.Row="0"
-    BackgroundColor="#1F1F1F"
-    Padding="16"
-    HeightRequest="80"
-    HorizontalOptions="FillAndExpand"
-    VerticalOptions="Start">
+          Grid.Row="0"
+          BackgroundColor="#1F1F1F"
+          Padding="16"
+          HeightRequest="80"
+          HorizontalOptions="FillAndExpand"
+          VerticalOptions="Start">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <!-- Contenedor redondeado con sombra ligera -->
-            <Frame
+            <SearchBar
                 Grid.Column="0"
-                Padding="0"
-                HasShadow="True"
-                CornerRadius="24"
-                BackgroundColor="#353535"
-                HeightRequest="48"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="Center">
-
-                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8" Padding="12,0">
-                    <!-- Icono de lupa -->
-                    <Image
-                Source="search_icon.png"
-                WidthRequest="20"
-                HeightRequest="20"
-                VerticalOptions="Center" />
-
-                    <!-- Entrada de texto -->
-                    <Entry
-                Grid.Column="1"
                 Text="{Binding SearchText}"
                 Placeholder="¿Qué quieres leer?"
                 FontSize="14"
                 TextColor="White"
                 PlaceholderColor="#888"
-                BackgroundColor="Transparent"
+                BackgroundColor="#353535"
+                HeightRequest="40"
+                HorizontalOptions="FillAndExpand"
                 VerticalOptions="Center"
-                ReturnType="Search"
-                />
-                </Grid>
-            </Frame>
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding SearchText}" />
 
-            <!-- Botón de cerrar búsqueda -->
             <ImageButton
                 Grid.Column="1"
                 Source="close.png"
@@ -70,7 +48,6 @@
                 VerticalOptions="Center"
                 Command="{Binding CloseSearchCommand}" />
         </Grid>
-
 
         <!-- Resultados: CollectionView sin ScrollView envolvente -->
         <ScrollView Grid.Row="1">
