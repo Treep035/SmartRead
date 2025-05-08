@@ -302,5 +302,12 @@ namespace SmartRead.MVVM.ViewModels
                 });
             }
         }
+
+        public async Task ResetAndApplyPreferencesAsync()
+        {
+            await _jsonService.ResetPreferencesAsync();
+            await InitializePreferencesAsync(); // Carga y aplica las nuevas preferencias
+        }
+
     }
 }

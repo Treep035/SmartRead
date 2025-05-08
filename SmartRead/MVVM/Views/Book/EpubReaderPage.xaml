@@ -42,17 +42,26 @@
         <!-- HEADER con botón Salir (izquierda), título (centro) y Configurar (derecha) -->
         <StackLayout Grid.Row="0" Style="{StaticResource HeaderContainerStyle}">
             <!-- Botón para salir -->
-            <Button Text="Salir"
-                    Command="{Binding ExitCommand}"
-                    Style="{StaticResource SubtleButtonStyle}" />
+            <ImageButton Source="close2.png"
+             Command="{Binding ExitCommand}"
+             BackgroundColor="Transparent"
+             WidthRequest="32"
+             HeightRequest="32"
+             HorizontalOptions="Start"
+             VerticalOptions="Center" />
 
             <!-- Título centrado -->
             <Label Text="Lector EPUB" Style="{StaticResource HeaderLabelStyle}" />
 
-            <!-- Botón para configurar -->
-            <Button Text="Configurar"
-                    Command="{Binding SettingsCommand}"
-                    Style="{StaticResource SubtleButtonStyle}" />
+            <!-- Botón para configurar (imagen) -->
+            <ImageButton Source="configuration2.png"
+             Command="{Binding SettingsCommand}"
+             BackgroundColor="Transparent"
+             WidthRequest="32"
+             HeightRequest="32"
+             HorizontalOptions="End"
+             VerticalOptions="Center" />
+
         </StackLayout>
 
         <!-- WebView para renderizar el HTML -->
@@ -66,13 +75,26 @@
 
         <!-- Botones de navegación -->
         <Grid Grid.Row="2" ColumnDefinitions="*,*" Padding="10" ColumnSpacing="10">
-            <Button Text="Anterior"
-                    Command="{Binding GoPreviousCommand}"
-                    Style="{StaticResource SubtleButtonStyle}" />
-            <Button Text="Siguiente"
-                    Grid.Column="1"
-                    Command="{Binding GoNextCommand}"
-                    Style="{StaticResource SubtleButtonStyle}" />
+
+            <Button
+ImageSource="leftarrow.png"
+BackgroundColor="Transparent"
+WidthRequest="60"
+HeightRequest="60"
+HorizontalOptions="Center"
+VerticalOptions="Center"
+Command="{Binding GoPreviousCommand}" />
+
+            <Button
+    Grid.Column="1"
+    ImageSource="rightarrow.png"
+    BackgroundColor="Transparent"
+    WidthRequest="60"
+    HeightRequest="60"
+    HorizontalOptions="Center"
+    VerticalOptions="Center"
+    Command="{Binding GoNextCommand}" />
+
         </Grid>
     </Grid>
 </ContentPage>

@@ -7,10 +7,6 @@
              xmlns:local="clr-namespace:SmartRead.MVVM.ViewModels"
              xmlns:sfComboBox="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs">
 
-    <ContentPage.BindingContext>
-        <local:SettingsViewModel />
-    </ContentPage.BindingContext>
-
     <ScrollView>
         <VerticalStackLayout Padding="30,40,25,0" Spacing="50">
 
@@ -34,92 +30,27 @@
                              Margin="0,0,0,10"/>
             </Grid>
 
-            <!-- Idioma -->
-            <Grid ColumnDefinitions="*, Auto" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
-                <Label Text="Idioma"
-           FontSize="18"
-           TextColor="White"
-           VerticalOptions="Center"
-           HorizontalOptions="Start"
-           Grid.Column="0" />
-                <!-- SfComboBox para Tema -->
-                <sfComboBox:SfComboBox
-                           HorizontalOptions="End" 
-                           WidthRequest="150"
-                           TextColor="White" 
-                           BackgroundColor="#171717"
-                           IsClearButtonVisible="False"
-                           SelectedItem="{Binding Idioma}" 
-                           ItemsSource="{Binding ListaIdiomas}"
-                           Grid.Column="1" />
-            </Grid>
-
-            <!-- Tema -->
-            <Grid ColumnDefinitions="*, Auto" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
-                <Label Text="Tema"
-                       FontSize="18"
-                       TextColor="White"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Start"
-                       Grid.Column="0" />
-                <!-- SfComboBox para Tema -->
-                <sfComboBox:SfComboBox
-                                       HorizontalOptions="End" 
-                                       WidthRequest="150"
-                                       TextColor="White" 
-                                       BackgroundColor="#171717"
-                                       IsClearButtonVisible="False"
-                                       SelectedItem="{Binding Tema}" 
-                                       ItemsSource="{Binding ListaTemas}"
-                                       Grid.Column="1" />
-            </Grid>
-
-            <!-- Tamaño de letra -->
-            <Grid ColumnDefinitions="*, Auto" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
-                <Label Text="Tamaño de letra"
-                       FontSize="18"
-                       TextColor="White"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Start"
-                       Grid.Column="0" />
-                <!-- SfComboBox para Tamaño de letra -->
-                <sfComboBox:SfComboBox
-                                       HorizontalOptions="End" 
-                                       WidthRequest="150"
-                                       TextColor="White" 
-                                       BackgroundColor="#171717"
-                                       IsClearButtonVisible="False"
-                                       SelectedItem="{Binding TamañoLetra}" 
-                                       ItemsSource="{Binding ListaTamañosLetra}"
-                                       Grid.Column="1"/>
-            </Grid>
-
-            <!-- Restablecer preferencias -->
-            <Label Text="Restablecer preferencias"
-                   FontSize="18"
-                   TextColor="White"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Start">
-                <!-- Agregar GestureRecognizer si se requiere restablecer -->
-            </Label>
-
             <!-- Política de privacidad -->
-            <Label Text="Política de privacidad"
+            <Button Text="Política de privacidad"
                    FontSize="18"
                    TextColor="White"
+                   BackgroundColor="Transparent"
+                   BorderColor="Transparent"
                    FontAttributes="Bold"
                    HorizontalOptions="Start">
                 <!-- Agregar GestureRecognizer si se requiere ver política -->
-            </Label>
+            </Button>
 
             <!-- Acerca de SmartRead -->
-            <Label Text="Acerca de SmartRead"
+            <Button Text="Acerca de SmartRead"
                    FontSize="18"
                    TextColor="White"
+                   BackgroundColor="Transparent"
+                   BorderColor="Transparent"
                    FontAttributes="Bold"
                    HorizontalOptions="Start">
                 <!-- Agregar GestureRecognizer si se requiere información sobre la app -->
-            </Label>
+            </Button>
 
         </VerticalStackLayout>
     </ScrollView>

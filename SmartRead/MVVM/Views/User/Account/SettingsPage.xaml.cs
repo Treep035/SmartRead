@@ -9,7 +9,6 @@ public partial class SettingsPage : ContentPage
     public SettingsPage()
 	{
 		InitializeComponent();
-        BindingContext = new SettingsViewModel();
     }
 
     private async void Close(object sender, EventArgs e)

@@ -51,6 +51,13 @@ public partial class SettingsPopup : Popup
         viewModel.UpdateColorTheme(backgroundColor, textColor, colorTheme);
     }
 
+    private void Reset_Clicked(object sender, EventArgs e)
+    {
+        // Aquí llamas al ViewModel para restablecer la configuración
+        var viewModel = (EpubReaderViewModel)BindingContext;
+        viewModel.ResetAndApplyPreferencesAsync();
+    }
+
     private void Close_Clicked(object sender, EventArgs e)
     {
         Close();
