@@ -27,6 +27,9 @@ namespace SmartRead.MVVM.ViewModels
         [ObservableProperty]
         private string epubContentHtml;
 
+        [ObservableProperty]
+        private Book book;
+
         // Índice del capítulo actual (0-based)
         [ObservableProperty]
         private int currentChapter;
@@ -87,12 +90,28 @@ namespace SmartRead.MVVM.ViewModels
         /// <summary>
         /// Se llama al navegar a esta página, recibe el parámetro epubBook.
         /// </summary>
-        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        public async void ApplyQueryAttributes(IDictionary<string, object> query)
         {
+            if (query.TryGetValue("book", out var bookObj) && bookObj is Book bookinfo)
+            {
+                Book = bookinfo;
+            }
             if (query.TryGetValue("epubBook", out var epubBookObj) && epubBookObj is EpubBook book)
             {
                 EpubBook = book;
-                CurrentChapter = 0;
+                var prefs = await _jsonService.LoadPreferencesAsync();
+
+                string bookId = Book.IdBook.ToString(); // O el identificador único que uses para el libro
+
+                if (prefs.LastChapterIndexPerBook.ContainsKey(bookId))
+                {
+                    CurrentChapter = Math.Clamp(prefs.LastChapterIndexPerBook[bookId], 0, EpubBook.ReadingOrder.Count - 1);
+                }
+                else
+                {
+                    CurrentChapter = 0; // Si no hay progreso guardado, empieza desde el primer capítulo
+                }
+
                 UpdateHtml();
                 // Aseguramos estado inicial de botones
                 GoPreviousCommand.NotifyCanExecuteChanged();
@@ -100,20 +119,22 @@ namespace SmartRead.MVVM.ViewModels
             }
         }
 
-        private void GoPrevious()
+        private async void GoPrevious()
         {
             CurrentChapter--;
             UpdateHtml();
             GoPreviousCommand.NotifyCanExecuteChanged();
             GoNextCommand.NotifyCanExecuteChanged();
+            await SaveCurrentChapterAsync();
         }
 
-        private void GoNext()
+        private async void GoNext()
         {
             CurrentChapter++;
             UpdateHtml();
             GoPreviousCommand.NotifyCanExecuteChanged();
             GoNextCommand.NotifyCanExecuteChanged();
+            await SaveCurrentChapterAsync();
         }
 
         private bool CanGoPrevious() => EpubBook != null && CurrentChapter > 0;
@@ -307,6 +328,25 @@ namespace SmartRead.MVVM.ViewModels
         {
             await _jsonService.ResetPreferencesAsync();
             await InitializePreferencesAsync(); // Carga y aplica las nuevas preferencias
+        }
+
+        private async Task SaveCurrentChapterAsync()
+        {
+            var prefs = await _jsonService.LoadPreferencesAsync();
+            if (EpubBook != null)
+            {
+                string bookId = Book.IdBook.ToString();
+                if (prefs.LastChapterIndexPerBook.ContainsKey(bookId))
+                {
+                    prefs.LastChapterIndexPerBook[bookId] = CurrentChapter;
+                }
+                else
+                {
+                    prefs.LastChapterIndexPerBook.Add(bookId, CurrentChapter);
+                }
+
+                await _jsonService.SavePreferencesAsync(prefs);
+            }
         }
 
     }

@@ -92,7 +92,6 @@ namespace SmartRead.MVVM.Services
         public async Task SavePreferencesAsync(UserPreferences preferences)
         {
             var json = JsonSerializer.Serialize(preferences);
-            Console.WriteLine("PPPPPPPPPPP" + json);
             await File.WriteAllTextAsync(_preferencesPath, json);
         }
 

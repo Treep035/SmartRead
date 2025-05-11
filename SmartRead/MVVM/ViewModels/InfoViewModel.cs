@@ -71,7 +71,8 @@ namespace SmartRead.MVVM.ViewModels
                             // Navegar a EpubReaderPage pasando el objeto epubBook en los parámetros
                             var navigationParams = new Dictionary<string, object>
                             {
-                                { "epubBook", epubBook }
+                                { "epubBook", epubBook },
+                                { "book", Book }
                             };
                             await Shell.Current.GoToAsync("//epub", navigationParams);
                         }
