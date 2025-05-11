@@ -110,26 +110,42 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Padding="0"
-                                   WidthRequest="140"
-                                   HeightRequest="200"
-                                   CornerRadius="5"
-                                   HasShadow="False"
-                                   BackgroundColor="Transparent">
-                                <Image Source="{Binding CoverImageUrl}"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
-                                            CommandParameter="{Binding .}" />
-                                    </Image.GestureRecognizers>
-                                </Image>
-                            </Frame>
+                            <Grid WidthRequest="140" HeightRequest="200">
+                                <!-- Portada -->
+                                <Frame Padding="0"
+                                       CornerRadius="5"
+                                       HasShadow="False"
+                                       BackgroundColor="Transparent">
+                                    <Image Source="{Binding CoverImageUrl}"
+                                           Aspect="AspectFill">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Frame>
+
+                                <!-- Botón Eliminar superpuesto -->
+                                <Button Text="✕"
+                                        FontSize="12"
+                                        WidthRequest="24"
+                                        HeightRequest="24"
+                                        CornerRadius="12"
+                                        BackgroundColor="#80000000"
+                                        TextColor="White"
+                                        Padding="0"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveFromListCommand}"
+                                        CommandParameter="{Binding .}"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Start"
+                                        Margin="5"/>
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <!-- Seguir leyendo (por ahora vacío) -->
+                <!-- Seguir leyendo -->
                 <Label Text="Seguir leyendo"
                        FontSize="20"
                        TextColor="White"
