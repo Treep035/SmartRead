@@ -27,6 +27,8 @@ namespace SmartRead.MVVM.Views.Book
                 await Shell.Current.GoToAsync("//news");
             else if (Source == "search")
                 await Shell.Current.GoToAsync("//search");
+            else if (Source == "profile")
+                await Shell.Current.GoToAsync("//profile");
             else
                 await Shell.Current.GoToAsync("//home");
         }

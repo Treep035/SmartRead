@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
-             x:Class="SmartRead.MVVM.Views.User.Account.ProfilePage"
-             BackgroundColor="Black">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
+    x:Class="SmartRead.MVVM.Views.User.Account.ProfilePage"
+    BackgroundColor="Black"
+    Title="Perfil">
 
-    <!-- Contenedor Principal con dos filas -->
     <Grid RowDefinitions="Auto,*">
 
-        <!-- 🔹 Fila 0: Barra superior con menú hamburguesa -->
+        <!-- HEADER con menú hamburguesa -->
         <Grid BackgroundColor="Black" Padding="15,10,15,0">
             <Image Source="menu.png"
                    WidthRequest="40"
@@ -21,69 +22,141 @@
             </Image>
         </Grid>
 
-        <!-- 🔹 Fila 1: Contenido Principal -->
+        <!-- CONTENIDO PRINCIPAL -->
         <ScrollView Grid.Row="1">
-            <VerticalStackLayout Padding="20">
+            <VerticalStackLayout Padding="20" Spacing="20">
 
                 <!-- Perfil de Usuario -->
                 <VerticalStackLayout HorizontalOptions="Center" Margin="0,10,0,20">
-                    <Image Source="usuario.png" WidthRequest="100" HeightRequest="100"/>
-                    <Label Text="Usuario" TextColor="White" FontSize="18" HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Image Source="usuario.png"
+                           WidthRequest="100"
+                           HeightRequest="100"/>
+                    <Label Text="{Binding Username}"
+                           TextColor="White"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
                 <!-- Progreso de Lectura -->
-                <VerticalStackLayout HorizontalOptions="Center" Padding="0,10">
+                <VerticalStackLayout HorizontalOptions="Center">
                     <Grid WidthRequest="220" HeightRequest="18">
-                        <BoxView BackgroundColor="#E0E0E0" CornerRadius="10" WidthRequest="220" HeightRequest="18"/>
-                        <BoxView BackgroundColor="#FFC766" CornerRadius="10" WidthRequest="100" HeightRequest="18" HorizontalOptions="Start"/>
+                        <BoxView BackgroundColor="#E0E0E0"
+                                 CornerRadius="10"
+                                 WidthRequest="220"
+                                 HeightRequest="18"/>
+                        <BoxView BackgroundColor="#FFC766"
+                                 CornerRadius="10"
+                                 WidthRequest="{Binding WeeklyProgressWidth}"
+                                 HeightRequest="18"
+                                 HorizontalOptions="Start"/>
                     </Grid>
-
-                    <Label Text="Esta semana has leído" TextColor="White" FontSize="16" FontAttributes="Bold" HorizontalTextAlignment="Center" Padding="0,5,0,0"/>
-                    <Label Text="58 páginas" TextColor="#FFC766" FontSize="14" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                    <Label Text="Esta semana has leído"
+                           TextColor="White"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Center"
+                           Margin="0,5,0,0"/>
+                    <Label Text="{Binding WeeklyPagesRead, StringFormat='{0} páginas'}"
+                           TextColor="#FFC766"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Center"/>
                 </VerticalStackLayout>
 
-                <!-- Separador -->
-                <BoxView BackgroundColor="#808080" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,10"/>
+                <BoxView BackgroundColor="#808080"
+                         HeightRequest="1"
+                         HorizontalOptions="FillAndExpand"/>
 
-                <!-- 🔹 Carrusel Único para "Mi Lista" y "Leídos Recientemente" -->
-                <CollectionView ItemsSource="{Binding Categories}">
+                <!-- Libros que te han gustado -->
+                <Label Text="Libros que te han gustado"
+                       FontSize="20"
+                       TextColor="White"/>
+                <CollectionView ItemsSource="{Binding LikedBooks}"
+                                HeightRequest="200">
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout>
+                            <Frame Padding="0"
+                                   WidthRequest="140"
+                                   HeightRequest="200"
+                                   CornerRadius="5"
+                                   HasShadow="False"
+                                   BackgroundColor="Transparent">
+                                <Image Source="{Binding CoverImageUrl}"
+                                       Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-                                <!-- Nombre de la Categoría -->
-                                <Label Text="{Binding Name}"
-                                       FontSize="18"
-                                       TextColor="White"
-                                       Margin="0,5,0,15"/>
+                <!-- Mi lista -->
+                <Label Text="Mi lista"
+                       FontSize="20"
+                       TextColor="White"
+                       Margin="0,10,0,0"/>
+                <CollectionView ItemsSource="{Binding MyListBooks}"
+                                HeightRequest="200">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="0"
+                                   WidthRequest="140"
+                                   HeightRequest="200"
+                                   CornerRadius="5"
+                                   HasShadow="False"
+                                   BackgroundColor="Transparent">
+                                <Image Source="{Binding CoverImageUrl}"
+                                       Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-                                <!-- Carrusel de Libros -->
-                                <CollectionView ItemsSource="{Binding Books}"
-                                                HeightRequest="180">
-                                    <CollectionView.ItemsLayout>
-                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5"/>
-                                    </CollectionView.ItemsLayout>
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Frame Padding="0"
-                                                   HasShadow="False"
-                                                   BackgroundColor="Transparent"
-                                                   BorderColor="Transparent"
-                                                   CornerRadius="8"
-                                                   WidthRequest="120"
-                                                   HeightRequest="200">
-                                                <Image Source="{Binding ImageSource}"
-                                                       WidthRequest="120"
-                                                       HeightRequest="180"/>
-                                            </Frame>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-
-                            </StackLayout>
+                <!-- Seguir leyendo (por ahora vacío) -->
+                <Label Text="Seguir leyendo"
+                       FontSize="20"
+                       TextColor="White"
+                       Margin="0,10,0,0"/>
+                <CollectionView ItemsSource="{Binding ContinueReadingBooks}"
+                                HeightRequest="200"
+                                EmptyView="No hay ningún libro en curso.">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="0"
+                                   WidthRequest="140"
+                                   HeightRequest="200"
+                                   CornerRadius="5"
+                                   HasShadow="False"
+                                   BackgroundColor="Transparent">
+                                <Image Source="{Binding CoverImageUrl}"
+                                       Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToInfoCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
@@ -92,5 +165,4 @@
         </ScrollView>
 
     </Grid>
-
 </ContentPage>

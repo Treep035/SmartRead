@@ -1,15 +1,26 @@
 ﻿using CommunityToolkit.Maui.Views;
+using Microsoft.Extensions.Configuration;
+using SmartRead.MVVM.Services;
 using SmartRead.MVVM.ViewModels;
-using SmartRead.ViewModels;
 
 namespace SmartRead.MVVM.Views.User.Account;
 public partial class ProfilePage : ContentPage
 {
-    public ProfilePage()
+    public ProfilePage(AuthService authService, IConfiguration configuration)
     {
         InitializeComponent();
-        BindingContext = new ProfileViewModel();  // Conecta la vista con los datos
+        BindingContext = new ProfileViewModel(authService, configuration); 
     }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is ProfileViewModel viewModel)
+        {
+            await viewModel.LoadProfileAsync();
+        }
+    }
+
+
 
     private async void OnMenuClicked(object sender, EventArgs e)
     {
@@ -26,17 +37,6 @@ public partial class ProfilePage : ContentPage
             // Manejar el caso de popup ya abierto
             Console.WriteLine(ex.Message);
         }
-    }
-
-    // Método correcto para compartir
-    private async void OnShareClicked(object sender, EventArgs e)
-    {
-        await Application.Current.MainPage.DisplayAlert("Compartir", "Funcionalidad en desarrollo", "OK");
-    }
-    // ✅ Método para abrir NoticiasPage cuando se haga clic en el botón "Noticias"
-    private async void OnNoticiasClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("news"); // 🔹 Redirige a la página de noticias
     }
 }
 

@@ -45,6 +45,9 @@ namespace SmartRead.MVVM.ViewModels
                 // Mostrar la URL en consola para debug
                 Debug.WriteLine($"Enlace del libro: {Book.FileUrl}");
 
+                Debug.WriteLine($"Enlace del libro: {Book.IdBook}");
+
+
                 using (HttpClient client = new HttpClient())
                 {
                     // Se descarga el archivo EPUB
