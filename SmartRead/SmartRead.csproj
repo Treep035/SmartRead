@@ -87,6 +87,9 @@
 	  <Compile Update="MVVM\Views\User\Account\AccountPage.xaml.cs">
 	    <DependentUpon>AccountPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="MVVM\Views\User\Authentication\PaymentPage.xaml.cs">
+	    <DependentUpon>PaymentPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -124,6 +127,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\User\Account\ProfilePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="MVVM\Views\User\Authentication\PaymentPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\User\Authentication\RegisterPage.xaml">

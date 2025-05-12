@@ -99,5 +99,11 @@ namespace SmartRead.MVVM.ViewModels
         {
             await Shell.Current.GoToAsync("//login");
         }
+
+        [RelayCommand]
+        public async Task NavigateToPayment()
+        {
+            await Shell.Current.GoToAsync("//payment");
+        }
     }
 }

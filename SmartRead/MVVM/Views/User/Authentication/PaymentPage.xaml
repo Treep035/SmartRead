@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
-             x:Class="SmartRead.MVVM.Views.User.RegisterPage"
+             x:Class="SmartRead.MVVM.Views.User.PaymentPage"
              BackgroundImageSource="background.png"
              NavigationPage.HasNavigationBar="False">
 
@@ -30,62 +30,32 @@
                            HorizontalOptions="Center"
                            HeightRequest="100" />
 
-                    <Entry Placeholder="Nombre de usuario"
+                    <Entry Placeholder="Número de tarjeta"
+                           BackgroundColor="#BE1F1F1F"
+                           TextColor="White"
+                           HeightRequest="50"/>
+
+                    <Entry Placeholder="Fecha de caducidad"
+                           BackgroundColor="#BE1F1F1F"
+                           TextColor="White"
+                           HeightRequest="50"/>
+
+                    <Entry Placeholder="CVC"
                            BackgroundColor="#BE1F1F1F"
                            TextColor="White"
                            HeightRequest="50"
-                           Text="{Binding Username}" />
-
-                    <Entry Placeholder="Correo electrónico"
-                           BackgroundColor="#BE1F1F1F"
-                           TextColor="White"
-                           HeightRequest="50"
-                           Text="{Binding Email}" />
-
-                    <Entry Placeholder="Contraseña"
-                           BackgroundColor="#BE1F1F1F"
-                           TextColor="White"
-                           HeightRequest="50"
-                           IsPassword="True"
-                           Text="{Binding Password}" />
-
-                    <Entry Placeholder="Confirmar contraseña"
-                           BackgroundColor="#BE1F1F1F"
-                           TextColor="White"
-                           HeightRequest="50"
-                           IsPassword="True"
-                           Text="{Binding ConfirmPassword}" />
-
-                    <HorizontalStackLayout Spacing="10"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Start">
-                        <CheckBox Color="White"
-                                  HeightRequest="24"
-                                  WidthRequest="24"
-                                  IsChecked="{Binding RememberMe}" />
-                        <Label Text="Recuérdame"
-                               TextColor="White"
-                               VerticalOptions="Center"
-                               FontSize="16" />
-                    </HorizontalStackLayout>
-
-                    <Button Text="Registrarse"
-                            BackgroundColor="White"
-                            TextColor="Black"
-                            HeightRequest="40"
-                            Command="{Binding RegisterCommand}" />
+                           IsPassword="True"/>
 
                     <Button Text="Pagar"
                             BackgroundColor="White"
                             TextColor="Black"
-                            HeightRequest="40"
-                            Command="{Binding NavigateToPaymentCommand}" />
+                            HeightRequest="40"/>
 
-                    <Label Text="¿Ya tienes cuenta? Iniciar sesión"
+                    <Label Text="¿Volver atrás?"
                            TextColor="#808080"
                            HorizontalOptions="Center">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}" />
+                            <TapGestureRecognizer Command="{Binding NavigateToRegisterCommand}" />
                         </Label.GestureRecognizers>
                     </Label>
                 </VerticalStackLayout>

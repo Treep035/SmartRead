@@ -32,6 +32,10 @@
         ContentTemplate="{DataTemplate User:RegisterPage}" />
     <ShellContent 
         FlyoutItemIsVisible="False" 
+        Route="payment" 
+        ContentTemplate="{DataTemplate User:PaymentPage}" />
+    <ShellContent 
+        FlyoutItemIsVisible="False" 
         Route="forgotpassword" 
         ContentTemplate="{DataTemplate User:ForgotPasswordPage}" />
 
