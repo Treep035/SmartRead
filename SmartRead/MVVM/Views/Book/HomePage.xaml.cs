@@ -17,10 +17,10 @@ namespace SmartRead.MVVM.Views.Book
         // Para detectar la dirección del scroll
         private double _previousScrollY = 0;
 
-        public HomePage(AuthService authService, IConfiguration configuration)
+        public HomePage(AuthService authService, IConfiguration configuration, JsonDatabaseService jsonDatabaseService)
         {
             InitializeComponent();
-            BindingContext = new HomeViewModel(authService, configuration);
+            BindingContext = new HomeViewModel(authService, configuration, jsonDatabaseService);
         }
 
         protected override async void OnAppearing()

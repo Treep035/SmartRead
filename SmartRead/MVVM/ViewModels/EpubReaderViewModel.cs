@@ -57,7 +57,7 @@ namespace SmartRead.MVVM.ViewModels
 
         public EpubReaderViewModel()
         {
-            _jsonService = new JsonDatabaseService(FileSystem.AppDataDirectory);
+            _jsonService = new JsonDatabaseService();
 
             _ = InitializePreferencesAsync();
 
@@ -95,6 +95,7 @@ namespace SmartRead.MVVM.ViewModels
             if (query.TryGetValue("book", out var bookObj) && bookObj is Book bookinfo)
             {
                 Book = bookinfo;
+                await _jsonService.SaveIdBooksForRead(Book.IdBook);
             }
             if (query.TryGetValue("epubBook", out var epubBookObj) && epubBookObj is EpubBook book)
             {

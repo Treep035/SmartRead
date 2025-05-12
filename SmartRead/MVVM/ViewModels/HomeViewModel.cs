@@ -14,6 +14,7 @@ using SmartRead.MVVM.Models;
 using SmartRead.MVVM.Services;
 using SmartRead.MVVM.Views.Book;
 using System.Diagnostics;
+using System.Text;
 
 namespace SmartRead.MVVM.ViewModels
 {
@@ -21,6 +22,7 @@ namespace SmartRead.MVVM.ViewModels
     {
         private readonly AuthService _authService;
         private readonly IConfiguration _configuration;
+        private readonly JsonDatabaseService _jsonDatabaseService;
         private readonly Dictionary<int, bool> _isLoadingBooks = new();
         private bool _selectedCategory = false;
         private string _selectedCategoryLabel = "Categorías";
@@ -69,10 +71,11 @@ namespace SmartRead.MVVM.ViewModels
         /// </summary>
         public IReadOnlyList<Category> OriginalCategories => _originalCategories;
 
-        public HomeViewModel(AuthService authService, IConfiguration configuration)
+        public HomeViewModel(AuthService authService, IConfiguration configuration, JsonDatabaseService jsonDatabaseService)
         {
             _authService = authService;
             _configuration = configuration;
+            _jsonDatabaseService = jsonDatabaseService;
         }
 
         private void UpdateCategories()
@@ -96,8 +99,17 @@ namespace SmartRead.MVVM.ViewModels
         [RelayCommand]
         public async Task LoadCategoriesAsync()
         {
-            if (Categories.Count > 1)
-                return;
+            if (Categories.Count == 0)
+                Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
+
+            // Actualizar siempre "Seguir leyendo"
+            var existing = Categories.FirstOrDefault(c => c.Name == "Seguir leyendo");
+            if (existing != null)
+                Categories.Remove(existing);
+
+            var idsToRead = await _jsonDatabaseService.GetIdBooksForRead();
+            var booksToRead = await GetBooksByIdsAsync(idsToRead);
+            Categories.Insert(1, new Category(0, "Seguir leyendo", new ObservableCollection<Book>(booksToRead)));
 
             var functionKey = _configuration["AzureFunctionKey"];
             if (string.IsNullOrWhiteSpace(functionKey))
@@ -119,13 +131,6 @@ namespace SmartRead.MVVM.ViewModels
             using var httpClient = new HttpClient();
             try
             {
-                // Añadimos secciones fijas
-                if (Categories.Count == 0)
-                {
-                    Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
-                    Categories.Add(new Category(0, "Seguir leyendo", new ObservableCollection<Book>()));
-                }
-
                 var response = await httpClient.GetAsync(url);
                 if (!response.IsSuccessStatusCode)
                 {
@@ -219,6 +224,36 @@ namespace SmartRead.MVVM.ViewModels
                 _isLoadingBooks[category.IdCategory] = false;
             }
         }
+        private async Task<List<Book>> GetBooksByIdsAsync(List<int> ids)
+        {
+            var functionKey = _configuration["AzureFunctionKey"];
+            var accessToken = await _authService.GetAccessTokenAsync();
+
+            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=getbooksbyids&accesstoken={Uri.EscapeDataString(accessToken)}";
+
+            using var httpClient = new HttpClient();
+
+            // Convertir la lista de IDs a JSON
+            var requestContent = new StringContent(JsonSerializer.Serialize(ids), Encoding.UTF8, "application/json");
+
+            // Hacer la petición POST
+            var response = await httpClient.PostAsync(url, requestContent);
+
+            if (!response.IsSuccessStatusCode) return new List<Book>();
+
+            // Leer la respuesta JSON
+            var json = await response.Content.ReadAsStringAsync();
+
+            // Deserializar los libros de la respuesta
+            var books = JsonSerializer.Deserialize<List<Book>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Book>();
+
+            // Procesar los libros si es necesario (por ejemplo, extraer autor y título desde la ruta del archivo)
+            foreach (var book in books)
+                book.ParseAndSetAuthorTitleFromFilePath();
+
+            return books;
+        }
+
 
         [RelayCommand]
         public async Task NavigateToInfo(Book book)

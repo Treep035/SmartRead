@@ -64,6 +64,11 @@ namespace SmartRead
 
             // Registrar Servicios
             builder.Services.AddTransient<AuthService>();
+            var basePath = Path.Combine(FileSystem.AppDataDirectory, "SmartReadData");
+            Directory.CreateDirectory(basePath); // asegúrate de que la carpeta existe
+
+            builder.Services.AddSingleton<JsonDatabaseService>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();

@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
+using Microsoft.Maui.Storage;
 using SmartRead.MVVM.Models;
 
 namespace SmartRead.MVVM.Services
@@ -8,16 +10,24 @@ namespace SmartRead.MVVM.Services
         private readonly string _categoryCountsPath;
         private readonly string _categoriesPath;
         private readonly string _preferencesPath;
+        private readonly string _booksClickedPath;
 
-        public JsonDatabaseService(string basePath)
+        public JsonDatabaseService()
         {
+            string basePath = Path.Combine(FileSystem.AppDataDirectory, "SmartReadData");
+
+            if (!Directory.Exists(basePath))
+                Directory.CreateDirectory(basePath);
+
             _categoryCountsPath = Path.Combine(basePath, "categoryCounts.json");
             _categoriesPath = Path.Combine(basePath, "categories.json");
             _preferencesPath = Path.Combine(basePath, "userPreferences.json");
+            _booksClickedPath = Path.Combine(basePath, "booksClicked.json");
 
             EnsureFileExists(_categoryCountsPath);
             EnsureFileExists(_categoriesPath);
             EnsureFileExists(_preferencesPath, defaultJson: JsonSerializer.Serialize(new UserPreferences()));
+            EnsureFileExists(_booksClickedPath);
         }
 
         private void EnsureFileExists(string path, string defaultJson = "[]")
@@ -99,6 +109,30 @@ namespace SmartRead.MVVM.Services
         {
             var defaultPreferences = new UserPreferences(); // Preferencias por defecto
             await SavePreferencesAsync(defaultPreferences);
+        }
+
+        public async Task SaveIdBooksForRead(int id)
+        {
+            var ids = await GetIdBooksForRead();
+            Debug.WriteLine("LLLLLLLLLLL" + ids);
+            if (!ids.Contains(id))
+            {
+                ids.Add(id);
+                var json = JsonSerializer.Serialize(ids);
+                Debug.WriteLine("OOOOOOOOOO" + json);
+                await File.WriteAllTextAsync(_booksClickedPath, json);
+            }
+        }
+
+        public async Task<List<int>> GetIdBooksForRead()
+        {
+            if (!File.Exists(_booksClickedPath))
+                return new List<int>();
+
+            var json = await File.ReadAllTextAsync(_booksClickedPath);
+            Debug.WriteLine("KKKKKKKKKKKKKK" + json);
+            Debug.WriteLine("Ruta completa del archivo: " + _booksClickedPath);
+            return JsonSerializer.Deserialize<List<int>>(json) ?? new List<int>();
         }
 
     }
