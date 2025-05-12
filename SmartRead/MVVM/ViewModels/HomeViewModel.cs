@@ -24,6 +24,7 @@ namespace SmartRead.MVVM.ViewModels
         private readonly IConfiguration _configuration;
         private readonly JsonDatabaseService _jsonDatabaseService;
         private readonly Dictionary<int, bool> _isLoadingBooks = new();
+        private bool _isCategoryPopupOpen = false;
         private bool _selectedCategory = false;
         private string _selectedCategoryLabel = "Categorías";
         private string _selectedCategoryImage = "down";
@@ -273,7 +274,18 @@ namespace SmartRead.MVVM.ViewModels
             }
             else
             {
+                if (_isCategoryPopupOpen)
+                    return Task.CompletedTask;
+
                 var popup = new CategoriesPopup(_authService, _configuration, OriginalCategories);
+
+                _isCategoryPopupOpen = true;
+
+                popup.Closed += (_, __) =>
+                {
+                    _isCategoryPopupOpen = false;
+                };
+
                 Application.Current.MainPage.ShowPopup(popup);
             }
             return Task.CompletedTask;
