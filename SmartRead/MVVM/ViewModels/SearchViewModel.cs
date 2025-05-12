@@ -14,6 +14,7 @@ using SmartRead.MVVM.Services;
 
 namespace SmartRead.MVVM.ViewModels
 {
+    [QueryProperty(nameof(From), "from")]
     public partial class SearchViewModel : ObservableObject
     {
         private readonly AuthService _authService;
@@ -39,6 +40,9 @@ namespace SmartRead.MVVM.ViewModels
                 await Shell.Current.GoToAsync("//info", p);
             });
         }
+
+        [ObservableProperty]
+        private string from;
 
         [ObservableProperty]
         private string searchText;
@@ -118,7 +122,12 @@ namespace SmartRead.MVVM.ViewModels
         [RelayCommand]
         private async Task CloseSearchAsync()
         {
-            await Shell.Current.GoToAsync("//home");
+            if (From == "profile")
+                await Shell.Current.GoToAsync("//profile");
+            else if (From == "home")
+                await Shell.Current.GoToAsync("//home");
+            else
+                await Shell.Current.GoToAsync("//news");
         }
     }
 }

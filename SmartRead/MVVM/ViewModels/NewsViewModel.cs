@@ -280,5 +280,15 @@ namespace SmartRead.MVVM.ViewModels
                     $"Excepción al añadir a la lista: {ex.Message}", "OK");
             }
         }
+
+        [RelayCommand]
+        public async Task NavigateToSearch()
+        {
+            var p = new Dictionary<string, object>
+            {
+                ["from"] = "news"
+            };
+            await Shell.Current.GoToAsync("///search", p);
+        }
     }
 }

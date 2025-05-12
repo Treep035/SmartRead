@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
 using SmartRead.MVVM.Services;
 using SmartRead.MVVM.ViewModels;

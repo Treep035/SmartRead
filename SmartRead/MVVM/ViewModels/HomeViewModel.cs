@@ -281,6 +281,12 @@ namespace SmartRead.MVVM.ViewModels
 
         [RelayCommand]
         public async Task NavigateToSearch()
-            => await Shell.Current.GoToAsync("//search");
+        {
+            var p = new Dictionary<string, object>
+            {
+                ["from"] = "home"
+            };
+            await Shell.Current.GoToAsync("///search", p);
+        }
     }
 }

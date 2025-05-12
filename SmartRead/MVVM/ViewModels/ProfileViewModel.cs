@@ -69,6 +69,16 @@ namespace SmartRead.MVVM.ViewModels
         }
 
         [RelayCommand]
+        public async Task NavigateToSearch()
+        {
+            var p = new Dictionary<string, object>
+            {
+                ["from"] = "profile"
+            };
+            await Shell.Current.GoToAsync("///search", p);
+        }
+
+        [RelayCommand]
         public async Task LoadLikedBooksAsync()
         {
             if (_isLoadingLiked) return;

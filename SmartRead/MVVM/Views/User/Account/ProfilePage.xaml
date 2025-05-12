@@ -3,24 +3,62 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
+    xmlns:ui="clr-namespace:Xe.AcrylicView;assembly=Xe.AcrylicView"
     x:Class="SmartRead.MVVM.Views.User.Account.ProfilePage"
     BackgroundColor="Black"
     Title="Perfil">
-
     <Grid RowDefinitions="Auto,*">
+        <!-- HEADER ACRÍLICO Y BOTÓN DE BÚSQUEDA -->
+        <ui:AcrylicView
+        EffectStyle="Custom"
+        VerticalOptions="Start"
+        TintOpacity="0.4"
+        TintColor="Black">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-        <!-- HEADER con menú hamburguesa -->
-        <Grid BackgroundColor="Black" Padding="15,10,15,0">
-            <Image Source="menu.png"
-                   WidthRequest="40"
-                   HeightRequest="40"
-                   HorizontalOptions="End"
-                   VerticalOptions="Start">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnMenuClicked"/>
-                </Image.GestureRecognizers>
-            </Image>
-        </Grid>
+                <!-- Fila 0: Título, búsqueda y menú -->
+                <Grid
+                Grid.Row="0"
+                Padding="20,20,10,10"
+                ColumnDefinitions="*,Auto,Auto">
+                    <Label
+                    Text="SmartRead"
+                    TextColor="White"
+                    FontSize="24"
+                    VerticalOptions="Center" />
+
+                    <!-- Icono de búsqueda -->
+                    <ImageButton
+                    Grid.Column="1"
+                    Source="search.png"
+                    BackgroundColor="Transparent"
+                    HeightRequest="40"
+                    WidthRequest="40"
+                    Command="{Binding NavigateToSearchCommand}"
+                    Padding="5" 
+                    Margin="0,0,15,0"/>
+
+                    <!-- Icono de menú a la derecha -->
+                    <Image
+                    Grid.Column="2"
+                    Source="menu.png"
+                    WidthRequest="40"
+                    HeightRequest="40"
+                    HorizontalOptions="End"
+                    VerticalOptions="Start">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMenuClicked"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                </Grid>
+
+            </Grid>
+        </ui:AcrylicView>
+
 
         <!-- CONTENIDO PRINCIPAL -->
         <ScrollView Grid.Row="1">
