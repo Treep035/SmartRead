@@ -6,10 +6,12 @@ using SmartRead.MVVM.ViewModels;
 namespace SmartRead.MVVM.Views.User.Account;
 public partial class ProfilePage : ContentPage
 {
-    public ProfilePage(AuthService authService, IConfiguration configuration)
+    private readonly AuthService _authService;
+    public ProfilePage(AuthService authService, IConfiguration configuration, JsonDatabaseService jsonDatabaseService)
     {
         InitializeComponent();
-        BindingContext = new ProfileViewModel(authService, configuration); 
+        _authService = authService;
+        BindingContext = new ProfileViewModel(authService, configuration, jsonDatabaseService); 
     }
     protected override async void OnAppearing()
     {
@@ -29,7 +31,7 @@ public partial class ProfilePage : ContentPage
 
         try
         {
-            var popup = new ProfileDropDownPopup();
+            var popup = new ProfileDropDownPopup(_authService);
             this.ShowPopup(popup);
         }
         catch (InvalidOperationException ex)

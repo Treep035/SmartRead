@@ -1,6 +1,7 @@
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
+using SmartRead.MVVM.Services;
 
 namespace SmartRead.MVVM.Views.User.Account
 {
@@ -8,14 +9,16 @@ namespace SmartRead.MVVM.Views.User.Account
     {
         private static bool _isPopupOpen;
         private bool _isClosing;
+        private readonly AuthService _authService;
 
         // Propiedad pública para verificar el estado
         public static bool IsPopupOpen => _isPopupOpen;
 
-        public ProfileDropDownPopup()
+        public ProfileDropDownPopup(AuthService authService)
         {
             InitializeComponent();
             SetPopupSize();
+            _authService = authService;
             _isPopupOpen = true;
             this.Opened += OnPopupOpened;
             this.Closed += OnPopupClosed;
@@ -80,6 +83,18 @@ namespace SmartRead.MVVM.Views.User.Account
         private async void OnAccountTapped(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//account");
+            await ClosePopupAsync();
+        }
+
+        private async void OnLogoutTapped(object sender, EventArgs e)
+        {
+            // Eliminar los tokens de acceso y de actualización
+            await _authService.ClearTokensAsync();
+
+            // Redirigir a la página de inicio de sesión
+            await Shell.Current.GoToAsync("//login");
+
+            // Cerrar el popup
             await ClosePopupAsync();
         }
     }

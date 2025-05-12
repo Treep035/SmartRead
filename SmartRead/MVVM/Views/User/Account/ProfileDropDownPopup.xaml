@@ -86,17 +86,24 @@
                     </Frame>
 
                     <!-- Cerrar sesión -->
-                    <HorizontalStackLayout Spacing="15">
-                        <Image Source="sign_out.png"
-                               WidthRequest="30"
-                               HeightRequest="30"
-                               VerticalOptions="Center"/>
-                        <Label Text="Cerrar sesión" 
-                               FontSize="18" 
-                               TextColor="White" 
-                               FontAttributes="Bold"
-                               VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
+                    <Frame HasShadow="False" Padding="0" BackgroundColor="Transparent" BorderColor="Transparent">
+                        <HorizontalStackLayout Spacing="15">
+                            <Image Source="sign_out.png"
+               WidthRequest="30"
+               HeightRequest="30"
+               VerticalOptions="Center"/>
+                            <Label Text="Cerrar sesión" 
+               FontSize="18" 
+               TextColor="White" 
+               FontAttributes="Bold"
+               VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnLogoutTapped"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
                 </VerticalStackLayout>
             </Grid>
         </Border>

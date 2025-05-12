@@ -12,6 +12,7 @@ using Microsoft.Maui.Controls;
 using SmartRead.MVVM.Models;
 using SmartRead.MVVM.Services;
 using SmartRead.MVVM.Views.Book;
+using System.Text;
 
 namespace SmartRead.MVVM.ViewModels
 {
@@ -19,6 +20,7 @@ namespace SmartRead.MVVM.ViewModels
     {
         private readonly AuthService _authService;
         private readonly IConfiguration _configuration;
+        private readonly JsonDatabaseService _jsonDatabaseService;
         private bool _isLoadingLiked;
         private bool _isLoadingMyList;
         private bool _isRemoving;
@@ -32,10 +34,11 @@ namespace SmartRead.MVVM.ViewModels
         public IRelayCommand<Book> NavigateToInfoCommand { get; }
         public IRelayCommand<Book> RemoveFromListCommand { get; }
 
-        public ProfileViewModel(AuthService authService, IConfiguration configuration)
+        public ProfileViewModel(AuthService authService, IConfiguration configuration, JsonDatabaseService jsonDatabaseService)
         {
             _authService = authService;
             _configuration = configuration;
+            _jsonDatabaseService = jsonDatabaseService;
 
             NavigateToInfoCommand = new RelayCommand<Book>(async book =>
             {
@@ -60,8 +63,9 @@ namespace SmartRead.MVVM.ViewModels
             if (MyListBooks.Count == 0)
                 tasks.Add(LoadMyListBooksAsync());
 
-            if (tasks.Any())
-                await Task.WhenAll(tasks);
+            tasks.Add(LoadContinueReadingAsync());
+
+            await Task.WhenAll(tasks);
         }
 
         [RelayCommand]
@@ -160,6 +164,48 @@ namespace SmartRead.MVVM.ViewModels
 
             foreach (var bk in books)
                 bk.ParseAndSetAuthorTitleFromFilePath();
+
+            return books;
+        }
+
+        [RelayCommand]
+        public async Task LoadContinueReadingAsync()
+        {
+            var idsToRead = await _jsonDatabaseService.GetIdBooksForRead();
+            var booksToRead = await GetBooksByIdsAsync(idsToRead);
+
+            ContinueReadingBooks.Clear();
+            foreach (var book in booksToRead)
+                ContinueReadingBooks.Add(book);
+        }
+
+
+        private async Task<List<Book>> GetBooksByIdsAsync(List<int> ids)
+        {
+            var functionKey = _configuration["AzureFunctionKey"];
+            var accessToken = await _authService.GetAccessTokenAsync();
+
+            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=getbooksbyids&accesstoken={Uri.EscapeDataString(accessToken)}";
+
+            using var httpClient = new HttpClient();
+
+            // Convertir la lista de IDs a JSON
+            var requestContent = new StringContent(JsonSerializer.Serialize(ids), Encoding.UTF8, "application/json");
+
+            // Hacer la petición POST
+            var response = await httpClient.PostAsync(url, requestContent);
+
+            if (!response.IsSuccessStatusCode) return new List<Book>();
+
+            // Leer la respuesta JSON
+            var json = await response.Content.ReadAsStringAsync();
+
+            // Deserializar los libros de la respuesta
+            var books = JsonSerializer.Deserialize<List<Book>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Book>();
+
+            // Procesar los libros si es necesario (por ejemplo, extraer autor y título desde la ruta del archivo)
+            foreach (var book in books)
+                book.ParseAndSetAuthorTitleFromFilePath();
 
             return books;
         }
