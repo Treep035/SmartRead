@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
              x:Class="SmartRead.MVVM.Views.User.PaymentPage"
              BackgroundImageSource="background.png"
              NavigationPage.HasNavigationBar="False">
 
-    <!-- ScrollView para soportar pantallas pequeñas -->
     <ScrollView>
         <Grid Padding="20"
               HorizontalOptions="FillAndExpand"
@@ -17,7 +15,6 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- Mismo Frame de LoginPage -->
             <Frame Grid.Column="1"
                    BackgroundColor="#BE1F1F1F"
                    Padding="20"
@@ -26,30 +23,22 @@
                    HorizontalOptions="FillAndExpand"
                    WidthRequest="300">
                 <VerticalStackLayout Spacing="15">
+
                     <Image Source="smartread.png"
                            HorizontalOptions="Center"
                            HeightRequest="100" />
 
-                    <Entry Placeholder="Número de tarjeta"
-                           BackgroundColor="#BE1F1F1F"
+                    <Label Text="Para continuar, realiza el pago de la suscripción."
                            TextColor="White"
-                           HeightRequest="50"/>
-
-                    <Entry Placeholder="Fecha de caducidad"
-                           BackgroundColor="#BE1F1F1F"
-                           TextColor="White"
-                           HeightRequest="50"/>
-
-                    <Entry Placeholder="CVC"
-                           BackgroundColor="#BE1F1F1F"
-                           TextColor="White"
-                           HeightRequest="50"
-                           IsPassword="True"/>
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           FontSize="Medium" />
 
                     <Button Text="Pagar"
                             BackgroundColor="White"
                             TextColor="Black"
-                            HeightRequest="40"/>
+                            HeightRequest="40"
+                            Command="{Binding StartPaymentCommand}" />
 
                     <Label Text="¿Volver atrás?"
                            TextColor="#808080"
@@ -58,6 +47,7 @@
                             <TapGestureRecognizer Command="{Binding NavigateToRegisterCommand}" />
                         </Label.GestureRecognizers>
                     </Label>
+
                 </VerticalStackLayout>
             </Frame>
         </Grid>

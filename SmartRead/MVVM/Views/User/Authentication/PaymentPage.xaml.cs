@@ -5,10 +5,10 @@ namespace SmartRead.MVVM.Views.User;
 
 public partial class PaymentPage : ContentPage
 {
-	public PaymentPage()
+	public PaymentPage(IConfiguration configuration)
 	{
 		InitializeComponent();
-        BindingContext = new PaymentViewModel();
+        BindingContext = new PaymentViewModel(configuration);
 
     }
 }
