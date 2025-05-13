@@ -46,6 +46,10 @@ namespace SmartRead.MVVM.ViewModels
         [ObservableProperty]
         private string colorTheme = "Claro";
 
+        private System.Timers.Timer readingTimer;
+        private TimeSpan readingSessionTime = TimeSpan.Zero;
+        private DateTime readingStartTime;
+
         private readonly JsonDatabaseService _jsonService;
 
         // Instancias únicas de los comandos de navegación
@@ -64,7 +68,11 @@ namespace SmartRead.MVVM.ViewModels
             // Creamos los comandos pasándoles sus métodos y condiciones
             GoPreviousCommand = new RelayCommand(GoPrevious, CanGoPrevious);
             GoNextCommand = new RelayCommand(GoNext, CanGoNext);
-            ExitCommand = new Command(async () => await Shell.Current.GoToAsync("//info"));
+            ExitCommand = new Command(async () =>
+            {
+                await StopAndSaveReadingTimeAsync();
+                await Shell.Current.GoToAsync("//info");
+            });
             SettingsCommand = new RelayCommand(OpenSettings);
 
         }
@@ -114,11 +122,38 @@ namespace SmartRead.MVVM.ViewModels
                 }
 
                 UpdateHtml();
+                StartReadingTimer();
                 // Aseguramos estado inicial de botones
                 GoPreviousCommand.NotifyCanExecuteChanged();
                 GoNextCommand.NotifyCanExecuteChanged();
             }
         }
+
+        private void StartReadingTimer()
+        {
+            readingStartTime = DateTime.Now;
+            readingTimer = new System.Timers.Timer(1000); // 1 segundo
+            readingTimer.Elapsed += (s, e) => readingSessionTime = readingSessionTime.Add(TimeSpan.FromSeconds(1));
+            readingTimer.AutoReset = true;
+            readingTimer.Start();
+        }
+
+        private async Task StopAndSaveReadingTimeAsync()
+        {
+            if (readingTimer != null)
+            {
+                readingTimer.Stop();
+                readingTimer.Dispose();
+                readingTimer = null;
+            }
+
+            if (Book != null)
+            {
+                await _jsonService.SaveReadingTimeAsync(Book.IdBook, readingSessionTime);
+                Console.WriteLine($"Tiempo de lectura registrado: {readingSessionTime}");
+            }
+        }
+
 
         private async void GoPrevious()
         {
@@ -331,6 +366,7 @@ namespace SmartRead.MVVM.ViewModels
             await InitializePreferencesAsync(); // Carga y aplica las nuevas preferencias
         }
 
+// Guardar capitulo
         private async Task SaveCurrentChapterAsync()
         {
             var prefs = await _jsonService.LoadPreferencesAsync();

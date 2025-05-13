@@ -135,5 +135,18 @@ namespace SmartRead.MVVM.Services
             return JsonSerializer.Deserialize<List<int>>(json) ?? new List<int>();
         }
 
+        public async Task SaveReadingTimeAsync(int bookId, TimeSpan sessionTime)
+        {
+            var prefs = await LoadPreferencesAsync();
+            string id = bookId.ToString();
+
+            double secondsToAdd = sessionTime.TotalSeconds;
+
+            Debug.WriteLine($"Tiempo de lectura para el libro {bookId}: {secondsToAdd} segundos");
+
+            prefs.ReadingTimePerBook[id] = secondsToAdd;
+
+            await SavePreferencesAsync(prefs);
+        }
     }
 }
