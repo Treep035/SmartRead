@@ -148,5 +148,26 @@ namespace SmartRead.MVVM.Services
 
             await SavePreferencesAsync(prefs);
         }
+
+        public async Task<List<int>> LoadBooksAndReadingTimeAsync()
+        {
+            var prefs = await LoadPreferencesAsync();
+
+            // Tomamos los 5 IDs de libros con más tiempo de lectura
+            var topBookIds = prefs.ReadingTimePerBook
+                .Select(entry => new KeyValuePair<int, double>(int.Parse(entry.Key), entry.Value))
+                .OrderByDescending(entry => entry.Value)
+                .Take(5)
+                .Select(entry => entry.Key)
+                .ToList();
+
+            Debug.WriteLine("HHHHHHHHH - Top 5 libros por tiempo de lectura:");
+            foreach (var bookId in topBookIds)
+            {
+                Debug.WriteLine($"Libro ID: {bookId}");
+            }
+
+            return topBookIds;
+        }
     }
 }
