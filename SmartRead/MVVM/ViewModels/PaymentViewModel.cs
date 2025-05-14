@@ -41,10 +41,13 @@ namespace SmartRead.MVVM.ViewModels
                     var content = await response.Content.ReadAsStringAsync();
                     var json = JObject.Parse(content);
                     var checkoutUrl = json["url"]?.ToString();
+                    var sessionId = json["sessionId"]?.ToString();
 
                     if (!string.IsNullOrEmpty(checkoutUrl))
                     {
                         await Launcher.Default.OpenAsync(checkoutUrl);
+                        await Shell.Current.DisplayAlert("Stripe Session ID", sessionId, "OK");
+
                     }
                     else
                     {

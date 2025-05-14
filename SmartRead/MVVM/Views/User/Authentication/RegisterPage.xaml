@@ -56,30 +56,14 @@
                            IsPassword="True"
                            Text="{Binding ConfirmPassword}" />
 
-                    <HorizontalStackLayout Spacing="10"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Start">
-                        <CheckBox Color="White"
-                                  HeightRequest="24"
-                                  WidthRequest="24"
-                                  IsChecked="{Binding RememberMe}" />
-                        <Label Text="Recuérdame"
-                               TextColor="White"
-                               VerticalOptions="Center"
-                               FontSize="16" />
-                    </HorizontalStackLayout>
+                  
 
-                    <Button Text="Registrarse"
+                    <Button Text="Proceder pago y registrarse"
                             BackgroundColor="White"
                             TextColor="Black"
                             HeightRequest="40"
                             Command="{Binding RegisterCommand}" />
-
-                    <Button Text="Pagar"
-                            BackgroundColor="White"
-                            TextColor="Black"
-                            HeightRequest="40"
-                            Command="{Binding NavigateToPaymentCommand}" />
+                 
 
                     <Label Text="¿Ya tienes cuenta? Iniciar sesión"
                            TextColor="#808080"
