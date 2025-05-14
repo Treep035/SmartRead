@@ -13,6 +13,7 @@ using SmartRead.MVVM.Models;
 using SmartRead.MVVM.Services;
 using SmartRead.MVVM.Views.Book;
 using System.Text;
+using System.Diagnostics;
 
 namespace SmartRead.MVVM.ViewModels
 {
@@ -30,6 +31,19 @@ namespace SmartRead.MVVM.ViewModels
         public ObservableCollection<Book> LikedBooks { get; } = new();
         public ObservableCollection<Book> MyListBooks { get; } = new();
         public ObservableCollection<Book> ContinueReadingBooks { get; } = new();
+
+        [ObservableProperty]
+        private TimeSpan totalReadingTime;
+
+        [ObservableProperty]
+        private double totalProgressWidth;
+
+        public string TotalReadingTimeFormatted => $"{(int)TotalReadingTime.TotalHours} h {TotalReadingTime.Minutes} min";
+
+        partial void OnTotalReadingTimeChanged(TimeSpan oldValue, TimeSpan newValue)
+        {
+            OnPropertyChanged(nameof(TotalReadingTimeFormatted));
+        }
 
         public IRelayCommand<Book> NavigateToInfoCommand { get; }
         public IRelayCommand<Book> RemoveFromListCommand { get; }
@@ -64,6 +78,7 @@ namespace SmartRead.MVVM.ViewModels
                 tasks.Add(LoadMyListBooksAsync());
 
             tasks.Add(LoadContinueReadingAsync());
+            tasks.Add(LoadTotalReadingProgressAsync());
 
             await Task.WhenAll(tasks);
         }
@@ -219,5 +234,27 @@ namespace SmartRead.MVVM.ViewModels
 
             return books;
         }
+
+        public async Task LoadTotalReadingProgressAsync()
+        {
+            var prefs = await _jsonDatabaseService.LoadPreferencesAsync(); // Carga el JSON de userPreferences.json
+            var totalSeconds = prefs.ReadingTimePerBook.Values.Sum(); // Suma de los segundos de lectura por libro
+
+            Debug.WriteLine($"Total de segundos leídos: {totalSeconds}");
+
+            // Convertir a TimeSpan
+            TotalReadingTime = TimeSpan.FromSeconds(totalSeconds);
+
+            // Para la barra, supón que el máximo es 10 horas (solo visual)
+            const int maxHoursVisual = 10; // 10 horas como máximo visual
+            const double maxWidth = 220.0;
+
+            // Calcular el porcentaje del progreso basado en el tiempo
+            double percentage = Math.Min(TotalReadingTime.TotalHours / maxHoursVisual, 1.0);
+            TotalProgressWidth = maxWidth * percentage;
+
+            Debug.WriteLine($"Progreso visual de la barra: {TotalProgressWidth}px");
+        }
+
     }
 }

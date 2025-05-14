@@ -153,6 +153,12 @@ namespace SmartRead.MVVM.Services
         {
             var prefs = await LoadPreferencesAsync();
 
+            if (prefs?.ReadingTimePerBook == null || prefs.ReadingTimePerBook.Count == 0)
+            {
+                Debug.WriteLine("No hay tiempos de lectura registrados. Devolviendo IDs por defecto.");
+                return new List<int> { 1, 2, 3, 4, 5 };
+            }
+
             // Tomamos los 5 IDs de libros con más tiempo de lectura
             var topBookIds = prefs.ReadingTimePerBook
                 .Select(entry => new KeyValuePair<int, double>(int.Parse(entry.Key), entry.Value))

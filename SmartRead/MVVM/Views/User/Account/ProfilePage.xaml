@@ -80,22 +80,20 @@
                 <VerticalStackLayout HorizontalOptions="Center">
                     <Grid WidthRequest="220" HeightRequest="18">
                         <BoxView BackgroundColor="#E0E0E0"
-                                 CornerRadius="10"
                                  WidthRequest="220"
                                  HeightRequest="18"/>
                         <BoxView BackgroundColor="#FFC766"
-                                 CornerRadius="10"
-                                 WidthRequest="{Binding WeeklyProgressWidth}"
+                                 WidthRequest="{Binding TotalProgressWidth}"
                                  HeightRequest="18"
                                  HorizontalOptions="Start"/>
                     </Grid>
-                    <Label Text="Esta semana has leído"
+                    <Label Text="Has leído un total de"
                            TextColor="White"
                            FontSize="16"
                            FontAttributes="Bold"
                            HorizontalTextAlignment="Center"
                            Margin="0,5,0,0"/>
-                    <Label Text="{Binding WeeklyPagesRead, StringFormat='{0} páginas'}"
+                    <Label Text="{Binding TotalReadingTimeFormatted}"
                            TextColor="#FFC766"
                            FontSize="14"
                            FontAttributes="Bold"

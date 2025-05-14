@@ -100,57 +100,57 @@ namespace SmartRead.MVVM.ViewModels
         [RelayCommand]
         public async Task LoadCategoriesAsync()
         {
-            if (Categories.Count == 0)
-                Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
             //if (Categories.Count == 0)
-            //{
-            //    var topBookIds = await _jsonDatabaseService.LoadBooksAndReadingTimeAsync();
+            //    Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
+            if (Categories.Count == 0)
+            {
+                var topBookIds = await _jsonDatabaseService.LoadBooksAndReadingTimeAsync();
 
-            //    var functionKey2 = _configuration["AzureFunctionKey"];
-            //    if (string.IsNullOrWhiteSpace(functionKey2))
-            //    {
-            //        await Shell.Current.DisplayAlert("Error", "La AzureFunctionKey no está configurada.", "OK");
-            //        return;
-            //    }
+                var functionKey2 = _configuration["AzureFunctionKey"];
+                if (string.IsNullOrWhiteSpace(functionKey2))
+                {
+                    await Shell.Current.DisplayAlert("Error", "La AzureFunctionKey no está configurada.", "OK");
+                    return;
+                }
 
-            //    var accessToken2 = await _authService.GetAccessTokenAsync();
-            //    if (string.IsNullOrEmpty(accessToken2))
-            //    {
-            //        await Shell.Current.DisplayAlert("Error", "No se encontró el token de acceso. Inicie sesión nuevamente.", "OK");
-            //        return;
-            //    }
+                var accessToken2 = await _authService.GetAccessTokenAsync();
+                if (string.IsNullOrEmpty(accessToken2))
+                {
+                    await Shell.Current.DisplayAlert("Error", "No se encontró el token de acceso. Inicie sesión nuevamente.", "OK");
+                    return;
+                }
 
-            //    var url2 = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey2}" +
-            //              $"&action=getrecommendedbooksbyids&accesstoken={Uri.EscapeDataString(accessToken2)}";
+                var url2 = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey2}" +
+                          $"&action=getrecommendedbooksbyids&accesstoken={Uri.EscapeDataString(accessToken2)}";
 
-            //    using var httpClient2 = new HttpClient();
+                using var httpClient2 = new HttpClient();
 
-            //    // Convertir la lista de IDs a JSON
-            //    var requestContent = new StringContent(JsonSerializer.Serialize(topBookIds), Encoding.UTF8, "application/json");
+                // Convertir la lista de IDs a JSON
+                var requestContent = new StringContent(JsonSerializer.Serialize(topBookIds), Encoding.UTF8, "application/json");
 
-            //    // Hacer la petición POST
-            //    var response = await httpClient2.PostAsync(url2, requestContent);
-            //    if (!response.IsSuccessStatusCode)
-            //    {
-            //        var msg = await response.Content.ReadAsStringAsync();
-            //        await Shell.Current.DisplayAlert("Error", $"Error al obtener libros recomendados: {msg}", "OK");
-            //        return;
-            //    }
+                // Hacer la petición POST
+                var response = await httpClient2.PostAsync(url2, requestContent);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var msg = await response.Content.ReadAsStringAsync();
+                    await Shell.Current.DisplayAlert("Error", $"Error al obtener libros recomendados: {msg}", "OK");
+                    return;
+                }
 
-            //    // Leer y deserializar los libros recomendados
-            //    var json = await response.Content.ReadAsStringAsync();
-            //    var recommendedBooks = JsonSerializer.Deserialize<List<Book>>(json, new JsonSerializerOptions
-            //    {
-            //        PropertyNameCaseInsensitive = true
-            //    }) ?? new List<Book>();
+                // Leer y deserializar los libros recomendados
+                var json = await response.Content.ReadAsStringAsync();
+                var recommendedBooks = JsonSerializer.Deserialize<List<Book>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<Book>();
 
-            //    // Procesar libros (autor/título desde el path)
-            //    foreach (var book in recommendedBooks)
-            //        book.ParseAndSetAuthorTitleFromFilePath();
+                // Procesar libros (autor/título desde el path)
+                foreach (var book in recommendedBooks)
+                    book.ParseAndSetAuthorTitleFromFilePath();
 
-            //    var booksToDisplay = recommendedBooks.Take(10).ToList();
-            //    Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>(booksToDisplay)));
-            //}
+                var booksToDisplay = recommendedBooks.Take(10).ToList();
+                Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>(booksToDisplay)));
+            }
 
             // Actualizar siempre "Seguir leyendo"
             var existing = Categories.FirstOrDefault(c => c.Name == "Seguir leyendo");
@@ -159,7 +159,10 @@ namespace SmartRead.MVVM.ViewModels
 
             var idsToRead = await _jsonDatabaseService.GetIdBooksForRead();
             var booksToRead = await GetBooksByIdsAsync(idsToRead);
-            Categories.Insert(1, new Category(0, "Seguir leyendo", new ObservableCollection<Book>(booksToRead)));
+            if (booksToRead.Count > 0)
+            {
+                Categories.Insert(1, new Category(0, "Seguir leyendo", new ObservableCollection<Book>(booksToRead)));
+            }
 
             var functionKey = _configuration["AzureFunctionKey"];
             if (string.IsNullOrWhiteSpace(functionKey))
