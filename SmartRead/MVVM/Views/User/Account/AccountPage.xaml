@@ -14,23 +14,24 @@
         <VerticalStackLayout Padding="30,40,25,0" Spacing="50">
 
             <!-- Título con botón de cierre -->
-            <Grid ColumnDefinitions="*, Auto, *" VerticalOptions="Center" Padding="0,10">
-                <Label Grid.Column="1"
-                       Text="Gestión de cuenta"
-                       FontSize="18"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"
-                       Margin="0,3,0,0"/>
-                <ImageButton Grid.Column="2"
-                             Source="close.png"
-                             Clicked="Close"
-                             HeightRequest="32"
-                             WidthRequest="32"
-                             HorizontalOptions="End"
-                             VerticalOptions="Start"
-                             Margin="0,0,0,10"/>
+            <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center" Padding="0,10">
+                <Label Grid.Column="0"
+           Text="Gestión de cuenta"
+           FontSize="18"
+           FontAttributes="Bold"
+           TextColor="White"
+           HorizontalOptions="Start"
+           HorizontalTextAlignment="Start"
+           VerticalOptions="Center"
+           Margin="22,0,0,0"/>
+                <ImageButton Grid.Column="1"
+                 Source="close.png"
+                 Clicked="Close"
+                 HeightRequest="32"
+                 WidthRequest="32"
+                 HorizontalOptions="End"
+                 VerticalOptions="Start"
+                 Margin="0,0,0,10"/>
             </Grid>
 
             <Frame BackgroundColor="#F0F0F0"

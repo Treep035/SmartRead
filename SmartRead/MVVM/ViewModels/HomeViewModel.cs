@@ -301,7 +301,13 @@ namespace SmartRead.MVVM.ViewModels
             foreach (var book in books)
                 book.ParseAndSetAuthorTitleFromFilePath();
 
-            return books;
+            ids.Reverse();
+
+            // Reordenar los libros según ese orden
+            var booksById = books.ToDictionary(b => b.IdBook);
+            var orderedBooks = ids.Where(id => booksById.ContainsKey(id)).Select(id => booksById[id]).ToList();
+
+            return orderedBooks;
         }
 
 
