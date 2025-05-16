@@ -72,11 +72,6 @@ namespace SmartRead.MVVM.ViewModels
         public async Task LoadProfileAsync()
         {
             var tasks = new List<Task>();
-            if (LikedBooks.Count == 0)
-                tasks.Add(LoadLikedBooksAsync());
-            if (MyListBooks.Count == 0)
-                tasks.Add(LoadMyListBooksAsync());
-
             tasks.Add(LoadContinueReadingAsync());
             tasks.Add(LoadTotalReadingProgressAsync());
 
