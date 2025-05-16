@@ -101,6 +101,7 @@ namespace SmartRead.MVVM.ViewModels
             _isLoadingLiked = true;
             try
             {
+                LikedBooks.Clear();
                 var books = await FetchBooksFromApiAsync("getlikedbooks", 0);
                 foreach (var book in books)
                     LikedBooks.Add(book);
@@ -116,6 +117,7 @@ namespace SmartRead.MVVM.ViewModels
             _isLoadingMyList = true;
             try
             {
+                MyListBooks.Clear();
                 var books = await FetchBooksFromApiAsync("getmylist", 0);
                 foreach (var book in books)
                     MyListBooks.Add(book);
@@ -232,7 +234,13 @@ namespace SmartRead.MVVM.ViewModels
             foreach (var book in books)
                 book.ParseAndSetAuthorTitleFromFilePath();
 
-            return books;
+            ids.Reverse();
+
+            // Reordenar los libros según ese orden
+            var booksById = books.ToDictionary(b => b.IdBook);
+            var orderedBooks = ids.Where(id => booksById.ContainsKey(id)).Select(id => booksById[id]).ToList();
+
+            return orderedBooks;
         }
 
         public async Task LoadTotalReadingProgressAsync()

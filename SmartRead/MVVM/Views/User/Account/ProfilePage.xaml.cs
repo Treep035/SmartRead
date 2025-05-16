@@ -20,6 +20,9 @@ public partial class ProfilePage : ContentPage
         if (BindingContext is ProfileViewModel viewModel)
         {
             await viewModel.LoadProfileAsync();
+            await viewModel.LoadLikedBooksAsync();
+            await viewModel.LoadMyListBooksAsync();
+
         }
     }
 
