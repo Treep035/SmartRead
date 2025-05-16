@@ -38,7 +38,8 @@
                    BackgroundColor="Transparent"
                    BorderColor="Transparent"
                    FontAttributes="Bold"
-                   HorizontalOptions="Start">
+                   HorizontalOptions="Start"
+                   Clicked="ShowPrivacyPolicy">
                 <!-- Agregar GestureRecognizer si se requiere ver política -->
             </Button>
 
@@ -49,7 +50,8 @@
                    BackgroundColor="Transparent"
                    BorderColor="Transparent"
                    FontAttributes="Bold"
-                   HorizontalOptions="Start">
+                   HorizontalOptions="Start"
+                   Clicked="ShowAbout">
                 <!-- Agregar GestureRecognizer si se requiere información sobre la app -->
             </Button>
 

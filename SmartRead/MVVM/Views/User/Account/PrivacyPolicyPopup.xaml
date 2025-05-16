@@ -1,0 +1,20 @@
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="SmartRead.MVVM.Views.User.Account.PrivacyPolicyPopup"
+               Color="#CC000000">
+    <Border BackgroundColor="White" Padding="20" Stroke="Gray" StrokeThickness="1" WidthRequest="300" HeightRequest="285">
+        <ScrollView>
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Política de privacidad"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       TextColor="Black"/>
+                <Label Text="SmartRead guarda cierta información en una base de datos para ofrecerte una mejor experiencia. No recopilamos datos personales sensibles ni compartimos tu información con terceros. Al usar la app, aceptas esta política."
+                       FontSize="14"
+                       TextColor="Black"/>
+                <Button Text="Cerrar" Background="#373737" Clicked="OnCloseClicked"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Border>
+</toolkit:Popup>

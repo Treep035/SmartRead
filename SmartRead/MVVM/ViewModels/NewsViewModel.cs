@@ -208,7 +208,8 @@ namespace SmartRead.MVVM.ViewModels
 
                     var navParams = new Dictionary<string, object>
                     {
-                        ["epubBook"] = epubBook
+                        { "epubBook", epubBook },
+                        { "book", book }
                     };
                     await Shell.Current.GoToAsync("//epub", navParams);
                 }

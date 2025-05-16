@@ -114,12 +114,10 @@ namespace SmartRead.MVVM.Services
         public async Task SaveIdBooksForRead(int id)
         {
             var ids = await GetIdBooksForRead();
-            Debug.WriteLine("LLLLLLLLLLL" + ids);
             if (!ids.Contains(id))
             {
                 ids.Add(id);
                 var json = JsonSerializer.Serialize(ids);
-                Debug.WriteLine("OOOOOOOOOO" + json);
                 await File.WriteAllTextAsync(_booksClickedPath, json);
             }
         }
@@ -130,8 +128,6 @@ namespace SmartRead.MVVM.Services
                 return new List<int>();
 
             var json = await File.ReadAllTextAsync(_booksClickedPath);
-            Debug.WriteLine("KKKKKKKKKKKKKK" + json);
-            Debug.WriteLine("Ruta completa del archivo: " + _booksClickedPath);
             return JsonSerializer.Deserialize<List<int>>(json) ?? new List<int>();
         }
 
@@ -158,7 +154,6 @@ namespace SmartRead.MVVM.Services
                 Debug.WriteLine("No hay tiempos de lectura registrados. Devolviendo IDs por defecto.");
                 return new List<int> { 1, 2, 3, 4, 5 };
             }
-
             // Tomamos los 5 IDs de libros con más tiempo de lectura
             var topBookIds = prefs.ReadingTimePerBook
                 .Select(entry => new KeyValuePair<int, double>(int.Parse(entry.Key), entry.Value))
@@ -166,12 +161,6 @@ namespace SmartRead.MVVM.Services
                 .Take(5)
                 .Select(entry => entry.Key)
                 .ToList();
-
-            Debug.WriteLine("HHHHHHHHH - Top 5 libros por tiempo de lectura:");
-            foreach (var bookId in topBookIds)
-            {
-                Debug.WriteLine($"Libro ID: {bookId}");
-            }
 
             return topBookIds;
         }

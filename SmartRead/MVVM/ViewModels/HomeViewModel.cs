@@ -124,7 +124,6 @@ namespace SmartRead.MVVM.ViewModels
                           $"&action=getrecommendedbooksbyids&accesstoken={Uri.EscapeDataString(accessToken2)}";
 
                 using var httpClient2 = new HttpClient();
-
                 // Convertir la lista de IDs a JSON
                 var requestContent = new StringContent(JsonSerializer.Serialize(topBookIds), Encoding.UTF8, "application/json");
 
@@ -136,18 +135,24 @@ namespace SmartRead.MVVM.ViewModels
                     await Shell.Current.DisplayAlert("Error", $"Error al obtener libros recomendados: {msg}", "OK");
                     return;
                 }
-
                 // Leer y deserializar los libros recomendados
                 var json = await response.Content.ReadAsStringAsync();
                 var recommendedBooks = JsonSerializer.Deserialize<List<Book>>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 }) ?? new List<Book>();
-
                 // Procesar libros (autor/título desde el path)
                 foreach (var book in recommendedBooks)
-                    book.ParseAndSetAuthorTitleFromFilePath();
-
+                {
+                    try
+                    {
+                        book.ParseAndSetAuthorTitleFromFilePath();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Error al procesar libro: " + ex.Message);
+                    }
+                }
                 var booksToDisplay = recommendedBooks.Take(10).ToList();
                 Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>(booksToDisplay)));
             }

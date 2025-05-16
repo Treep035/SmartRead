@@ -1,0 +1,20 @@
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="SmartRead.MVVM.Views.User.Account.AboutPopup"
+               Color="#CC000000">
+    <Border BackgroundColor="White" Padding="20" Stroke="Gray" StrokeThickness="1" WidthRequest="300" HeightRequest="285">
+        <ScrollView>
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Sobre nosotros"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       TextColor="Black"/>
+                <Label Text="SmartRead es una aplicación diseñada para ofrecerte una experiencia cómoda y personalizable al leer libros digitales. Nuestro objetivo es ayudarte a disfrutar de la lectura con una interfaz sencilla, rápida y sin distracciones. Gracias por usar SmartRead."
+                       FontSize="14"
+                       TextColor="Black"/>
+                <Button Text="Cerrar" Background="#373737" Clicked="OnCloseClicked"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Border>
+</toolkit:Popup>
