@@ -54,13 +54,11 @@ namespace SmartRead.MVVM.ViewModels
         {
             // Obtener la clave de la Azure Function desde appsettings.json mediante IConfiguration
             var functionKey = _configuration["AzureFunctionKey"];
-            await Shell.Current.DisplayAlert("Debug", $"Valor de functionKey: {functionKey}", "OK");
 
             // Construir la URL con los parámetros utilizando la clave obtenida y la acción "login"
             var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=login&username={Uri.EscapeDataString(username)}&password={Uri.EscapeDataString(password)}";
 
             // Mostrar la URL final para depuración
-            await Shell.Current.DisplayAlert("Debug", $"URL final: {url}", "OK");
 
             using (var httpClient = new HttpClient())
             {
@@ -94,9 +92,7 @@ namespace SmartRead.MVVM.ViewModels
                     await _authService.SaveAccessTokenAsync(tokenResponse.AccessToken);
                     await _authService.SaveRefreshTokenAsync(tokenResponse.RefreshToken);
 
-                    // Mostrar los tokens en un DisplayAlert
-                    await Shell.Current.DisplayAlert("Tokens",
-                        $"Access Token:\n{tokenResponse.AccessToken}\n\nRefresh Token:\n{tokenResponse.RefreshToken}", "OK");
+                
 
                     return true;
                 }

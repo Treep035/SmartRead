@@ -66,7 +66,7 @@ namespace SmartRead.MVVM.ViewModels
                 {
                     SessionId = sessionIdValue;
                     await Launcher.Default.OpenAsync(checkoutUrl);
-                    await Shell.Current.DisplayAlert("Stripe Session ID", sessionIdValue, "OK");
+                    //await Shell.Current.DisplayAlert("Stripe Session ID", sessionIdValue, "OK");
                 }
                 else
                 {
@@ -131,7 +131,6 @@ namespace SmartRead.MVVM.ViewModels
                       $"&email={Uri.EscapeDataString(email)}" +
                       $"&sessionId={Uri.EscapeDataString(sessionId)}";
 
-            await Shell.Current.DisplayAlert("Debug", $"URL final: {url}", "OK");
 
             using var httpClient = new HttpClient();
             try

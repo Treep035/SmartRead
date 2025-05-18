@@ -101,19 +101,10 @@ namespace SmartRead.MVVM.ViewModels
             {
                 // 1) Cargar IDs de libros y validar
                 var topBookIds = await _jsonDatabaseService.LoadBooksAndReadingTimeAsync();
-                if (topBookIds == null || topBookIds.Count == 0)
-                {
-                    await Shell.Current.DisplayAlert("Debug IDs", "No hay IDs para enviar.", "OK");
-                    return;
-                }
 
                 // 2) Clave y token
                 var functionKey = _configuration["AzureFunctionKey"];
-                if (string.IsNullOrWhiteSpace(functionKey))
-                {
-                    await Shell.Current.DisplayAlert("Error", "La AzureFunctionKey no está configurada.", "OK");
-                    return;
-                }
+
 
                 var accessToken = await _authService.GetAccessTokenAsync();
                 if (string.IsNullOrEmpty(accessToken))
@@ -135,11 +126,6 @@ namespace SmartRead.MVVM.ViewModels
 
                 // 4) Mostrar en la app URL, status y JSON para depuración
                 var raw = await response.Content.ReadAsStringAsync();
-                await Shell.Current.DisplayAlert(
-                    "Debug getrecommendedbooksbyids",
-                    $"URL: {url}\nStatus: {(int)response.StatusCode} {response.StatusCode}\n\n{raw}",
-                    "OK"
-                );
 
                 if (!response.IsSuccessStatusCode)
                     return;
