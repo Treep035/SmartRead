@@ -44,8 +44,6 @@ namespace SmartRead.MVVM.ViewModels
             var functionKey = _configuration["AzureFunctionKey"];
             var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=createcheckoutsession";
 
-            await Shell.Current.DisplayAlert("Debug", $"URL final: {url}", "OK");
-
             using var httpClient = new HttpClient();
             try
             {
