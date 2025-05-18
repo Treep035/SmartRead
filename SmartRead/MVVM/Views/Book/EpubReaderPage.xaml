@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:SmartRead.MVVM.ViewModels"
     x:Class="SmartRead.MVVM.Views.Book.EpubReaderPage"
-    Title="Lector EPUB">
+    Title="SmartRead">
 
     <ContentPage.Resources>
         <!-- Contenedor del header -->
@@ -51,7 +51,7 @@
              VerticalOptions="Center" />
 
             <!-- Título centrado -->
-            <Label Text="Lector EPUB" Style="{StaticResource HeaderLabelStyle}" />
+            <Label Text="SmartRead" Style="{StaticResource HeaderLabelStyle}" />
 
             <!-- Botón para configurar (imagen) -->
             <ImageButton Source="configuration2.png"
