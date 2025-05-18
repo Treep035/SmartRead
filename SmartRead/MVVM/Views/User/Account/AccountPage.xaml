@@ -39,119 +39,47 @@
                    Margin="20,0"
                    Padding="15">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Plan de Suscripción"
+                    <Label Text="Detalles de pago"
                             LineBreakMode="WordWrap"
                             FontAttributes="Bold"
                             FontSize="18"
                             TextColor="#333333" />
                     <VerticalStackLayout Spacing="5">
                         <HorizontalStackLayout Spacing="5">
-                            <Label Text="Plan Actual:"
-                               LineBreakMode="WordWrap"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="#333333" />
-                            <Label Text="Premium"
+                            <Label Text="Importe:"
+                                   LineBreakMode="WordWrap"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Label Text="€99.00"
                                    LineBreakMode="WordWrap"
                                    FontSize="14"
                                    TextColor="#333333" />
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Spacing="5">
-                            <Label Text="Precio:"
+                            <Label Text="Método de pago:"
                                    LineBreakMode="WordWrap"
                                    FontSize="14"
                                    FontAttributes="Bold"
                                    TextColor="#333333" />
-                            <Label Text="€15.99/mes"
+                            <Label Text="Stripe"
                                    LineBreakMode="WordWrap"
                                    FontSize="14"
                                    TextColor="#333333" />
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Spacing="5">
-                            <Label Text="Renovación:"
-                                   LineBreakMode="WordWrap"
+                            <Label Text="Estado del pago:"
                                    FontSize="14"
                                    FontAttributes="Bold"
                                    TextColor="#333333" />
-                            <Label Text="15 de marzo de 2025"
-                                   LineBreakMode="WordWrap"
+                            <Label Text="Completado"
                                    FontSize="14"
                                    TextColor="#333333" />
                         </HorizontalStackLayout>
-                        <Button Margin="5"
-                                BackgroundColor="White"
-                                BorderColor="Transparent"
-                                Text="Cancelar suscripción"
-                                TextColor="#000000"/>
+
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Frame>
-
-            <Frame BackgroundColor="#F0F0F0"
-                   CornerRadius="10"
-                   Margin="20,0"
-                   Padding="15">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Métodos de pago"
-                            LineBreakMode="WordWrap"
-                            FontAttributes="Bold"
-                            FontSize="18"
-                            TextColor="#333333" />
-                    <Frame BackgroundColor="#E0E0E0" BorderColor="Transparent" Margin="0" Padding="15">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="Tarjeta de Crédito"
-                                   LineBreakMode="WordWrap"
-                                   FontSize="16"
-                                   FontAttributes="Bold"
-                                   TextColor="#333333" />
-                            <Label Text="Visa **** 1234"
-                                    LineBreakMode="WordWrap"
-                                    FontSize="14"
-                                    TextColor="#333333" />
-                            <Label Text="Expira: 12/27"
-                                    LineBreakMode="WordWrap"
-                                    FontSize="14"
-                                    TextColor="#333333" />
-                        </VerticalStackLayout>
-                    </Frame>
-                    <Frame BackgroundColor="#E0E0E0" BorderColor="Transparent" Margin="0" Padding="15">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="Tarjeta de Débito"
-               LineBreakMode="WordWrap"
-               FontSize="16"
-               FontAttributes="Bold"
-               TextColor="#333333" />
-                            <Label Text="MasterCard **** 5678"
-                LineBreakMode="WordWrap"
-                FontSize="14"
-                TextColor="#333333" />
-                            <Label Text="Expira: 05/26"
-                LineBreakMode="WordWrap"
-                FontSize="14"
-                TextColor="#333333" />
-                        </VerticalStackLayout>
-                    </Frame>
-                    <Frame BackgroundColor="#E0E0E0" BorderColor="Transparent" Margin="0" Padding="15">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="PayPal"
-               LineBreakMode="WordWrap"
-               FontSize="16"
-               FontAttributes="Bold"
-               TextColor="#333333" />
-                            <Label Text="usuario@correo.com"
-                LineBreakMode="WordWrap"
-                FontSize="14"
-                TextColor="#333333" />
-                        </VerticalStackLayout>
-                    </Frame>
-                    <Button Margin="5"
-        BackgroundColor="White"
-        BorderColor="Transparent"
-        Text="Añadir método de pago"
-        TextColor="#000000"/>
-                </VerticalStackLayout>
-            </Frame>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
