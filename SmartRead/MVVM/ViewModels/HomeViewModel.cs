@@ -14,7 +14,6 @@ using SmartRead.MVVM.Models;
 using SmartRead.MVVM.Services;
 using SmartRead.MVVM.Views.Book;
 using System.Diagnostics;
-using System.Text;
 
 namespace SmartRead.MVVM.ViewModels
 {
@@ -83,7 +82,6 @@ namespace SmartRead.MVVM.ViewModels
         {
             if (SelectedCategory)
             {
-                // Sólo la categoría seleccionada
                 FilteredCategories.Clear();
                 var match = _originalCategories
                     .FirstOrDefault(c => c.Name.Equals(SelectedCategoryLabel, StringComparison.OrdinalIgnoreCase));
@@ -92,7 +90,6 @@ namespace SmartRead.MVVM.ViewModels
             }
             else
             {
-                // Quitamos el filtro
                 FilteredCategories.Clear();
             }
         }
@@ -100,48 +97,59 @@ namespace SmartRead.MVVM.ViewModels
         [RelayCommand]
         public async Task LoadCategoriesAsync()
         {
-            //if (Categories.Count == 0)
-            //    Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>()));
             if (Categories.Count == 0)
             {
+                // 1) Cargar IDs de libros y validar
                 var topBookIds = await _jsonDatabaseService.LoadBooksAndReadingTimeAsync();
+                if (topBookIds == null || topBookIds.Count == 0)
+                {
+                    await Shell.Current.DisplayAlert("Debug IDs", "No hay IDs para enviar.", "OK");
+                    return;
+                }
 
-                var functionKey2 = _configuration["AzureFunctionKey"];
-                if (string.IsNullOrWhiteSpace(functionKey2))
+                // 2) Clave y token
+                var functionKey = _configuration["AzureFunctionKey"];
+                if (string.IsNullOrWhiteSpace(functionKey))
                 {
                     await Shell.Current.DisplayAlert("Error", "La AzureFunctionKey no está configurada.", "OK");
                     return;
                 }
 
-                var accessToken2 = await _authService.GetAccessTokenAsync();
-                if (string.IsNullOrEmpty(accessToken2))
+                var accessToken = await _authService.GetAccessTokenAsync();
+                if (string.IsNullOrEmpty(accessToken))
                 {
                     await Shell.Current.DisplayAlert("Error", "No se encontró el token de acceso. Inicie sesión nuevamente.", "OK");
                     return;
                 }
 
-                var url2 = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey2}" +
-                          $"&action=getrecommendedbooksbyids&accesstoken={Uri.EscapeDataString(accessToken2)}";
+                // 3) Construir URL GET con bookIds en la query
+                var idsParam = Uri.EscapeDataString(string.Join(",", topBookIds));
+                var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function" +
+                          $"?code={functionKey}" +
+                          $"&action=getrecommendedbooksbyids" +
+                          $"&bookIds={idsParam}" +
+                          $"&accesstoken={Uri.EscapeDataString(accessToken)}";
 
-                using var httpClient2 = new HttpClient();
-                // Convertir la lista de IDs a JSON
-                var requestContent = new StringContent(JsonSerializer.Serialize(topBookIds), Encoding.UTF8, "application/json");
+                using var http = new HttpClient();
+                var response = await http.GetAsync(url);
 
-                // Hacer la petición POST
-                var response = await httpClient2.PostAsync(url2, requestContent);
+                // 4) Mostrar en la app URL, status y JSON para depuración
+                var raw = await response.Content.ReadAsStringAsync();
+                await Shell.Current.DisplayAlert(
+                    "Debug getrecommendedbooksbyids",
+                    $"URL: {url}\nStatus: {(int)response.StatusCode} {response.StatusCode}\n\n{raw}",
+                    "OK"
+                );
+
                 if (!response.IsSuccessStatusCode)
-                {
-                    var msg = await response.Content.ReadAsStringAsync();
-                    await Shell.Current.DisplayAlert("Error", $"Error al obtener libros recomendados: {msg}", "OK");
                     return;
-                }
-                // Leer y deserializar los libros recomendados
-                var json = await response.Content.ReadAsStringAsync();
-                var recommendedBooks = JsonSerializer.Deserialize<List<Book>>(json, new JsonSerializerOptions
+
+                // 5) Deserializar y procesar
+                var recommendedBooks = JsonSerializer.Deserialize<List<Book>>(raw, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 }) ?? new List<Book>();
-                // Procesar libros (autor/título desde el path)
+
                 foreach (var book in recommendedBooks)
                 {
                     try
@@ -153,9 +161,12 @@ namespace SmartRead.MVVM.ViewModels
                         Debug.WriteLine("Error al procesar libro: " + ex.Message);
                     }
                 }
+
                 var booksToDisplay = recommendedBooks.Take(10).ToList();
                 Categories.Add(new Category(0, "Recomendaciones para ti", new ObservableCollection<Book>(booksToDisplay)));
             }
+
+            // ======== Resto de LoadCategoriesAsync sin cambios ========
 
             // Actualizar siempre "Seguir leyendo"
             var existing = Categories.FirstOrDefault(c => c.Name == "Seguir leyendo");
@@ -169,27 +180,29 @@ namespace SmartRead.MVVM.ViewModels
                 Categories.Insert(1, new Category(0, "Seguir leyendo", new ObservableCollection<Book>(booksToRead)));
             }
 
-            var functionKey = _configuration["AzureFunctionKey"];
-            if (string.IsNullOrWhiteSpace(functionKey))
+            var functionKey2 = _configuration["AzureFunctionKey"];
+            if (string.IsNullOrWhiteSpace(functionKey2))
             {
                 await Shell.Current.DisplayAlert("Error", "La AzureFunctionKey no está configurada.", "OK");
                 return;
             }
 
-            var accessToken = await _authService.GetAccessTokenAsync();
-            if (string.IsNullOrEmpty(accessToken))
+            var accessToken2 = await _authService.GetAccessTokenAsync();
+            if (string.IsNullOrEmpty(accessToken2))
             {
                 await Shell.Current.DisplayAlert("Error", "No se encontró el token de acceso. Inicie sesión nuevamente.", "OK");
                 return;
             }
 
-            var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}" +
-                      $"&action=getcategories&accesstoken={Uri.EscapeDataString(accessToken)}";
+            var url2 = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function" +
+                       $"?code={functionKey2}" +
+                       $"&action=getcategories" +
+                       $"&accesstoken={Uri.EscapeDataString(accessToken2)}";
 
             using var httpClient = new HttpClient();
             try
             {
-                var response = await httpClient.GetAsync(url);
+                var response = await httpClient.GetAsync(url2);
                 if (!response.IsSuccessStatusCode)
                 {
                     var msg = await response.Content.ReadAsStringAsync();
@@ -202,7 +215,6 @@ namespace SmartRead.MVVM.ViewModels
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 if (list == null) return;
 
-                // Añadimos sólo las nuevas categorías
                 var toAdd = new List<Category>();
                 foreach (var cat in list)
                 {
@@ -216,10 +228,8 @@ namespace SmartRead.MVVM.ViewModels
                 foreach (var cat in toAdd)
                     Categories.Add(cat);
 
-                // Guardamos la copia original
                 _originalCategories = Categories.ToList();
 
-                // Cargamos los libros de cada categoría
                 var loadSnapshot = Categories.Where(c => c.IdCategory != 0).ToList();
                 foreach (var cat in loadSnapshot)
                 {
@@ -282,6 +292,7 @@ namespace SmartRead.MVVM.ViewModels
                 _isLoadingBooks[category.IdCategory] = false;
             }
         }
+
         private async Task<List<Book>> GetBooksByIdsAsync(List<int> ids)
         {
             var functionKey = _configuration["AzureFunctionKey"];
@@ -290,34 +301,21 @@ namespace SmartRead.MVVM.ViewModels
             var url = $"https://functionappsmartread20250303123217.azurewebsites.net/api/Function?code={functionKey}&action=getbooksbyids&accesstoken={Uri.EscapeDataString(accessToken)}";
 
             using var httpClient = new HttpClient();
-
-            // Convertir la lista de IDs a JSON
-            var requestContent = new StringContent(JsonSerializer.Serialize(ids), Encoding.UTF8, "application/json");
-
-            // Hacer la petición POST
+            var requestContent = new StringContent(JsonSerializer.Serialize(ids), System.Text.Encoding.UTF8, "application/json");
             var response = await httpClient.PostAsync(url, requestContent);
 
             if (!response.IsSuccessStatusCode) return new List<Book>();
 
-            // Leer la respuesta JSON
             var json = await response.Content.ReadAsStringAsync();
-
-            // Deserializar los libros de la respuesta
             var books = JsonSerializer.Deserialize<List<Book>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Book>();
 
-            // Procesar los libros si es necesario (por ejemplo, extraer autor y título desde la ruta del archivo)
             foreach (var book in books)
                 book.ParseAndSetAuthorTitleFromFilePath();
 
             ids.Reverse();
-
-            // Reordenar los libros según ese orden
             var booksById = books.ToDictionary(b => b.IdBook);
-            var orderedBooks = ids.Where(id => booksById.ContainsKey(id)).Select(id => booksById[id]).ToList();
-
-            return orderedBooks;
+            return ids.Where(id => booksById.ContainsKey(id)).Select(id => booksById[id]).ToList();
         }
-
 
         [RelayCommand]
         public async Task NavigateToInfo(Book book)
@@ -341,16 +339,11 @@ namespace SmartRead.MVVM.ViewModels
                     return Task.CompletedTask;
 
                 var popup = new CategoriesPopup(_authService, _configuration, OriginalCategories);
-
                 _isCategoryPopupOpen = true;
-
-                popup.Closed += (_, __) =>
-                {
-                    _isCategoryPopupOpen = false;
-                };
-
+                popup.Closed += (_, __) => { _isCategoryPopupOpen = false; };
                 Application.Current.MainPage.ShowPopup(popup);
             }
+
             return Task.CompletedTask;
         }
 
